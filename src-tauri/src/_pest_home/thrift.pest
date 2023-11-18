@@ -1,0 +1,129 @@
+comment_line             = @{ (!NEWLINE ~ ANY)* }
+comment_block            = @{ (!"*/" ~ ANY)* }
+comment_annotation_name  = @{
+    "uri"
+  | "postUri"
+  | "getUri"
+  | "putUri"
+  | "patchUri"
+  | "deleteUri"
+  | "page"
+}
+comment_annotation_value = @{ (!("\n" | ",") ~ (ASCII_ALPHANUMERIC | blank | "'" | "\"" | "/" | "_" | "{" | "}"))* }
+comment_annotation       = ${ comment_annotation_name ~ ("(" ~ (comment_annotation_value ~ ("," ~ comment_annotation_value)*)? ~ ")")? }
+COMMENT                  = ${ ("//" ~ blank* ~ ("@" ~ comment_annotation | comment_line)) | ("/*" ~ comment_block ~ "*/") }
+WHITESPACE               = _{ " " | "\t" | NEWLINE }
+blank                    = _{ " " | "\t" }
+
+// 命名空间定义
+namespace_lang  = @{
+    "c_glib"
+  | "cl"
+  | "dart"
+  | "delphi"
+  | "d"
+  | "erl"
+  | "go"
+  | "gv"
+  | "haxe"
+  | "html"
+  | "javame"
+  | "java"
+  | "json"
+  | "js"
+  | "kotlin"
+  | "lua"
+  | "markdown"
+  | "netstd"
+  | "ocaml"
+  | "perl"
+  | "php"
+  | "py"
+  | "rb"
+  | "rs"
+  | "st"
+  | "swift"
+}
+namespace_value = @{ (ASCII_ALPHANUMERIC | "_")+ ~ ("." ~ (ASCII_ALPHANUMERIC | "_")+)* }
+namespace       = ${ "namespace" ~ blank+ ~ namespace_lang ~ blank+ ~ namespace_value }
+
+// include引用定义
+include_value = @{ (ASCII_ALPHANUMERIC | "." | "_" | "/" | "\\")+ }
+include       = ${ "include" ~ blank+ ~ "\"" ~ include_value ~ "\"" }
+
+// 预置类型定义 built-in type
+contain_map_keytype   = @{ type }
+contain_map_valuetype = @{ type }
+contain_map           = !{ "map" ~ "<" ~ contain_map_keytype ~ "," ~ contain_map_valuetype ~ ">" }
+contain_list_type     = @{ type }
+contain_list          = !{ "list" ~ "<" ~ contain_list_type ~ ">" }
+contain_set_type      = @{ type }
+contain_set           = !{ "set" ~ "<" ~ contain_set_type ~ ">" }
+intype                = ${
+    "bool"
+  | "byte"
+  | "i16"
+  | "i32"
+  | "i64"
+  | "double"
+  | "binary"
+  | "string"
+}
+
+// 用户类型定义
+utype_namespace  = @{ (ASCII_ALPHANUMERIC | "_")+ }
+utype_customname = @{ (ASCII_ALPHANUMERIC | "_")+ }
+utype            = ${ (utype_namespace ~ ".")? ~ utype_customname }
+
+type = ${
+    intype
+  | contain_map
+  | contain_list
+  | contain_set
+  | utype
+}
+
+void = @{ "void" }
+
+// 类型修饰符定义
+modifier = @{ "required" | "optional" }
+
+// 结构体定义
+struct_name               = @{ utype_customname }
+struct_attribute_name     = @{ (ASCII_ALPHANUMERIC | "_")+ }
+struct_attribute_constant = @{ ASCII_DIGIT+ }
+struct_attribute          = ${
+    struct_attribute_constant ~ WHITESPACE* ~ ":" ~ WHITESPACE* ~ (modifier ~ WHITESPACE+)? ~ (((contain_list | contain_map | contain_set) ~ WHITESPACE*) | ((intype | utype) ~ WHITESPACE+)) ~ struct_attribute_name ~ (WHITESPACE* ~ ";")?
+}
+struct                    = ${
+    "struct" ~ WHITESPACE+ ~ struct_name ~ WHITESPACE* ~ "{" ~ (WHITESPACE | COMMENT)* ~ (struct_attribute ~ (WHITESPACE | COMMENT)*)* ~ "}"
+}
+
+// 枚举定义
+enum_name               = @{ utype_customname }
+enum_instance_name      = @{ (ASCII_ALPHANUMERIC | "_")+ }
+enum_instance_constant  = @{ ASCII_DIGIT+ }
+enum_instance_separator = _{ "," | ";" }
+enum_instance           = ${ enum_instance_name ~ (WHITESPACE* ~ "=" ~ WHITESPACE* ~ enum_instance_constant)? }
+enum                    = ${
+    "enum" ~ WHITESPACE+ ~ enum_name ~ WHITESPACE* ~ "{" ~ (WHITESPACE | COMMENT)* ~ (enum_instance ~ (WHITESPACE | COMMENT)* ~ (enum_instance_separator? ~ (WHITESPACE | COMMENT)* ~ enum_instance ~ (WHITESPACE | COMMENT)*)* ~ enum_instance_separator?)? ~ (WHITESPACE | COMMENT)* ~ "}"
+}
+
+// 入参定义
+param_number = @{ ASCII_DIGIT+ }
+param_name   = @{ (ASCII_ALPHANUMERIC | "_")+ }
+param        = ${ param_number ~ WHITESPACE* ~ ":" ~ WHITESPACE* ~ (modifier ~ WHITESPACE+)? ~ type ~ WHITESPACE+ ~ param_name }
+
+// service定义
+service_name          = @{ utype_customname }
+service_function_name = @{ (ASCII_ALPHANUMERIC | "_")+ }
+service_function      = ${
+    (void | type) ~ WHITESPACE+ ~ service_function_name ~ WHITESPACE* ~ "(" ~ WHITESPACE* ~ ((WHITESPACE | COMMENT)* ~ param ~ WHITESPACE* ~ ("," ~ (WHITESPACE | COMMENT)* ~ param)* ~ WHITESPACE*)? ~ ")" ~ (WHITESPACE* ~ ";")?
+}
+service               = ${
+    "service" ~ WHITESPACE+ ~ service_name ~ WHITESPACE* ~ "{" ~ (WHITESPACE | COMMENT)* ~ (service_function ~ (WHITESPACE | COMMENT)*)* ~ "}"
+}
+
+root = {
+    SOI ~ (namespace | include | enum | struct | service)* ~ EOI
+}
