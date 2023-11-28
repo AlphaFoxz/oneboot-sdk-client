@@ -1,9 +1,9 @@
-import { notification, message } from "ant-design-vue"
+import { notification, message } from 'ant-design-vue'
 
 const [notificationApi, notificationContextHolder] = notification.useNotification()
 /**
  * 全局通知
-*/
+ */
 export const global_notification = { api: notificationApi, contextHolder: notificationContextHolder }
 
 const [messageApi, messageContextHolder] = message.useMessage()
@@ -45,6 +45,40 @@ export function throttle(fn: Function, delay: number = 500): Function {
 }
 
 /**
+ * Prefetches the specified paths by adding <link> elements to the document head.
+ *
+ * @param {string[]} paths - An array of paths to be prefetched.
+ */
+export function prefetchLink(paths: string[]) {
+  if (!paths.length) return
+  paths.forEach((item) => {
+    const dom = document.createElement('link')
+    dom.rel = 'prefetch'
+    dom.href = item
+    dom.as = 'script'
+    document.head.appendChild(dom)
+  })
+}
+
+/**
+ * Finds the longest common prefix among an array of strings.
+ *
+ * @param {string[]} strs - The array of strings to find the longest common prefix from.
+ * @return {string} - The longest common prefix string.
+ */
+export function longestCommonPrefix(...strs: string[]): string {
+  if (!strs.length) return ''
+  let [a, ...b] = strs
+  let result = ''
+  for (let i = 0; i < a.length; i++) {
+    let flag = b.every((item) => item[i] === a[i])
+    if (flag) result += a[i]
+    else break
+  }
+  return result
+}
+
+/**
  * 生成一个defer方法用于控制模板组件的加载顺序（通过传入的帧数判断）
  * @param maxCount 最大帧数，传入负数将在mounted之前一直循环
  * @returns defer方法，如：v-if="defer(1)" 表示从第一帧开始加载组件
@@ -76,7 +110,7 @@ export function useDefer(maxCount = 100) {
 export function camelToUpperSnake(str: string): string {
   if (!str) return str
   str = str.replace(str[0], str[0].toLowerCase())
-  return str.replace(/([A-Z])/g, "_$1").toUpperCase()
+  return str.replace(/([A-Z])/g, '_$1').toUpperCase()
 }
 
 /**
@@ -92,7 +126,4 @@ export function snakeToUpperCamel(str: string): string {
 import * as rust_api from './rust_api'
 import * as dyn_component from './dyn_component'
 import { onMounted, ref } from 'vue'
-export {
-  rust_api,
-  dyn_component,
-}
+export { rust_api, dyn_component }

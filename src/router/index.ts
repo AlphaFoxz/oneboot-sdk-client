@@ -17,19 +17,34 @@ const routes = [
     component: () => import('@/views/GenCrudService.vue'),
   },
   {
-    path: '/helpApisUtil',
-    name: 'HelpApisUtil',
-    component: () => import('@/views/HelpApisUtil.vue'),
+    path: '/genApisUtil',
+    name: 'GenApisUtil',
+    component: () => import('@/views/GenApisUtil.vue'),
   },
   {
-    path: '/helpDatabase',
-    name: 'HelpDatabase',
-    component: () => import('@/views/HelpDatabase.vue'),
+    path: '/rulesOfDatabase',
+    name: 'RulesOfDatabase',
+    component: () => import('@/views/RulesOfDatabase.vue'),
+  },
+  {
+    path: '/rulesOfJava',
+    name: 'RulesOfJava',
+    component: () => import('@/views/RulesOfJava.vue'),
   },
   {
     path: '/options',
     name: 'Options',
     component: () => import('@/views/Options.vue'),
+  },
+  {
+    path: '/checkCode',
+    name: 'CheckCode',
+    component: () => import('@/views/CheckCode.vue'),
+  },
+  {
+    path: '/checkServiceStatus',
+    name: 'CheckServiceStatus',
+    component: () => import('@/views/CheckServiceStatus.vue'),
   },
 ] as RouteRecordRaw[]
 

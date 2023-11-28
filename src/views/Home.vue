@@ -21,9 +21,15 @@ const newWindowFn = (url: string) => {
   <a-button type="primary" @click="routerGo('GenCrudService')">后端CrudService代码生成</a-button>
   <a-button type="primary" @click="newWindowFn('/genCrudService')">[新窗口]</a-button>
   <br />
-  <a-button type="primary" @click="routerGo('HelpApisUtil')">自定义apisUtil.ts代码示例</a-button>
+  <a-button type="primary" @click="routerGo('GenApisUtil')">自定义apisUtil.ts代码示例</a-button>
   <br />
-  <a-button type="primary" @click="routerGo('HelpDatabase')">数据库设计准则</a-button>
+  <a-button type="primary" @click="routerGo('RulesOfDatabase')">数据库设计原则</a-button>
+  <br />
+  <a-button type="primary" @click="routerGo('RulesOfJava')">Java编写原则</a-button>
+  <br />
+  <a-button type="primary" @click="routerGo('CheckCode')">代码检查（待完成）</a-button>
+  <br />
+  <a-button type="primary" @click="routerGo('CheckServiceStatus')">服务状态检查（待完成）</a-button>
   <br />
   <a-button type="primary" @click="routerGo('Options')">设置</a-button>
 </template>

@@ -1,16 +1,50 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Editor, type Files, useMessage, useMonaco } from 'monaco-tree-editor'
+import { Modal as AModal, Tabs as ATabs, TabPane as ATabPane } from 'ant-design-vue'
+import { onMounted, ref, watch } from 'vue'
+import { Editor, type Files, useMessage, useMonaco, useHotkey } from 'monaco-tree-editor'
 import 'monaco-tree-editor/index.css'
 import * as utils from '@/utils'
 import * as api from './api'
 import { SdkFileTypeEnum } from '@/utils/rust_api'
 import { registerRestful } from './restful'
+import { Range } from 'monaco-editor'
 
 // ================ 注册语言 ================
 const monacoStore = useMonaco()
 const monaco = monacoStore.monaco
+watch(monacoStore.isReady, () => {
+  monacoStore.getEditor().onDidChangeModelContent(() => {})
+})
+onMounted(() => {
+  monacoStore.getEditor().onMouseDown((_e) => {})
+})
 registerRestful(monacoStore.monaco)
+
+// ================ 快捷键 ================
+const hotkeyStore = useHotkey()
+hotkeyStore.listen('editor', (e) => {
+  if (e.ctrlKey && e.altKey && !e.shiftKey) {
+    if (e.key === 'ArrowLeft') {
+      monacoStore.getEditor().trigger('keyboard', 'cursorUndo', null)
+    } else if (e.key === 'ArrowRight') {
+      monacoStore.getEditor().trigger('keyboard', 'cursorRedo', null)
+    }
+  } else if (e.ctrlKey && !e.altKey && e.shiftKey) {
+    console.debug(monacoStore.getEditor().getSupportedActions())
+    if (e.key === '?' || e.key === '/') {
+      monacoStore.getEditor().trigger('keyboard', 'editor.action.blockComment', null)
+    } else if (e.key === 'ArrowUp') {
+      monacoStore.getEditor().trigger('keyboard', 'editor.action.moveLinesUpAction', null)
+    } else if (e.key === 'ArrowDown') {
+      monacoStore.getEditor().trigger('keyboard', 'editor.action.moveLinesDownAction', null)
+    }
+  } else if (e.ctrlKey && !e.altKey && !e.shiftKey) {
+    if (e.key === 'y' || e.key === 'Y') {
+      console.debug(monacoStore.monaco.editor.getModels())
+      monacoStore.getEditor().trigger('keyboard', 'editor.action.openLink', '/sdk/dtos/SdkResponseDto.restful')
+    }
+  }
+})
 
 // ================ 加载文件 load files ================
 const files = ref<Files>({})
@@ -37,8 +71,10 @@ const handleReload = (resolve: () => void, reject: (msg?: string) => void) => {
       if (res.success && res.data) {
         console.debug('请求结果', res)
         const container = loadFile(res.data, {}, 0)
-        files.value = container
         resolve()
+        setTimeout(() => {
+          files.value = container
+        })
       } else {
         reject('加载文件树失败，请检查服务端报错信息')
       }
@@ -77,10 +113,12 @@ const handleNewFolder = (path: string, resolve: () => void, reject: (msg?: strin
   })
 }
 const handleSaveFile = (path: string, value: string, resolve: () => void, reject: (msg?: string) => void) => {
+  const currentPath =
+    monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
   utils.rust_api.createOrUpdateFile(path, value).then((res) => {
     if (res) {
       if (path.endsWith('.restful')) {
-        api.checkErr(monaco, monacoStore.getEditor())
+        api.checkErr(monaco, files.value[path].content!, currentPath === path ? monacoStore.getEditor() : undefined)
       }
       resolve()
     } else {
@@ -106,9 +144,54 @@ const handleRename = (path: string, newPath: string, resolve: () => void, reject
     }
   })
 }
+const handleDragInEditor = (srcPath: string, targetPath: string, type: 'file' | 'dir') => {
+  if (!targetPath.endsWith('.restful')) {
+    return
+  }
+  const editor = monacoStore.getEditor()
+  const lineIndex = editor.getPosition()?.lineNumber!
+  let str = ''
+  if (type === 'file') {
+    str += 'import "' + relativePathFrom(srcPath, targetPath) + '"'
+  } else {
+    str = srcPath.replace(monacoStore.prefix.value, '')
+    const tsNamespace = str.replaceAll(monacoStore.fileSeparator.value, '.')
+    const javaNamespace: any = str.split(monacoStore.fileSeparator.value)
+    javaNamespace.splice(2, 0, 'gen', 'restful')
+    str = `namespace java com.github.alphafoxz.oneboot${javaNamespace.join('.')}\n`
+    str += `namespace ts gen${tsNamespace}\n`
+  }
+  editor.executeEdits('drop', [{ range: new Range(lineIndex, 0, lineIndex, 0), text: str }])
+}
+//计算相对路径 getRelativePath
+const relativePathFrom = (returnPath: string, fromPath: string): string => {
+  const prefix = utils.longestCommonPrefix(returnPath, fromPath)
+  returnPath = returnPath.replace(prefix, '').replace(/\\/g, '/')
+  fromPath = fromPath.replace(prefix, '').replace(/\\/g, '/')
+  const fromPathArr = fromPath.split('/')
+  let relativePath = ''
+  if (fromPathArr.length === 1) {
+    relativePath = './'
+  } else {
+    for (let i = fromPathArr.length - 2; i >= 0; i--) {
+      relativePath += '../'
+    }
+  }
+  return (relativePath += returnPath)
+}
+const sqlTitle = ref<string[]>([])
+const sqlIndex = ref(-1)
+const sqlContent = ref<string[]>([])
+const sqlVisible = ref(false)
 const handleContextmenuSelect = async (path: string, item: { label: string; value: string }) => {
+  const currentPath =
+    monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
   if (item.value === 'generateTsCode') {
-    const ok = await api.checkErr(monaco, monacoStore.getEditor())
+    const ok = await api.checkErr(
+      monaco,
+      files.value[path].content!,
+      currentPath === path ? monacoStore.getEditor() : undefined
+    )
     if (ok) {
       utils.rust_api.generateTsApi(path).then((res) => {
         if (res) {
@@ -131,7 +214,11 @@ const handleContextmenuSelect = async (path: string, item: { label: string; valu
       })
     }
   } else if (item.value === 'generateJavaCode') {
-    const ok = await api.checkErr(monaco, monacoStore.getEditor())
+    const ok = await api.checkErr(
+      monaco,
+      files.value[path].content!,
+      currentPath === path ? monacoStore.getEditor() : undefined
+    )
     if (ok) {
       utils.rust_api.generateJavaApi(path).then((res) => {
         if (res) {
@@ -153,11 +240,61 @@ const handleContextmenuSelect = async (path: string, item: { label: string; valu
         closeable: true,
       })
     }
+  } else if (item.value === 'generateDbSql') {
+    const ok = await api.checkErr(
+      monaco,
+      files.value[path].content!,
+      currentPath === path ? monacoStore.getEditor() : undefined
+    )
+    if (ok) {
+      utils.rust_api.generateSql(path).then((res) => {
+        if (res.success) {
+          messageStore.success({
+            content: 'SQL已生成',
+            timeoutMs: 5000,
+            closeable: true,
+          })
+          if (!res.data) {
+            sqlTitle.value = []
+            sqlContent.value = []
+            sqlIndex.value = -1
+            return
+          }
+          const titles: string[] = []
+          const contents: string[] = []
+          Object.keys(res.data).forEach((key) => {
+            titles.push(key)
+            contents.push(res.data![key])
+            sqlContent.value = contents
+            sqlTitle.value = titles
+            sqlIndex.value = 0
+          })
+          sqlVisible.value = true
+        } else {
+          messageStore.error({
+            content: 'SQL生成失败',
+            closeable: true,
+          })
+        }
+      })
+    } else {
+      messageStore.error({
+        content: '存在语法错误，无法生成',
+        closeable: true,
+      })
+    }
   }
 }
 </script>
 
 <template>
+  <a-modal v-model:open="sqlVisible" width="70%">
+    <a-tabs v-if="sqlTitle.length" v-model:activeKey="sqlIndex">
+      <a-tab-pane v-for="(item, index) in sqlTitle" :key="index" :tab="item">
+        <pre>{{ sqlContent[index] }}</pre>
+      </a-tab-pane>
+    </a-tabs>
+  </a-modal>
   <Editor
     ref="editorRef"
     @reload="handleReload"
@@ -175,9 +312,14 @@ const handleContextmenuSelect = async (path: string, item: { label: string; valu
         label: 'Generate Ts Code',
         value: 'generateTsCode',
       },
+      {
+        label: 'Generate Db SQL',
+        value: 'generateDbSql',
+      },
     ]"
     :folder-menu="[]"
     @contextmenu-select="handleContextmenuSelect"
+    @drag-in-editor="handleDragInEditor"
   />
 </template>
 <!--  -->

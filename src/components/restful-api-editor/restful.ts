@@ -1,4 +1,6 @@
-export function registerRestful(monaco: { languages: any }) {
+import { nextTick } from 'vue'
+
+export function registerRestful(monaco: { editor: any; languages: any }) {
   const languages = monaco.languages
   const keywords = [
     /* 关键字 */
@@ -187,5 +189,16 @@ export function registerRestful(monaco: { languages: any }) {
       ],
       service_body: [],
     },
+  })
+  monaco.editor.onDidCreateModel((model: any) => {
+    if (model.getLanguageId() === 'restful') {
+      nextTick(() => {
+        model.updateOptions({
+          tabSize: 4,
+          insertSpaces: true,
+          trimAutoWhitespace: true,
+        })
+      })
+    }
   })
 }

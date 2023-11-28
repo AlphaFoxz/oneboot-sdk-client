@@ -1,6 +1,8 @@
 pub mod core;
 pub mod thrift;
 
+use std::collections::BTreeMap;
+
 use crate::thrift::gen::ifaces::sdk_gen_code_iface::TSdkGenCodeIfaceSyncClient;
 use crate::thrift::gen::ifaces::sdk_info_iface::TSdkInfoIfaceSyncClient;
 
@@ -202,6 +204,39 @@ fn generate_ts_api(file_path: &str) -> bool {
     true
 }
 
+#[tauri::command]
+fn generate_sql(file_path: &str) -> BTreeMap<String, serde_json::Value> {
+    let mut result = BTreeMap::<String, serde_json::Value>::new();
+    result.insert("success".into(), false.into());
+    let value =
+        dtos::sdk_code_template_dto::SdkCodeTemplateDto::try_from_file_path(file_path.into());
+    if value.is_err() {
+        return result;
+    }
+    let req_dto = sdk_request_dto::SdkCodeTemplateRequestDto {
+        id: util::next_snowflake_id(),
+        task_id: util::next_snowflake_id(),
+        data: value.unwrap(),
+    };
+    let gen_client = thrift::client::SdkGenCodeIfaceSyncClient::default_client();
+    if gen_client.is_err() {
+        return result;
+    }
+    let response = gen_client.unwrap().preview_generate_sql(req_dto);
+    if response.is_ok() {
+        let mut codes = serde_json::Map::new();
+        let response = response.unwrap();
+        if response.success && response.data.is_some() {
+            for (k, v) in response.data.unwrap().iter() {
+                codes.insert(k.into(), v.to_string().into());
+            }
+        }
+        result.insert("data".into(), codes.into());
+        result.insert("success".into(), true.into());
+    }
+    result
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -218,6 +253,7 @@ pub fn run() {
             rename_file,
             generate_java_api,
             generate_ts_api,
+            generate_sql,
             crate::core::db::get_option_tree_value_command,
             crate::core::db::set_option_tree_value_command,
         ])

@@ -63,3 +63,9 @@ export async function generateJavaApi(filePath: string): Promise<boolean> {
 export async function generateTsApi(filePath: string): Promise<boolean> {
   return await invoke('generate_ts_api', { filePath })
 }
+
+export async function generateSql(
+  filePath: string
+): Promise<{ success: boolean; data: { [k: string]: string } | undefined }> {
+  return await invoke('generate_sql', { filePath })
+}

@@ -2,9 +2,9 @@ import { invoke } from '@tauri-apps/api/primitives'
 import * as types from './define'
 type IStandaloneCodeEditor = types.monaco_editor.IStandaloneCodeEditor
 
-export async function checkErr(monaco: any, editorInst: IStandaloneCodeEditor): Promise<boolean> {
+export async function checkErr(monaco: any, codeStr: string, editorInst?: IStandaloneCodeEditor): Promise<boolean> {
   const result = (await invoke('check_restful_code_err', {
-    code: editorInst.getValue(),
+    code: codeStr,
   })) as types.component_dto.CheckResult
   monaco.editor.removeAllMarkers('restful')
   if (result.success) {
@@ -27,15 +27,17 @@ export async function checkErr(monaco: any, editorInst: IStandaloneCodeEditor): 
     startColumn = p[0][1]
     endColumn = p[1][1]
   }
-  monaco.editor.setModelMarkers(editorInst.getModel()!, 'restful', [
-    {
-      startLineNumber,
-      startColumn,
-      endLineNumber,
-      endColumn,
-      severity: monaco.MarkerSeverity.Error,
-      message: result.message!,
-    },
-  ])
+  if (editorInst) {
+    monaco.editor.setModelMarkers(editorInst.getModel()!, 'restful', [
+      {
+        startLineNumber,
+        startColumn,
+        endLineNumber,
+        endColumn,
+        severity: monaco.MarkerSeverity.Error,
+        message: result.message!,
+      },
+    ])
+  }
   return false
 }
