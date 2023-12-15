@@ -1,6 +1,6 @@
 pub mod error;
 pub mod parser;
-pub mod db;
+pub mod store;
 
 pub mod util {
     use std::sync::{Arc, Mutex};

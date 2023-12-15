@@ -169,8 +169,14 @@ fn generate_java_api(file_path: &str) -> bool {
 /// 根据文件路径生成ts api
 #[tauri::command]
 fn generate_ts_api(file_path: &str) -> bool {
-    use crate::core::db;
-    let gen_dir = db::get_option_tree_value(db::OPTION_TS_GEN_DIR_KEY).unwrap();
+    use crate::core::store;
+    let gen_dir;
+    let res = store::get_settings_value(store::TS_GEN_DIR.clone());
+    if res.is_none() {
+        return false;
+    } else {
+        gen_dir = res.unwrap().as_str().unwrap().to_string();
+    }
     let value =
         dtos::sdk_code_template_dto::SdkCodeTemplateDto::try_from_file_path(file_path.into());
     if value.is_err() {
@@ -243,6 +249,17 @@ pub fn run() {
         .plugin(tauri_plugin_window::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_store::Builder::default().build())
+        .setup(|app| {
+            let mut store =
+                tauri_plugin_store::StoreBuilder::new(".settings.dat").build(app.handle().clone());
+            let mut lock = crate::core::store::SETTINGS_STORE.lock().unwrap();
+            let res = store.load();
+            if res.is_err() {
+                let _ = store.save();
+            }
+            *lock = Some(store);
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             check_restful_code_err,
             get_restful_template_file_tree,
@@ -254,8 +271,6 @@ pub fn run() {
             generate_java_api,
             generate_ts_api,
             generate_sql,
-            crate::core::db::get_option_tree_value_command,
-            crate::core::db::set_option_tree_value_command,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

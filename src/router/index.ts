@@ -37,9 +37,14 @@ const routes = [
     component: () => import('@/views/Options.vue'),
   },
   {
-    path: '/checkCode',
-    name: 'CheckCode',
-    component: () => import('@/views/CheckCode.vue'),
+    path: '/checkClientCode',
+    name: 'CheckClientCode',
+    component: () => import('@/views/CheckClientCode.vue'),
+  },
+  {
+    path: '/checkServerCode',
+    name: 'CheckServerCode',
+    component: () => import('@/views/CheckServerCode.vue'),
   },
   {
     path: '/checkServiceStatus',

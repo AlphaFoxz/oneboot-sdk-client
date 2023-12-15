@@ -1,32 +1,30 @@
 <script setup lang="ts">
-import { Store } from '@tauri-apps/plugin-store'
+import { invoke } from '@tauri-apps/api/primitives'
 import router from '@/router'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { global_notification } from '@/utils'
 
-const store = new Store('.settings.dat')
 const backendHost = ref('')
+invoke('get_option_tree_value_command', { key: 'OPTIONS:BACKEND_HOST' }).then(
+  (str) => (backendHost.value = str as string)
+)
 const backendPort = ref('')
+invoke('get_option_tree_value_command', { key: 'OPTIONS:BACKEND_PORT' }).then(
+  (str) => (backendPort.value = str as string)
+)
 const tsGenDir = ref('')
-
-onMounted(async () => {
-  backendHost.value = (await store.get('backendHost')) || ''
-  backendPort.value = (await store.get('backendPort')) || ''
-  tsGenDir.value = (await store.get('tsGenDir')) || ''
-})
+invoke('get_option_tree_value_command', { key: 'OPTIONS:TS_GEN_DIR' }).then((str) => (tsGenDir.value = str as string))
 
 const saveAllHandler = async () => {
-  await store.set('backendHost', backendHost.value)
-  await store.set('backendPort', backendPort.value)
-  await store.set('tsGenDir', tsGenDir.value)
-  store
-    .save()
-    .then(() => {
-      openSuccessNotification('配置已保存')
-    })
-    .catch(() => {
-      openErrorNotification('保存失败，请检查是否有网络错误')
-    })
+  const result =
+    (await invoke('set_option_tree_value_command', { key: 'OPTIONS:BACKEND_HOST', value: backendHost.value })) &&
+    (await invoke('set_option_tree_value_command', { key: 'OPTIONS:BACKEND_PORT', value: backendPort.value })) &&
+    (await invoke('set_option_tree_value_command', { key: 'OPTIONS:TS_GEN_DIR', value: tsGenDir.value }))
+  if (result) {
+    openSuccessNotification('配置已保存')
+  } else {
+    openErrorNotification('保存失败，请检查是否有网络错误')
+  }
 }
 const routerGo = (name: string) => {
   router.push({ name })

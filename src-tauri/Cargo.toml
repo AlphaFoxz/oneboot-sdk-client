@@ -6,6 +6,7 @@ authors = ["AlphaFoxz@github.com"]
 license = "Apache-2.0"
 repository = "https://github.com/AlphaFoxz/oneboot-sdk-client"
 edition = "2021"
+rust-version = "1.71"
 
 [lib]
 name = "oneboot_sdk_client_lib"
@@ -30,7 +31,6 @@ lazy_static = "1.4.0"
 error-chain = "0.12.4"
 pest = { version = "2.7.2", features = ["std", "pretty-print"] }
 pest_derive = "2.7.2"
-sled = "0.34.7"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

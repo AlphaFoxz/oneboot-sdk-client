@@ -27,7 +27,9 @@ const newWindowFn = (url: string) => {
   <br />
   <a-button type="primary" @click="routerGo('RulesOfJava')">Java编写原则</a-button>
   <br />
-  <a-button type="primary" @click="routerGo('CheckCode')">代码检查（待完成）</a-button>
+  <a-button type="primary" @click="routerGo('CheckClientCode')">前端代码检查</a-button>
+  <br />
+  <a-button type="primary" @click="routerGo('CheckServerCode')">服务端代码检查</a-button>
   <br />
   <a-button type="primary" @click="routerGo('CheckServiceStatus')">服务状态检查（待完成）</a-button>
   <br />

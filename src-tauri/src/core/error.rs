@@ -23,6 +23,5 @@ error_chain! {
         PestParseRestError(pest::error::Error<super::parser::restful::Rule>);
         SerdeJsonError(serde_json::Error);
         InfallibleError(std::convert::Infallible);
-        SledErrpr(sled::Error);
     }
 }

@@ -30,7 +30,6 @@ hotkeyStore.listen('editor', (e) => {
       monacoStore.getEditor().trigger('keyboard', 'cursorRedo', null)
     }
   } else if (e.ctrlKey && !e.altKey && e.shiftKey) {
-    console.debug(monacoStore.getEditor().getSupportedActions())
     if (e.key === '?' || e.key === '/') {
       monacoStore.getEditor().trigger('keyboard', 'editor.action.blockComment', null)
     } else if (e.key === 'ArrowUp') {
@@ -54,7 +53,7 @@ const loadFile = (file: utils.rust_api.SdkFileInfoDto, container: Files, level: 
     name: file.file_name,
     content: file.content || '',
     readonly: level < 3,
-    isDirectory: file.file_type === SdkFileTypeEnum.LOCAL_DIR,
+    isFolder: file.file_type === SdkFileTypeEnum.LOCAL_DIR,
     isFile: file.file_type === SdkFileTypeEnum.LOCAL_FILE,
   }
   if (file.children) {
@@ -99,7 +98,7 @@ const handleNewFile = (path: string, resolve: () => void, reject: (msg?: string)
     if (res) {
       resolve()
     } else {
-      reject('保存失败，请检查服务端保存信息')
+      reject('保存失败，请检查服务端报错信息')
     }
   })
 }
@@ -108,7 +107,7 @@ const handleNewFolder = (path: string, resolve: () => void, reject: (msg?: strin
     if (res) {
       resolve()
     } else {
-      reject('保存失败，请检查服务端保存信息')
+      reject('保存失败，请检查服务端报错信息')
     }
   })
 }
@@ -122,7 +121,7 @@ const handleSaveFile = (path: string, value: string, resolve: () => void, reject
       }
       resolve()
     } else {
-      reject('保存失败，请检查服务端保存信息')
+      reject('保存失败，请检查服务端报错信息')
     }
   })
 }
@@ -131,7 +130,7 @@ const handleDeleteFile = (path: string, resolve: () => void, reject: (msg?: stri
     if (res && res.success) {
       resolve()
     } else {
-      reject('删除文件失败，请检查服务端保存信息')
+      reject('删除文件失败，请检查服务端报错信息')
     }
   })
 }
@@ -144,7 +143,7 @@ const handleRename = (path: string, newPath: string, resolve: () => void, reject
     }
   })
 }
-const handleDragInEditor = (srcPath: string, targetPath: string, type: 'file' | 'dir') => {
+const handleDragInEditor = (srcPath: string, targetPath: string, type: 'file' | 'folder') => {
   if (!targetPath.endsWith('.restful')) {
     return
   }
