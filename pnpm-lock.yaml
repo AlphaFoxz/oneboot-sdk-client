@@ -26,9 +26,12 @@ dependencies:
   json-bigint:
     specifier: ^1.0.0
     version: 1.0.0
+  monaco-editor:
+    specifier: ^0.44.0
+    version: 0.44.0
   monaco-tree-editor:
-    specifier: 0.0.1-beta.7.7
-    version: 0.0.1-beta.7.7(typescript@5.3.3)
+    specifier: 0.0.1-beta.8.2
+    version: 0.0.1-beta.8.2(typescript@5.3.3)
   nanoid:
     specifier: ^5.0.4
     version: 5.0.4
@@ -73,9 +76,6 @@ devDependencies:
   less:
     specifier: ^4.2.0
     version: 4.2.0
-  monaco-editor:
-    specifier: ^0.44.0
-    version: 0.44.0
   postcss:
     specifier: ^8.4.32
     version: 8.4.32
@@ -1886,12 +1886,12 @@ packages:
 
   /monaco-editor@0.44.0:
     resolution: {integrity: sha512-5SmjNStN6bSuSE5WPT2ZV+iYn1/yI9sd4Igtk23ChvqB7kDk9lZbB9F5frsuvpB+2njdIeGGFf2G4gbE6rCC9Q==}
+    dev: false
 
-  /monaco-tree-editor@0.0.1-beta.7.7(typescript@5.3.3):
-    resolution: {integrity: sha512-gPCjVOc3aLWzFVq1817NuABqtE/WGflnBUItkbjxCKaMvo1TGrqNPGT6xYbD8NXzAYyZGDECRJVKpL+dmcwXGQ==}
+  /monaco-tree-editor@0.0.1-beta.8.2(typescript@5.3.3):
+    resolution: {integrity: sha512-yywGkF+TLt7KA+5RaSuuLDT0PRvuuxHIsDV3ODfjh5PflhB+8v295r4DAwUmVB9okVu1RQh6ev1UR4vMuvG91g==}
     dependencies:
       '@ant-design/icons-vue': 7.0.1(vue@3.3.11)
-      monaco-editor: 0.44.0
       nanoid: 5.0.4
       onigasm: 2.2.5
       vue: 3.3.11(typescript@5.3.3)

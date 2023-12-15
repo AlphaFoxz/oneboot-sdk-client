@@ -1,24 +1,42 @@
 <script setup lang="ts">
 import { Modal as AModal, Tabs as ATabs, TabPane as ATabPane } from 'ant-design-vue'
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { Editor, type Files, useMessage, useMonaco, useHotkey } from 'monaco-tree-editor'
 import 'monaco-tree-editor/index.css'
 import * as utils from '@/utils'
 import * as api from './api'
 import { SdkFileTypeEnum } from '@/utils/rust_api'
 import { registerRestful } from './restful'
-import { Range } from 'monaco-editor'
+import * as monaco from 'monaco-editor'
+// import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+// import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
+// import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+// import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
+// import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
+
+window.MonacoEnvironment = {
+  getWorker: function (_moduleId, _label: string) {
+    // if (label === 'json') {
+    //   return new jsonWorker()
+    // } else if (label === 'ts' || label === 'typescript') {
+    //   return new tsWorker()
+    // } else if (label === 'html' || label === 'handlebars' || label === 'razor') {
+    //   return new htmlWorker()
+    // } else if (label === 'css' || label === 'scss' || label === 'less') {
+    //   return new cssWorker()
+    // }
+    return new editorWorker()
+  },
+  globalAPI: true,
+}
 
 // ================ 注册语言 ================
-const monacoStore = useMonaco()
-const monaco = monacoStore.monaco
+const monacoStore = useMonaco(monaco)
 watch(monacoStore.isReady, () => {
   monacoStore.getEditor().onDidChangeModelContent(() => {})
 })
-onMounted(() => {
-  monacoStore.getEditor().onMouseDown((_e) => {})
-})
-registerRestful(monacoStore.monaco)
+registerRestful(monaco)
 
 // ================ 快捷键 ================
 const hotkeyStore = useHotkey()
@@ -160,7 +178,7 @@ const handleDragInEditor = (srcPath: string, targetPath: string, type: 'file' | 
     str = `namespace java com.github.alphafoxz.oneboot${javaNamespace.join('.')}\n`
     str += `namespace ts gen${tsNamespace}\n`
   }
-  editor.executeEdits('drop', [{ range: new Range(lineIndex, 0, lineIndex, 0), text: str }])
+  editor.executeEdits('drop', [{ range: new monaco.Range(lineIndex, 0, lineIndex, 0), text: str }])
 }
 //计算相对路径 getRelativePath
 const relativePathFrom = (returnPath: string, fromPath: string): string => {
