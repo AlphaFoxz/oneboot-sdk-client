@@ -24,8 +24,10 @@ const newWindowFn = (url: string) => {
   <a-button type="primary" @click="routerGo('GenApisUtil')">自定义apisUtil.ts代码示例</a-button>
   <br />
   <a-button type="primary" @click="routerGo('RulesOfDatabase')">数据库设计原则</a-button>
+  <a-button type="primary" @click="newWindowFn('/rulesOfDatabase')">[新窗口]</a-button>
   <br />
   <a-button type="primary" @click="routerGo('RulesOfJava')">Java编写原则</a-button>
+  <a-button type="primary" @click="newWindowFn('/rulesOfJava')">[新窗口]</a-button>
   <br />
   <a-button type="primary" @click="routerGo('CheckClientCode')">前端代码检查</a-button>
   <br />

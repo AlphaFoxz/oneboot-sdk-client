@@ -29,7 +29,7 @@ const poInput = ref('')
 const PoName = ref('')
 const PO_NAME = ref('')
 const render = () => {
-  if(/^\s*$/.test(poInput.value)) {
+  if (/^\s*$/.test(poInput.value)) {
     return
   }
   const r =
@@ -80,10 +80,13 @@ onMounted(render)
       <a-button class="text-white" @click="handleCopy">复制</a-button>
     </a-layout-header>
     <a-layout-content>
-      <textarea ref="copyRef" style="display: none;"></textarea>
+      <textarea ref="copyRef" style="display: none"></textarea>
       <pre
-        class="inline-block w-full h-full text-black"><code class="whitespace-pre-wrap overflow-ellipsis overflow-hidden" v-html="highlightCode"></code></pre>
-      <pre class="inline-block w-full h-full text-black"><code ref="templateCachedCodeRef" class="hidden">package {{ packagePrefix }}.{{ moduleName }}.service.crud;
+        class="inline-block w-full h-full text-black"
+      ><code class="whitespace-pre-wrap overflow-ellipsis overflow-hidden" v-html="highlightCode"></code></pre>
+      <pre
+        class="inline-block w-full h-full text-black"
+      ><code ref="templateCachedCodeRef" class="hidden">package {{ packagePrefix }}.{{ moduleName }}.service.crud;
 
 import com.github.alphafoxz.oneboot.common.interfaces.framework.impl.AbstractCachedCrudService;
 import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.{{ PoName }};

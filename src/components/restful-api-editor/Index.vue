@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { Modal as AModal, Tabs as ATabs, TabPane as ATabPane } from 'ant-design-vue'
 import { ref, watch } from 'vue'
 import { Editor, type Files, useMessage, useMonaco, useHotkey } from 'monaco-tree-editor'
@@ -100,6 +101,17 @@ const handleReload = (resolve: () => void, reject: (msg?: string) => void) => {
       reject('加载文件树失败，请检查网络是否正常、后端服务是否正常')
     })
 }
+
+// ================ 自定义菜单 custom menu ================
+const router = useRouter()
+const settingsMenu = ref([
+  {
+    label: '退出',
+    handler: () => {
+      router.back()
+    },
+  },
+])
 
 // ================ 调整尺寸 resize ================
 const editorRef = ref()
@@ -335,6 +347,7 @@ const handleContextmenuSelect = async (path: string, item: { label: string; valu
       },
     ]"
     :folder-menu="[]"
+    :settings-menu="settingsMenu"
     @contextmenu-select="handleContextmenuSelect"
     @drag-in-editor="handleDragInEditor"
   />
