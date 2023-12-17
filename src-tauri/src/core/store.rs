@@ -14,9 +14,9 @@ lazy_static! {
     pub static ref SETTINGS_STORE: Arc<Mutex<Option<StoreImpl>>> = Arc::new(Mutex::new(None));
 }
 
-pub fn get_settings_value(s: String) -> Option<Value> {
-    let lock = &mut *SETTINGS_STORE.lock().unwrap();
-    let store = lock.as_mut().unwrap();
+pub async fn get_settings_value(s: String) -> Option<Value> {
+    let inner = &mut *SETTINGS_STORE.lock().unwrap();
+    let store = inner.as_mut().unwrap();
     store.load().unwrap();
     store.get(s).cloned()
 }

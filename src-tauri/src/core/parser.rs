@@ -1,7 +1,7 @@
 pub mod restful;
 pub mod thrift;
 
-use crate::core::error::*;
+use crate::core::error::Error;
 use pest::Parser;
 
 #[derive(Debug, serde::Serialize)]
@@ -100,7 +100,7 @@ impl From<pest::error::LineColLocation> for ErrorLocation {
     }
 }
 
-pub fn parse_thrift_root_into_json(content: &String) -> Result<serde_json::Value> {
+pub fn parse_thrift_root_into_json(content: &String) -> Result<serde_json::Value, Error> {
     let pairs = thrift::ThriftParser::parse(thrift::Rule::root, content.as_str())?;
     let first = pairs.into_iter().next();
     if first.is_none() {
@@ -110,7 +110,7 @@ pub fn parse_thrift_root_into_json(content: &String) -> Result<serde_json::Value
     Ok(serde_json::json!(&root))
 }
 
-pub fn parse_restful_root_into_json(content: &String) -> Result<serde_json::Value> {
+pub fn parse_restful_root_into_json(content: &String) -> Result<serde_json::Value, Error> {
     let pairs = restful::RestfulParser::parse(restful::Rule::root, content.as_str())?;
     let first = pairs.into_iter().next();
     if first.is_none() {

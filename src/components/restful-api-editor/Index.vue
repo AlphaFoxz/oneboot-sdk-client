@@ -222,20 +222,21 @@ const handleContextmenuSelect = async (path: string, item: { label: string; valu
       currentPath === path ? monacoStore.getEditor() : undefined
     )
     if (ok) {
-      utils.rust_api.generateTsApi(path).then((res) => {
-        if (res) {
+      utils.rust_api
+        .generateTsApi(path)
+        .then(() => {
           messageStore.success({
             content: '代码已生成，请稍后重新编译项目并验证',
             timeoutMs: 5000,
             closeable: true,
           })
-        } else {
+        })
+        .catch(() => {
           messageStore.error({
             content: '保存失败，请检查是否有网络错误',
             closeable: true,
           })
-        }
-      })
+        })
     } else {
       messageStore.error({
         content: '存在语法错误，无法生成',
@@ -249,20 +250,21 @@ const handleContextmenuSelect = async (path: string, item: { label: string; valu
       currentPath === path ? monacoStore.getEditor() : undefined
     )
     if (ok) {
-      utils.rust_api.generateJavaApi(path).then((res) => {
-        if (res) {
+      utils.rust_api
+        .generateJavaApi(path)
+        .then(() => {
           messageStore.success({
             content: '代码已生成，请稍后重新编译项目并验证',
             timeoutMs: 5000,
             closeable: true,
           })
-        } else {
+        })
+        .catch(() => {
           messageStore.error({
             content: '保存失败，请检查是否有网络错误',
             closeable: true,
           })
-        }
-      })
+        })
     } else {
       messageStore.error({
         content: '存在语法错误，无法生成',

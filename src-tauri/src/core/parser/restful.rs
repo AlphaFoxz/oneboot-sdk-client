@@ -1,4 +1,4 @@
-use crate::core::error::*;
+use crate::core::error::Error;
 use pest::Parser;
 use pest_derive::Parser;
 
@@ -12,7 +12,7 @@ pub fn check_restful_code_err(content: &str) -> super::CheckResult {
     super::CheckResult::from(err)
 }
 
-pub fn parse_json_from_string(content: String) -> Result<serde_json::Value> {
+pub fn parse_json_from_string(content: String) -> Result<serde_json::Value, Error> {
     let pairs = RestfulParser::parse(Rule::root, content.as_str())?;
     let first = pairs.into_iter().next();
     if first.is_none() {
@@ -45,7 +45,8 @@ mod restful_test {
 
     #[test]
     fn namespace() {
-        let result = RestfulParser::parse(Rule::namespace, "namespace java   as_d.asd.asdddasd_GFA");
+        let result =
+            RestfulParser::parse(Rule::namespace, "namespace java   as_d.asd.asdddasd_GFA");
         assert!(result.is_ok());
         let result = RestfulParser::parse(Rule::namespace, "namespace java _asd");
         assert!(result.is_ok());
@@ -73,7 +74,8 @@ mod restful_test {
 
     #[test]
     fn class_field() {
-        let result = RestfulParser::parse(Rule::class_field, "map<i64, map<double,list<string>>>attr");
+        let result =
+            RestfulParser::parse(Rule::class_field, "map<i64, map<double,list<string>>>attr");
         assert!(result.is_ok());
         let result = RestfulParser::parse(Rule::class_field, "optional Users.UserInfo attr");
         assert!(result.is_ok());

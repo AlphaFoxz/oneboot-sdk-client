@@ -34,7 +34,6 @@ use crate::thrift::gen::dtos::sdk_response_dto;
 //
 
 pub trait TSdkThriftIfaceSyncClient {
-  fn get_server_port(&mut self) -> thrift::Result<sdk_response_dto::SdkLongResponseDto>;
   fn get_executable_file_path(&mut self) -> thrift::Result<sdk_response_dto::SdkStringResponseDto>;
   fn get_template_content_by_path(&mut self, path_dto: sdk_request_dto::SdkStringRequestDto) -> thrift::Result<sdk_response_dto::SdkCodeTemplateResponseDto>;
   fn get_template_content_by_include_path(&mut self, template_path_dto: sdk_request_dto::SdkStringRequestDto, include_path: String) -> thrift::Result<sdk_response_dto::SdkCodeTemplateResponseDto>;
@@ -65,33 +64,6 @@ impl <IP, OP> TThriftClient for SdkThriftIfaceSyncClient<IP, OP> where IP: TInpu
 impl <IP, OP> TSdkThriftIfaceSyncClientMarker for SdkThriftIfaceSyncClient<IP, OP> where IP: TInputProtocol, OP: TOutputProtocol {}
 
 impl <C: TThriftClient + TSdkThriftIfaceSyncClientMarker> TSdkThriftIfaceSyncClient for C {
-  fn get_server_port(&mut self) -> thrift::Result<sdk_response_dto::SdkLongResponseDto> {
-    (
-      {
-        self.increment_sequence_number();
-        let message_ident = TMessageIdentifier::new("getServerPort", TMessageType::Call, self.sequence_number());
-        let call_args = SdkThriftIfaceGetServerPortArgs {  };
-        self.o_prot_mut().write_message_begin(&message_ident)?;
-        call_args.write_to_out_protocol(self.o_prot_mut())?;
-        self.o_prot_mut().write_message_end()?;
-        self.o_prot_mut().flush()
-      }
-    )?;
-    {
-      let message_ident = self.i_prot_mut().read_message_begin()?;
-      verify_expected_sequence_number(self.sequence_number(), message_ident.sequence_number)?;
-      verify_expected_service_call("getServerPort", &message_ident.name)?;
-      if message_ident.message_type == TMessageType::Exception {
-        let remote_error = thrift::Error::read_application_error_from_in_protocol(self.i_prot_mut())?;
-        self.i_prot_mut().read_message_end()?;
-        return Err(thrift::Error::Application(remote_error))
-      }
-      verify_expected_message_type(TMessageType::Reply, message_ident.message_type)?;
-      let result = SdkThriftIfaceGetServerPortResult::read_from_in_protocol(self.i_prot_mut())?;
-      self.i_prot_mut().read_message_end()?;
-      result.ok_or()
-    }
-  }
   fn get_executable_file_path(&mut self) -> thrift::Result<sdk_response_dto::SdkStringResponseDto> {
     (
       {
@@ -207,7 +179,6 @@ impl <C: TThriftClient + TSdkThriftIfaceSyncClientMarker> TSdkThriftIfaceSyncCli
 //
 
 pub trait SdkThriftIfaceSyncHandler {
-  fn handle_get_server_port(&self) -> thrift::Result<sdk_response_dto::SdkLongResponseDto>;
   fn handle_get_executable_file_path(&self) -> thrift::Result<sdk_response_dto::SdkStringResponseDto>;
   fn handle_get_template_content_by_path(&self, path_dto: sdk_request_dto::SdkStringRequestDto) -> thrift::Result<sdk_response_dto::SdkCodeTemplateResponseDto>;
   fn handle_get_template_content_by_include_path(&self, template_path_dto: sdk_request_dto::SdkStringRequestDto, include_path: String) -> thrift::Result<sdk_response_dto::SdkCodeTemplateResponseDto>;
@@ -223,9 +194,6 @@ impl <H: SdkThriftIfaceSyncHandler> SdkThriftIfaceSyncProcessor<H> {
     SdkThriftIfaceSyncProcessor {
       handler,
     }
-  }
-  fn process_get_server_port(&self, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    TSdkThriftIfaceProcessFunctions::process_get_server_port(&self.handler, incoming_sequence_number, i_prot, o_prot)
   }
   fn process_get_executable_file_path(&self, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
     TSdkThriftIfaceProcessFunctions::process_get_executable_file_path(&self.handler, incoming_sequence_number, i_prot, o_prot)
@@ -244,43 +212,6 @@ impl <H: SdkThriftIfaceSyncHandler> SdkThriftIfaceSyncProcessor<H> {
 pub struct TSdkThriftIfaceProcessFunctions;
 
 impl TSdkThriftIfaceProcessFunctions {
-  pub fn process_get_server_port<H: SdkThriftIfaceSyncHandler>(handler: &H, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    let _ = SdkThriftIfaceGetServerPortArgs::read_from_in_protocol(i_prot)?;
-    match handler.handle_get_server_port() {
-      Ok(handler_return) => {
-        let message_ident = TMessageIdentifier::new("getServerPort", TMessageType::Reply, incoming_sequence_number);
-        o_prot.write_message_begin(&message_ident)?;
-        let ret = SdkThriftIfaceGetServerPortResult { result_value: Some(handler_return) };
-        ret.write_to_out_protocol(o_prot)?;
-        o_prot.write_message_end()?;
-        o_prot.flush()
-      },
-      Err(e) => {
-        match e {
-          thrift::Error::Application(app_err) => {
-            let message_ident = TMessageIdentifier::new("getServerPort", TMessageType::Exception, incoming_sequence_number);
-            o_prot.write_message_begin(&message_ident)?;
-            thrift::Error::write_application_error_to_out_protocol(&app_err, o_prot)?;
-            o_prot.write_message_end()?;
-            o_prot.flush()
-          },
-          _ => {
-            let ret_err = {
-              ApplicationError::new(
-                ApplicationErrorKind::Unknown,
-                e.to_string()
-              )
-            };
-            let message_ident = TMessageIdentifier::new("getServerPort", TMessageType::Exception, incoming_sequence_number);
-            o_prot.write_message_begin(&message_ident)?;
-            thrift::Error::write_application_error_to_out_protocol(&ret_err, o_prot)?;
-            o_prot.write_message_end()?;
-            o_prot.flush()
-          },
-        }
-      },
-    }
-  }
   pub fn process_get_executable_file_path<H: SdkThriftIfaceSyncHandler>(handler: &H, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
     let _ = SdkThriftIfaceGetExecutableFilePathArgs::read_from_in_protocol(i_prot)?;
     match handler.handle_get_executable_file_path() {
@@ -435,9 +366,6 @@ impl <H: SdkThriftIfaceSyncHandler> TProcessor for SdkThriftIfaceSyncProcessor<H
   fn process(&self, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
     let message_ident = i_prot.read_message_begin()?;
     let res = match &*message_ident.name {
-      "getServerPort" => {
-        self.process_get_server_port(message_ident.sequence_number, i_prot, o_prot)
-      },
       "getExecutableFilePath" => {
         self.process_get_executable_file_path(message_ident.sequence_number, i_prot, o_prot)
       },
@@ -462,100 +390,6 @@ impl <H: SdkThriftIfaceSyncHandler> TProcessor for SdkThriftIfaceSyncProcessor<H
       },
     };
     thrift::server::handle_process_result(&message_ident, res, o_prot)
-  }
-}
-
-//
-// SdkThriftIfaceGetServerPortArgs
-//
-
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct SdkThriftIfaceGetServerPortArgs {
-}
-
-impl SdkThriftIfaceGetServerPortArgs {
-  fn read_from_in_protocol(i_prot: &mut dyn TInputProtocol) -> thrift::Result<SdkThriftIfaceGetServerPortArgs> {
-    i_prot.read_struct_begin()?;
-    loop {
-      let field_ident = i_prot.read_field_begin()?;
-      if field_ident.field_type == TType::Stop {
-        break;
-      }
-      i_prot.skip(field_ident.field_type)?;
-      i_prot.read_field_end()?;
-    }
-    i_prot.read_struct_end()?;
-    let ret = SdkThriftIfaceGetServerPortArgs {};
-    Ok(ret)
-  }
-  fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    let struct_ident = TStructIdentifier::new("getServerPort_args");
-    o_prot.write_struct_begin(&struct_ident)?;
-    o_prot.write_field_stop()?;
-    o_prot.write_struct_end()
-  }
-}
-
-//
-// SdkThriftIfaceGetServerPortResult
-//
-
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct SdkThriftIfaceGetServerPortResult {
-  result_value: Option<sdk_response_dto::SdkLongResponseDto>,
-}
-
-impl SdkThriftIfaceGetServerPortResult {
-  fn ok_or(self) -> thrift::Result<sdk_response_dto::SdkLongResponseDto> {
-    if self.result_value.is_some() {
-      Ok(self.result_value.unwrap())
-    } else {
-      Err(
-        thrift::Error::Application(
-          ApplicationError::new(
-            ApplicationErrorKind::MissingResult,
-            "no result received for SdkThriftIfaceGetServerPort"
-          )
-        )
-      )
-    }
-  }
-  fn read_from_in_protocol(i_prot: &mut dyn TInputProtocol) -> thrift::Result<SdkThriftIfaceGetServerPortResult> {
-    i_prot.read_struct_begin()?;
-    let mut f_0: Option<sdk_response_dto::SdkLongResponseDto> = None;
-    loop {
-      let field_ident = i_prot.read_field_begin()?;
-      if field_ident.field_type == TType::Stop {
-        break;
-      }
-      let field_id = field_id(&field_ident)?;
-      match field_id {
-        0 => {
-          let val = sdk_response_dto::SdkLongResponseDto::read_from_in_protocol(i_prot)?;
-          f_0 = Some(val);
-        },
-        _ => {
-          i_prot.skip(field_ident.field_type)?;
-        },
-      };
-      i_prot.read_field_end()?;
-    }
-    i_prot.read_struct_end()?;
-    let ret = SdkThriftIfaceGetServerPortResult {
-      result_value: f_0,
-    };
-    Ok(ret)
-  }
-  fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    let struct_ident = TStructIdentifier::new("SdkThriftIfaceGetServerPortResult");
-    o_prot.write_struct_begin(&struct_ident)?;
-    if let Some(ref fld_var) = self.result_value {
-      o_prot.write_field_begin(&TFieldIdentifier::new("result_value", TType::Struct, 0))?;
-      fld_var.write_to_out_protocol(o_prot)?;
-      o_prot.write_field_end()?
-    }
-    o_prot.write_field_stop()?;
-    o_prot.write_struct_end()
   }
 }
 

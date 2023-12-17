@@ -1,4 +1,4 @@
-use crate::core::error::*;
+use crate::core::error::Error;
 use pest::Parser;
 use pest_derive::Parser;
 
@@ -12,7 +12,7 @@ pub fn check_thrift_code_err(content: &str) -> super::CheckResult {
     super::CheckResult::from(err)
 }
 
-pub fn parse_json_from_string(content: String) -> Result<serde_json::Value> {
+pub fn parse_json_from_string(content: String) -> Result<serde_json::Value, Error> {
     let pairs = ThriftParser::parse(Rule::root, content.as_str())?;
     let first = pairs.into_iter().next();
     if first.is_none() {

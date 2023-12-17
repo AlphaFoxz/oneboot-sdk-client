@@ -267,7 +267,7 @@ impl TSerializable for SdkMapResponseDto {
 // SdkLongResponseDto
 //
 
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, serde::Deserialize)]
 pub struct SdkLongResponseDto {
   pub id: i64,
   pub task_id: i64,

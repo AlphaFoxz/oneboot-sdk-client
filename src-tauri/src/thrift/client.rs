@@ -1,5 +1,5 @@
 use super::gen::ifaces;
-use crate::core::error::*;
+use crate::core::error::Error;
 use thrift::{
     protocol,
     transport::{self, TIoChannel},
@@ -13,25 +13,21 @@ pub type ClientOutputProtocol = protocol::TMultiplexedOutputProtocol<
     >,
 >;
 
-// TODO 尝试用宏简化
-pub trait ThriftDefaultClient {
-    fn default_client() -> Result<Self>
-    where
-        Self: Sized;
-}
-
-fn get_io_protocols(service_name: &str) -> Result<(ClientInputProtocol, ClientOutputProtocol)> {
+async fn get_io_protocols(
+    service_name: &str,
+) -> Result<(ClientInputProtocol, ClientOutputProtocol), Error> {
+    use crate::core::http;
     use crate::core::store;
     let mut c = transport::TTcpChannel::new();
-    c.open(&format!(
-        "{:?}:{:?}",
-        store::get_settings_value(store::BACKEND_HOST.clone())
-            .unwrap()
-            .as_str(),
-        store::get_settings_value(store::BACKEND_PORT.clone())
-            .unwrap()
-            .as_str()
-    ))?;
+    let backend_host = store::get_settings_value(store::BACKEND_HOST.clone())
+        .await
+        .unwrap_or("127.0.0.1".into());
+    let backend_host = backend_host.as_str().unwrap_or("127.0.0.1");
+    let rpc_server_port = http::get_rpc_server_port(backend_host.to_string())
+        .await
+        .unwrap_or(8081);
+    let url = &format!("{}:{}", backend_host, rpc_server_port);
+    c.open(url)?;
     let (i_chan, o_chan) = c.split()?;
     let i_prot =
         protocol::TBinaryInputProtocol::new(transport::TFramedReadTransport::new(i_chan), true);
@@ -46,71 +42,54 @@ fn get_io_protocols(service_name: &str) -> Result<(ClientInputProtocol, ClientOu
     Ok((i_prot, o_prot))
 }
 
-pub use ifaces::sdk_info_iface::SdkInfoIfaceSyncClient;
-impl ThriftDefaultClient
-    for ifaces::sdk_info_iface::SdkInfoIfaceSyncClient<ClientInputProtocol, ClientOutputProtocol>
-{
-    fn default_client() -> Result<Self>
-    where
-        Self: Sized,
-    {
-        let (i_prot, o_prot) = get_io_protocols("sdkInfoIface")?;
-        Ok(ifaces::sdk_info_iface::SdkInfoIfaceSyncClient::new(
-            i_prot, o_prot,
-        ))
-    }
+pub async fn try_get_sdk_info_client() -> Result<
+    ifaces::sdk_info_iface::SdkInfoIfaceSyncClient<ClientInputProtocol, ClientOutputProtocol>,
+    Error,
+> {
+    let (i_prot, o_prot) = get_io_protocols("sdkInfoIface").await?;
+    Ok(ifaces::sdk_info_iface::SdkInfoIfaceSyncClient::new(
+        i_prot, o_prot,
+    ))
 }
 
-pub use ifaces::sdk_thrift_iface::SdkThriftIfaceSyncClient;
-impl ThriftDefaultClient
-    for ifaces::sdk_thrift_iface::SdkThriftIfaceSyncClient<
-        ClientInputProtocol,
-        ClientOutputProtocol,
-    >
-{
-    fn default_client() -> Result<Self>
-    where
-        Self: Sized,
-    {
-        let (i_prot, o_prot) = get_io_protocols("sdkThriftIface")?;
-        Ok(ifaces::sdk_thrift_iface::SdkThriftIfaceSyncClient::new(
-            i_prot, o_prot,
-        ))
-    }
+pub async fn try_get_sdk_thrift_client() -> Result<
+    ifaces::sdk_thrift_iface::SdkThriftIfaceSyncClient<ClientInputProtocol, ClientOutputProtocol>,
+    Error,
+> {
+    let (i_prot, o_prot) = get_io_protocols("sdkThriftIface").await?;
+    Ok(ifaces::sdk_thrift_iface::SdkThriftIfaceSyncClient::new(
+        i_prot, o_prot,
+    ))
 }
 
-pub use ifaces::sdk_gen_code_iface::SdkGenCodeIfaceSyncClient;
-impl ThriftDefaultClient
-    for ifaces::sdk_gen_code_iface::SdkGenCodeIfaceSyncClient<
+pub async fn try_get_sdk_gen_code_client() -> Result<
+    ifaces::sdk_gen_code_iface::SdkGenCodeIfaceSyncClient<
         ClientInputProtocol,
         ClientOutputProtocol,
-    >
-{
-    fn default_client() -> Result<Self> {
-        let (i_prot, o_prot) = get_io_protocols("sdkGenCodeIface")?;
-        Ok(ifaces::sdk_gen_code_iface::SdkGenCodeIfaceSyncClient::new(
-            i_prot, o_prot,
-        ))
-    }
+    >,
+    Error,
+> {
+    let (i_prot, o_prot) = get_io_protocols("sdkGenCodeIface").await?;
+    Ok(ifaces::sdk_gen_code_iface::SdkGenCodeIfaceSyncClient::new(
+        i_prot, o_prot,
+    ))
 }
 
 #[cfg(test)]
 mod thrift_test {
-    use super::super::gen::ifaces;
-    use crate::core::error::*;
-    use crate::thrift::client::ThriftDefaultClient;
     use crate::thrift::gen::ifaces::sdk_thrift_iface::TSdkThriftIfaceSyncClient;
 
-    #[test]
-    pub fn default_client() -> Result<()> {
-        ifaces::sdk_gen_code_iface::SdkGenCodeIfaceSyncClient::default_client()?;
-        Ok(())
+    #[tokio::test]
+    pub async fn gen_code_client() {
+        let c = super::try_get_sdk_gen_code_client().await;
+        assert!(c.is_ok());
     }
-    #[test]
-    pub fn test_client() -> Result<()> {
-        let mut client = ifaces::sdk_thrift_iface::SdkThriftIfaceSyncClient::default_client()?;
-        let result = client.get_executable_file_path();
+    #[tokio::test]
+    pub async fn thrift_client() {
+        let c = super::try_get_sdk_thrift_client().await;
+        assert!(c.is_ok());
+        let mut c = c.unwrap();
+        let result = c.get_executable_file_path();
         assert!(result.is_ok());
-        Ok(())
     }
 }

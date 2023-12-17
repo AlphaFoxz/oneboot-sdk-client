@@ -1,5 +1,7 @@
 {
-  "rust-analyzer.linkedProjects": [".\\src-tauri\\Cargo.toml"],
+  "rust-analyzer.linkedProjects": [
+    ".\\src-tauri\\Cargo.toml"
+  ],
   "editor.tabSize": 2,
   "editor.indentSize": "tabSize",
   "editor.formatOnSave": true,
@@ -24,5 +26,8 @@
   },
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
   }
 }

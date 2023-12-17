@@ -33,39 +33,39 @@ export interface SdkFileTreeResponseDto {
 }
 
 export async function getRestfulTemplateFileTree(): Promise<SdkFileTreeResponseDto> {
-  return (await invoke('get_restful_template_file_tree')) as SdkFileTreeResponseDtoImpl
+  return invoke('get_restful_template_file_tree')
 }
 
 export async function getTemplateContentByPath(filePath: string): Promise<any> {
-  return await invoke('get_template_content_by_path', { filePath })
+  return invoke('get_template_content_by_path', { filePath })
 }
 
 export async function createOrUpdateFile(filePath: string, content: string): Promise<any> {
-  return await invoke('create_or_update_file', { filePath, content })
+  return invoke('create_or_update_file', { filePath, content })
 }
 
 export async function createFolder(folderPath: string): Promise<any> {
-  return await invoke('create_folder', { folderPath })
+  return invoke('create_folder', { folderPath })
 }
 
 export async function deleteFile(filePath: string): Promise<any> {
-  return await invoke('delete_file', { filePath })
+  return invoke('delete_file', { filePath })
 }
 
 export async function renameFile(filePath: string, newPath: string): Promise<any> {
-  return await invoke('rename_file', { filePath, newPath })
+  return invoke('rename_file', { filePath, newPath })
 }
 
-export async function generateJavaApi(filePath: string): Promise<boolean> {
-  return await invoke('generate_java_api', { filePath })
+export async function generateJavaApi(filePath: string): Promise<void> {
+  return invoke('generate_java_api', { filePath })
 }
 
-export async function generateTsApi(filePath: string): Promise<boolean> {
-  return await invoke('generate_ts_api', { filePath })
+export async function generateTsApi(filePath: string): Promise<void> {
+  return invoke('generate_ts_api', { filePath })
 }
 
 export async function generateSql(
   filePath: string
 ): Promise<{ success: boolean; data: { [k: string]: string } | undefined }> {
-  return await invoke('generate_sql', { filePath })
+  return invoke('generate_sql', { filePath })
 }
