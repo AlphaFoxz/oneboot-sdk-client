@@ -11,11 +11,11 @@ const templateCodeRef = ref<HTMLElement>()
 const handleCopy = () => {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(copyRef.value!.value)
-    global_message.api.success("复制成功")
+    global_message.api.success('复制成功')
   } else {
     copyRef.value!.select()
     document.execCommand('copy')
-    global_message.api.success("复制成功")
+    global_message.api.success('复制成功')
   }
 }
 onMounted(() => {
@@ -33,10 +33,13 @@ onMounted(() => {
       <a-button class="text-white" @click="handleCopy">复制</a-button>
     </a-layout-header>
     <a-layout-content>
-      <textarea ref="copyRef" style="display: none;"></textarea>
+      <textarea ref="copyRef" style="display: none"></textarea>
       <pre
-        class="inline-block w-full h-full text-black"><code class="whitespace-pre-wrap overflow-ellipsis overflow-hidden" v-html="highlightCode"></code></pre>
-      <pre class="inline-block w-full h-full text-black"><code ref="templateCodeRef" class="hidden">import axios, { type AxiosInstance } from 'axios'
+        class="inline-block w-full h-full text-black"
+      ><code class="whitespace-pre-wrap overflow-ellipsis overflow-hidden" v-html="highlightCode"></code></pre>
+      <pre
+        class="inline-block w-full h-full text-black"
+      ><code ref="templateCodeRef" class="hidden">import axios, { type AxiosInstance } from 'axios'
 import JSONBigFun from 'json-bigint'
 
 const JSONBig = JSONBigFun({ useNativeBigInt: true })
@@ -94,7 +97,9 @@ axios.interceptors.response.use(config => {
 /**
  * 向gen各个模块提供axios实例，方法内可改，方法本体勿删
  */
-export function requireAxios(): AxiosInstance {
+export async function requireAxios(): AxiosInstance {
+  // 可以等待请求一些异步配置 ...
+  // await some async configure ...
   return axiosInstance
 }
 

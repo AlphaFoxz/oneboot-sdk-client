@@ -1,6 +1,6 @@
 import * as SdkVersionDto from '../dtos/SdkVersionDto'
 import { requireAxios as _requireAxios, requireJSON as _requireJSON, type Page as _Page } from '../../../apisUtil'
-const _axios = _requireAxios()
+const _axios = await _requireAxios()
 const _jsonUtil = _requireJSON()
 
 /**

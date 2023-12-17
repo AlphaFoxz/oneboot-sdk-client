@@ -1,6 +1,9 @@
 import axios, { type AxiosInstance } from 'axios'
 import JSONBigFun from 'json-bigint'
+import { Store } from '@tauri-apps/plugin-store'
+import { settings } from '@/constants'
 
+const settingsStore = new Store(settings.FILE_NAME)
 const JSONBig = JSONBigFun({ useNativeBigInt: true })
 
 /**
@@ -32,7 +35,7 @@ const axiosInstance = axios.create({
 /**
  * 默认前缀，对应proxy跨域代理中的前缀
  */
-axiosInstance.defaults.baseURL = 'http://localhost:8080'
+// axiosInstance.defaults.baseURL = `http://127.0.0.1:8080`
 
 /**
  * 配置请求拦截
@@ -64,7 +67,10 @@ axios.interceptors.response.use(
 /**
  * 向gen各个模块提供axios实例，方法内可改，方法本体勿删
  */
-export function requireAxios(): AxiosInstance {
+export async function requireAxios(): Promise<AxiosInstance> {
+  const host = await settingsStore.get(settings.KEY_BACKEND_HOST)
+  const port = await settingsStore.get(settings.KEY_BACKEND_PORT)
+  axiosInstance.defaults.baseURL = `http://${host}:${port}`
   return axiosInstance
 }
 

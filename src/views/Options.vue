@@ -3,22 +3,23 @@ import { Store } from '@tauri-apps/plugin-store'
 import router from '@/router'
 import { onMounted, ref } from 'vue'
 import { global_notification } from '@/utils'
+import { settings } from '@/constants'
 
-const store = new Store('.settings.dat')
+const store = new Store(settings.FILE_NAME)
 const backendHost = ref('')
 const backendPort = ref('')
 const tsGenDir = ref('')
 
 onMounted(async () => {
-  backendHost.value = (await store.get('backendHost')) || ''
-  backendPort.value = (await store.get('backendPort')) || ''
-  tsGenDir.value = (await store.get('tsGenDir')) || ''
+  backendHost.value = (await store.get(settings.KEY_BACKEND_HOST)) || ''
+  backendPort.value = (await store.get(settings.KEY_BACKEND_PORT)) || ''
+  tsGenDir.value = (await store.get(settings.KEY_TS_GEN_DIR)) || ''
 })
 
 const saveAllHandler = async () => {
-  await store.set('backendHost', backendHost.value)
-  await store.set('backendPort', backendPort.value)
-  await store.set('tsGenDir', tsGenDir.value)
+  await store.set(settings.KEY_BACKEND_HOST, backendHost.value)
+  await store.set(settings.KEY_BACKEND_PORT, backendPort.value)
+  await store.set(settings.KEY_TS_GEN_DIR, tsGenDir.value)
   store
     .save()
     .then(() => {

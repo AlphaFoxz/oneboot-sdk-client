@@ -9,6 +9,8 @@ type StoreImpl = Store<Wry>;
 
 lazy_static! {
     pub static ref TS_GEN_DIR: String = "tsGenDir".into();
+    pub static ref BACKEND_HOST: String = "backendHost".into();
+    pub static ref BACKEND_PORT: String = "backendPort".into();
     pub static ref SETTINGS_STORE: Arc<Mutex<Option<StoreImpl>>> = Arc::new(Mutex::new(None));
 }
 

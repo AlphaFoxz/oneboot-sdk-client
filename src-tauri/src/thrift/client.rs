@@ -21,8 +21,17 @@ pub trait ThriftDefaultClient {
 }
 
 fn get_io_protocols(service_name: &str) -> Result<(ClientInputProtocol, ClientOutputProtocol)> {
+    use crate::core::store;
     let mut c = transport::TTcpChannel::new();
-    c.open(&format!("{}:{}", "127.0.0.1", 8081))?;
+    c.open(&format!(
+        "{:?}:{:?}",
+        store::get_settings_value(store::BACKEND_HOST.clone())
+            .unwrap()
+            .as_str(),
+        store::get_settings_value(store::BACKEND_PORT.clone())
+            .unwrap()
+            .as_str()
+    ))?;
     let (i_chan, o_chan) = c.split()?;
     let i_prot =
         protocol::TBinaryInputProtocol::new(transport::TFramedReadTransport::new(i_chan), true);
@@ -39,10 +48,7 @@ fn get_io_protocols(service_name: &str) -> Result<(ClientInputProtocol, ClientOu
 
 pub use ifaces::sdk_info_iface::SdkInfoIfaceSyncClient;
 impl ThriftDefaultClient
-    for ifaces::sdk_info_iface::SdkInfoIfaceSyncClient<
-        ClientInputProtocol,
-        ClientOutputProtocol,
-    >
+    for ifaces::sdk_info_iface::SdkInfoIfaceSyncClient<ClientInputProtocol, ClientOutputProtocol>
 {
     fn default_client() -> Result<Self>
     where

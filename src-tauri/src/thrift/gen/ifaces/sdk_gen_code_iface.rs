@@ -38,8 +38,6 @@ pub trait TSdkGenCodeIfaceSyncClient {
   fn generate_java_api(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
   fn generate_java_rpc(&mut self, task_id: i64) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
   fn preview_generate_sql(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto) -> thrift::Result<sdk_response_dto::SdkMapResponseDto>;
-  fn check_ts_api_version(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
-  fn check_java_api_version(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
 }
 
 pub trait TSdkGenCodeIfaceSyncClientMarker {}
@@ -174,60 +172,6 @@ impl <C: TThriftClient + TSdkGenCodeIfaceSyncClientMarker> TSdkGenCodeIfaceSyncC
       result.ok_or()
     }
   }
-  fn check_ts_api_version(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkListResponseDto> {
-    (
-      {
-        self.increment_sequence_number();
-        let message_ident = TMessageIdentifier::new("checkTsApiVersion", TMessageType::Call, self.sequence_number());
-        let call_args = SdkGenCodeIfaceCheckTsApiVersionArgs { template_dto, gen_dir };
-        self.o_prot_mut().write_message_begin(&message_ident)?;
-        call_args.write_to_out_protocol(self.o_prot_mut())?;
-        self.o_prot_mut().write_message_end()?;
-        self.o_prot_mut().flush()
-      }
-    )?;
-    {
-      let message_ident = self.i_prot_mut().read_message_begin()?;
-      verify_expected_sequence_number(self.sequence_number(), message_ident.sequence_number)?;
-      verify_expected_service_call("checkTsApiVersion", &message_ident.name)?;
-      if message_ident.message_type == TMessageType::Exception {
-        let remote_error = thrift::Error::read_application_error_from_in_protocol(self.i_prot_mut())?;
-        self.i_prot_mut().read_message_end()?;
-        return Err(thrift::Error::Application(remote_error))
-      }
-      verify_expected_message_type(TMessageType::Reply, message_ident.message_type)?;
-      let result = SdkGenCodeIfaceCheckTsApiVersionResult::read_from_in_protocol(self.i_prot_mut())?;
-      self.i_prot_mut().read_message_end()?;
-      result.ok_or()
-    }
-  }
-  fn check_java_api_version(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkListResponseDto> {
-    (
-      {
-        self.increment_sequence_number();
-        let message_ident = TMessageIdentifier::new("checkJavaApiVersion", TMessageType::Call, self.sequence_number());
-        let call_args = SdkGenCodeIfaceCheckJavaApiVersionArgs { template_dto, gen_dir };
-        self.o_prot_mut().write_message_begin(&message_ident)?;
-        call_args.write_to_out_protocol(self.o_prot_mut())?;
-        self.o_prot_mut().write_message_end()?;
-        self.o_prot_mut().flush()
-      }
-    )?;
-    {
-      let message_ident = self.i_prot_mut().read_message_begin()?;
-      verify_expected_sequence_number(self.sequence_number(), message_ident.sequence_number)?;
-      verify_expected_service_call("checkJavaApiVersion", &message_ident.name)?;
-      if message_ident.message_type == TMessageType::Exception {
-        let remote_error = thrift::Error::read_application_error_from_in_protocol(self.i_prot_mut())?;
-        self.i_prot_mut().read_message_end()?;
-        return Err(thrift::Error::Application(remote_error))
-      }
-      verify_expected_message_type(TMessageType::Reply, message_ident.message_type)?;
-      let result = SdkGenCodeIfaceCheckJavaApiVersionResult::read_from_in_protocol(self.i_prot_mut())?;
-      self.i_prot_mut().read_message_end()?;
-      result.ok_or()
-    }
-  }
 }
 
 //
@@ -239,8 +183,6 @@ pub trait SdkGenCodeIfaceSyncHandler {
   fn handle_generate_java_api(&self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
   fn handle_generate_java_rpc(&self, task_id: i64) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
   fn handle_preview_generate_sql(&self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto) -> thrift::Result<sdk_response_dto::SdkMapResponseDto>;
-  fn handle_check_ts_api_version(&self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
-  fn handle_check_java_api_version(&self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
 }
 
 pub struct SdkGenCodeIfaceSyncProcessor<H: SdkGenCodeIfaceSyncHandler> {
@@ -264,12 +206,6 @@ impl <H: SdkGenCodeIfaceSyncHandler> SdkGenCodeIfaceSyncProcessor<H> {
   }
   fn process_preview_generate_sql(&self, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
     TSdkGenCodeIfaceProcessFunctions::process_preview_generate_sql(&self.handler, incoming_sequence_number, i_prot, o_prot)
-  }
-  fn process_check_ts_api_version(&self, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    TSdkGenCodeIfaceProcessFunctions::process_check_ts_api_version(&self.handler, incoming_sequence_number, i_prot, o_prot)
-  }
-  fn process_check_java_api_version(&self, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    TSdkGenCodeIfaceProcessFunctions::process_check_java_api_version(&self.handler, incoming_sequence_number, i_prot, o_prot)
   }
 }
 
@@ -424,80 +360,6 @@ impl TSdkGenCodeIfaceProcessFunctions {
       },
     }
   }
-  pub fn process_check_ts_api_version<H: SdkGenCodeIfaceSyncHandler>(handler: &H, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    let args = SdkGenCodeIfaceCheckTsApiVersionArgs::read_from_in_protocol(i_prot)?;
-    match handler.handle_check_ts_api_version(args.template_dto, args.gen_dir) {
-      Ok(handler_return) => {
-        let message_ident = TMessageIdentifier::new("checkTsApiVersion", TMessageType::Reply, incoming_sequence_number);
-        o_prot.write_message_begin(&message_ident)?;
-        let ret = SdkGenCodeIfaceCheckTsApiVersionResult { result_value: Some(handler_return) };
-        ret.write_to_out_protocol(o_prot)?;
-        o_prot.write_message_end()?;
-        o_prot.flush()
-      },
-      Err(e) => {
-        match e {
-          thrift::Error::Application(app_err) => {
-            let message_ident = TMessageIdentifier::new("checkTsApiVersion", TMessageType::Exception, incoming_sequence_number);
-            o_prot.write_message_begin(&message_ident)?;
-            thrift::Error::write_application_error_to_out_protocol(&app_err, o_prot)?;
-            o_prot.write_message_end()?;
-            o_prot.flush()
-          },
-          _ => {
-            let ret_err = {
-              ApplicationError::new(
-                ApplicationErrorKind::Unknown,
-                e.to_string()
-              )
-            };
-            let message_ident = TMessageIdentifier::new("checkTsApiVersion", TMessageType::Exception, incoming_sequence_number);
-            o_prot.write_message_begin(&message_ident)?;
-            thrift::Error::write_application_error_to_out_protocol(&ret_err, o_prot)?;
-            o_prot.write_message_end()?;
-            o_prot.flush()
-          },
-        }
-      },
-    }
-  }
-  pub fn process_check_java_api_version<H: SdkGenCodeIfaceSyncHandler>(handler: &H, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    let args = SdkGenCodeIfaceCheckJavaApiVersionArgs::read_from_in_protocol(i_prot)?;
-    match handler.handle_check_java_api_version(args.template_dto, args.gen_dir) {
-      Ok(handler_return) => {
-        let message_ident = TMessageIdentifier::new("checkJavaApiVersion", TMessageType::Reply, incoming_sequence_number);
-        o_prot.write_message_begin(&message_ident)?;
-        let ret = SdkGenCodeIfaceCheckJavaApiVersionResult { result_value: Some(handler_return) };
-        ret.write_to_out_protocol(o_prot)?;
-        o_prot.write_message_end()?;
-        o_prot.flush()
-      },
-      Err(e) => {
-        match e {
-          thrift::Error::Application(app_err) => {
-            let message_ident = TMessageIdentifier::new("checkJavaApiVersion", TMessageType::Exception, incoming_sequence_number);
-            o_prot.write_message_begin(&message_ident)?;
-            thrift::Error::write_application_error_to_out_protocol(&app_err, o_prot)?;
-            o_prot.write_message_end()?;
-            o_prot.flush()
-          },
-          _ => {
-            let ret_err = {
-              ApplicationError::new(
-                ApplicationErrorKind::Unknown,
-                e.to_string()
-              )
-            };
-            let message_ident = TMessageIdentifier::new("checkJavaApiVersion", TMessageType::Exception, incoming_sequence_number);
-            o_prot.write_message_begin(&message_ident)?;
-            thrift::Error::write_application_error_to_out_protocol(&ret_err, o_prot)?;
-            o_prot.write_message_end()?;
-            o_prot.flush()
-          },
-        }
-      },
-    }
-  }
 }
 
 impl <H: SdkGenCodeIfaceSyncHandler> TProcessor for SdkGenCodeIfaceSyncProcessor<H> {
@@ -515,12 +377,6 @@ impl <H: SdkGenCodeIfaceSyncHandler> TProcessor for SdkGenCodeIfaceSyncProcessor
       },
       "previewGenerateSql" => {
         self.process_preview_generate_sql(message_ident.sequence_number, i_prot, o_prot)
-      },
-      "checkTsApiVersion" => {
-        self.process_check_ts_api_version(message_ident.sequence_number, i_prot, o_prot)
-      },
-      "checkJavaApiVersion" => {
-        self.process_check_java_api_version(message_ident.sequence_number, i_prot, o_prot)
       },
       method => {
         Err(
@@ -981,250 +837,6 @@ impl SdkGenCodeIfacePreviewGenerateSqlResult {
   }
   fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
     let struct_ident = TStructIdentifier::new("SdkGenCodeIfacePreviewGenerateSqlResult");
-    o_prot.write_struct_begin(&struct_ident)?;
-    if let Some(ref fld_var) = self.result_value {
-      o_prot.write_field_begin(&TFieldIdentifier::new("result_value", TType::Struct, 0))?;
-      fld_var.write_to_out_protocol(o_prot)?;
-      o_prot.write_field_end()?
-    }
-    o_prot.write_field_stop()?;
-    o_prot.write_struct_end()
-  }
-}
-
-//
-// SdkGenCodeIfaceCheckTsApiVersionArgs
-//
-
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct SdkGenCodeIfaceCheckTsApiVersionArgs {
-  template_dto: sdk_request_dto::SdkCodeTemplateRequestDto,
-  gen_dir: String,
-}
-
-impl SdkGenCodeIfaceCheckTsApiVersionArgs {
-  fn read_from_in_protocol(i_prot: &mut dyn TInputProtocol) -> thrift::Result<SdkGenCodeIfaceCheckTsApiVersionArgs> {
-    i_prot.read_struct_begin()?;
-    let mut f_1: Option<sdk_request_dto::SdkCodeTemplateRequestDto> = None;
-    let mut f_2: Option<String> = None;
-    loop {
-      let field_ident = i_prot.read_field_begin()?;
-      if field_ident.field_type == TType::Stop {
-        break;
-      }
-      let field_id = field_id(&field_ident)?;
-      match field_id {
-        1 => {
-          let val = sdk_request_dto::SdkCodeTemplateRequestDto::read_from_in_protocol(i_prot)?;
-          f_1 = Some(val);
-        },
-        2 => {
-          let val = i_prot.read_string()?;
-          f_2 = Some(val);
-        },
-        _ => {
-          i_prot.skip(field_ident.field_type)?;
-        },
-      };
-      i_prot.read_field_end()?;
-    }
-    i_prot.read_struct_end()?;
-    verify_required_field_exists("SdkGenCodeIfaceCheckTsApiVersionArgs.template_dto", &f_1)?;
-    verify_required_field_exists("SdkGenCodeIfaceCheckTsApiVersionArgs.gen_dir", &f_2)?;
-    let ret = SdkGenCodeIfaceCheckTsApiVersionArgs {
-      template_dto: f_1.expect("auto-generated code should have checked for presence of required fields"),
-      gen_dir: f_2.expect("auto-generated code should have checked for presence of required fields"),
-    };
-    Ok(ret)
-  }
-  fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    let struct_ident = TStructIdentifier::new("checkTsApiVersion_args");
-    o_prot.write_struct_begin(&struct_ident)?;
-    o_prot.write_field_begin(&TFieldIdentifier::new("templateDto", TType::Struct, 1))?;
-    self.template_dto.write_to_out_protocol(o_prot)?;
-    o_prot.write_field_end()?;
-    o_prot.write_field_begin(&TFieldIdentifier::new("genDir", TType::String, 2))?;
-    o_prot.write_string(&self.gen_dir)?;
-    o_prot.write_field_end()?;
-    o_prot.write_field_stop()?;
-    o_prot.write_struct_end()
-  }
-}
-
-//
-// SdkGenCodeIfaceCheckTsApiVersionResult
-//
-
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct SdkGenCodeIfaceCheckTsApiVersionResult {
-  result_value: Option<sdk_response_dto::SdkListResponseDto>,
-}
-
-impl SdkGenCodeIfaceCheckTsApiVersionResult {
-  fn ok_or(self) -> thrift::Result<sdk_response_dto::SdkListResponseDto> {
-    if self.result_value.is_some() {
-      Ok(self.result_value.unwrap())
-    } else {
-      Err(
-        thrift::Error::Application(
-          ApplicationError::new(
-            ApplicationErrorKind::MissingResult,
-            "no result received for SdkGenCodeIfaceCheckTsApiVersion"
-          )
-        )
-      )
-    }
-  }
-  fn read_from_in_protocol(i_prot: &mut dyn TInputProtocol) -> thrift::Result<SdkGenCodeIfaceCheckTsApiVersionResult> {
-    i_prot.read_struct_begin()?;
-    let mut f_0: Option<sdk_response_dto::SdkListResponseDto> = None;
-    loop {
-      let field_ident = i_prot.read_field_begin()?;
-      if field_ident.field_type == TType::Stop {
-        break;
-      }
-      let field_id = field_id(&field_ident)?;
-      match field_id {
-        0 => {
-          let val = sdk_response_dto::SdkListResponseDto::read_from_in_protocol(i_prot)?;
-          f_0 = Some(val);
-        },
-        _ => {
-          i_prot.skip(field_ident.field_type)?;
-        },
-      };
-      i_prot.read_field_end()?;
-    }
-    i_prot.read_struct_end()?;
-    let ret = SdkGenCodeIfaceCheckTsApiVersionResult {
-      result_value: f_0,
-    };
-    Ok(ret)
-  }
-  fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    let struct_ident = TStructIdentifier::new("SdkGenCodeIfaceCheckTsApiVersionResult");
-    o_prot.write_struct_begin(&struct_ident)?;
-    if let Some(ref fld_var) = self.result_value {
-      o_prot.write_field_begin(&TFieldIdentifier::new("result_value", TType::Struct, 0))?;
-      fld_var.write_to_out_protocol(o_prot)?;
-      o_prot.write_field_end()?
-    }
-    o_prot.write_field_stop()?;
-    o_prot.write_struct_end()
-  }
-}
-
-//
-// SdkGenCodeIfaceCheckJavaApiVersionArgs
-//
-
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct SdkGenCodeIfaceCheckJavaApiVersionArgs {
-  template_dto: sdk_request_dto::SdkCodeTemplateRequestDto,
-  gen_dir: String,
-}
-
-impl SdkGenCodeIfaceCheckJavaApiVersionArgs {
-  fn read_from_in_protocol(i_prot: &mut dyn TInputProtocol) -> thrift::Result<SdkGenCodeIfaceCheckJavaApiVersionArgs> {
-    i_prot.read_struct_begin()?;
-    let mut f_1: Option<sdk_request_dto::SdkCodeTemplateRequestDto> = None;
-    let mut f_2: Option<String> = None;
-    loop {
-      let field_ident = i_prot.read_field_begin()?;
-      if field_ident.field_type == TType::Stop {
-        break;
-      }
-      let field_id = field_id(&field_ident)?;
-      match field_id {
-        1 => {
-          let val = sdk_request_dto::SdkCodeTemplateRequestDto::read_from_in_protocol(i_prot)?;
-          f_1 = Some(val);
-        },
-        2 => {
-          let val = i_prot.read_string()?;
-          f_2 = Some(val);
-        },
-        _ => {
-          i_prot.skip(field_ident.field_type)?;
-        },
-      };
-      i_prot.read_field_end()?;
-    }
-    i_prot.read_struct_end()?;
-    verify_required_field_exists("SdkGenCodeIfaceCheckJavaApiVersionArgs.template_dto", &f_1)?;
-    verify_required_field_exists("SdkGenCodeIfaceCheckJavaApiVersionArgs.gen_dir", &f_2)?;
-    let ret = SdkGenCodeIfaceCheckJavaApiVersionArgs {
-      template_dto: f_1.expect("auto-generated code should have checked for presence of required fields"),
-      gen_dir: f_2.expect("auto-generated code should have checked for presence of required fields"),
-    };
-    Ok(ret)
-  }
-  fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    let struct_ident = TStructIdentifier::new("checkJavaApiVersion_args");
-    o_prot.write_struct_begin(&struct_ident)?;
-    o_prot.write_field_begin(&TFieldIdentifier::new("templateDto", TType::Struct, 1))?;
-    self.template_dto.write_to_out_protocol(o_prot)?;
-    o_prot.write_field_end()?;
-    o_prot.write_field_begin(&TFieldIdentifier::new("genDir", TType::String, 2))?;
-    o_prot.write_string(&self.gen_dir)?;
-    o_prot.write_field_end()?;
-    o_prot.write_field_stop()?;
-    o_prot.write_struct_end()
-  }
-}
-
-//
-// SdkGenCodeIfaceCheckJavaApiVersionResult
-//
-
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct SdkGenCodeIfaceCheckJavaApiVersionResult {
-  result_value: Option<sdk_response_dto::SdkListResponseDto>,
-}
-
-impl SdkGenCodeIfaceCheckJavaApiVersionResult {
-  fn ok_or(self) -> thrift::Result<sdk_response_dto::SdkListResponseDto> {
-    if self.result_value.is_some() {
-      Ok(self.result_value.unwrap())
-    } else {
-      Err(
-        thrift::Error::Application(
-          ApplicationError::new(
-            ApplicationErrorKind::MissingResult,
-            "no result received for SdkGenCodeIfaceCheckJavaApiVersion"
-          )
-        )
-      )
-    }
-  }
-  fn read_from_in_protocol(i_prot: &mut dyn TInputProtocol) -> thrift::Result<SdkGenCodeIfaceCheckJavaApiVersionResult> {
-    i_prot.read_struct_begin()?;
-    let mut f_0: Option<sdk_response_dto::SdkListResponseDto> = None;
-    loop {
-      let field_ident = i_prot.read_field_begin()?;
-      if field_ident.field_type == TType::Stop {
-        break;
-      }
-      let field_id = field_id(&field_ident)?;
-      match field_id {
-        0 => {
-          let val = sdk_response_dto::SdkListResponseDto::read_from_in_protocol(i_prot)?;
-          f_0 = Some(val);
-        },
-        _ => {
-          i_prot.skip(field_ident.field_type)?;
-        },
-      };
-      i_prot.read_field_end()?;
-    }
-    i_prot.read_struct_end()?;
-    let ret = SdkGenCodeIfaceCheckJavaApiVersionResult {
-      result_value: f_0,
-    };
-    Ok(ret)
-  }
-  fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
-    let struct_ident = TStructIdentifier::new("SdkGenCodeIfaceCheckJavaApiVersionResult");
     o_prot.write_struct_begin(&struct_ident)?;
     if let Some(ref fld_var) = self.result_value {
       o_prot.write_field_begin(&TFieldIdentifier::new("result_value", TType::Struct, 0))?;
