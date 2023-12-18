@@ -79,7 +79,7 @@ axiosInstance.defaults.baseURL = '/api'
 axios.interceptors.request.use(config => {
   // Do something
   return config
-}, error => {
+}, _error => {
   // Do something
 })
 

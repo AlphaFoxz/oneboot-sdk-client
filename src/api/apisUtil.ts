@@ -1,16 +1,25 @@
 import axios, { type AxiosInstance } from 'axios'
-import JSONBigFun from 'json-bigint'
+import * as losslessJson from 'lossless-json'
 import { Store } from '@tauri-apps/plugin-store'
 import { settings } from '@/constants'
 
 const settingsStore = new Store(settings.FILE_NAME)
-const JSONBig = JSONBigFun({ useNativeBigInt: true })
 
 /**
  * 向gen各个模块提供JSON序列化工具，方法内可改，方法本体勿删
  */
-export function requireJSON(): { parse: typeof JSON.parse; stringify: typeof JSON.stringify } {
-  return JSONBig
+type JsonLike = {
+  parse: typeof JSON.parse
+  stringify:
+    | typeof JSON.stringify
+    | ((
+        value: any,
+        replacer?: (this: any, key: string, value: any) => any,
+        space?: string | number
+      ) => string | undefined)
+}
+export function requireJSON(): JsonLike {
+  return losslessJson
 }
 
 /**
@@ -24,7 +33,7 @@ const axiosInstance = axios.create({
   transformResponse: [
     (data) => {
       try {
-        return JSONBig.parse(data)
+        return losslessJson.parse(data)
       } catch (e) {
         return data
       }
@@ -45,7 +54,7 @@ axios.interceptors.request.use(
     // Do something
     return config
   },
-  (error) => {
+  (_error) => {
     // Do something
   }
 )
