@@ -35,5 +35,5 @@ const newWindowFn = (url: string) => {
   <br />
   <a-button type="primary" @click="routerGo('CheckServiceStatus')">服务状态检查（待完成）</a-button>
   <br />
-  <a-button type="primary" @click="routerGo('Options')">设置</a-button>
+  <a-button type="primary" @click="routerGo('Settings')">设置</a-button>
 </template>

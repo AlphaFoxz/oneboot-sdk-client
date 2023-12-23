@@ -4,11 +4,13 @@ import router from '@/router'
 import { onMounted, ref } from 'vue'
 import { global_notification } from '@/utils'
 import { settings } from '@/constants'
+import axios, { AxiosError } from 'axios'
 
 const store = new Store(settings.FILE_NAME)
 const backendHost = ref('')
 const backendPort = ref('')
 const tsGenDir = ref('')
+const isTestingUrl = ref(false)
 
 onMounted(async () => {
   backendHost.value = (await store.get(settings.KEY_BACKEND_HOST)) || ''
@@ -16,6 +18,24 @@ onMounted(async () => {
   tsGenDir.value = (await store.get(settings.KEY_TS_GEN_DIR)) || ''
 })
 
+const handleTestUrl = async () => {
+  isTestingUrl.value = true
+  axios
+    .get(`http://${backendHost.value}:${backendPort.value}/_sdk`)
+    .then(() => {
+      openSuccessNotification('连通性测试成功')
+      isTestingUrl.value = false
+    })
+    .catch((e: AxiosError) => {
+      if (e.response && e.response.status) {
+        openErrorNotification('已连通，但后端可能没有以开发模式运行')
+      } else {
+        console.error('catch', e)
+        openErrorNotification('连通性测试失败，服务不可访问')
+      }
+      isTestingUrl.value = false
+    })
+}
 const saveAllHandler = async () => {
   await store.set(settings.KEY_BACKEND_HOST, backendHost.value)
   await store.set(settings.KEY_BACKEND_PORT, backendPort.value)
@@ -52,11 +72,12 @@ const openErrorNotification = (content: string) => {
   <a-layout class="h-full">
     <a-layout-content class="overflow-x-hidden">
       <a-form>
-        <a-form-item label="后端Host">
-          <a-input title="要访问的后端Host" placeholder="127.0.0.1" v-model:value="backendHost" />
-        </a-form-item>
-        <a-form-item label="后端端口">
-          <a-input title="要访问的后端端口" placeholder="8080" v-model:value="backendPort" />
+        <a-form-item label="服务端http地址">
+          <label class="font-bold">http://</label>
+          <a-input class="w-1/3" title="要访问的后端Host" placeholder="127.0.0.1" v-model:value="backendHost" />
+          <label class="font-bold">:</label>
+          <a-input class="w-1/12" title="要访问的后端端口" placeholder="8080" v-model:value="backendPort" />
+          <a-button type="text" @click="handleTestUrl" :loading="isTestingUrl">测试连接</a-button>
         </a-form-item>
         <a-form-item label="ts代码生成目录">
           <a-input
@@ -67,7 +88,8 @@ const openErrorNotification = (content: string) => {
         </a-form-item>
         <a-form-item>
           <a-button @click="routerGo('Home')">返回</a-button>
-          <a-button @click="saveAllHandler">保存</a-button>
+          &emsp;
+          <a-button type="link" @click="saveAllHandler">保存</a-button>
         </a-form-item>
       </a-form>
     </a-layout-content>

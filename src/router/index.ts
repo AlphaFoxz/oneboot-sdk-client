@@ -32,9 +32,9 @@ const routes = [
     component: () => import('@/views/RulesOfJava.vue'),
   },
   {
-    path: '/options',
-    name: 'Options',
-    component: () => import('@/views/Options.vue'),
+    path: '/settings',
+    name: 'Settings',
+    component: () => import('@/views/Settings.vue'),
   },
   {
     path: '/checkClientCode',
