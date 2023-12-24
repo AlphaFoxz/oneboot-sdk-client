@@ -40,15 +40,23 @@ onMounted(() => {
       <pre
         class="inline-block w-full h-full text-black"
       ><code ref="templateCodeRef" class="hidden">import axios, { type AxiosInstance } from 'axios'
-import JSONBigFun from 'json-bigint'
-
-const JSONBig = JSONBigFun({ useNativeBigInt: true })
+import * as losslessJson from 'lossless-json'
 
 /**
- * 向gen各个模块提供JSON序列化工具，方法内可改，方法本体勿删
+ * 向gen各个模块提供JSON序列化工具，解决JSON.parse大整数精度丢失问题
  */
-export function requireJSON(): { parse: typeof JSON.parse; stringify: typeof JSON.stringify } {
-  return JSONBig
+type JsonLike = {
+  parse: typeof JSON.parse
+  stringify:
+    | typeof JSON.stringify
+    | ((
+        value: any,
+        replacer?: (this: any, key: string, value: any) => any,
+        space?: string | number
+      ) => string | undefined)
+}
+export function requireJSON(): JsonLike {
+  return losslessJson
 }
 
 /**
@@ -57,15 +65,17 @@ export function requireJSON(): { parse: typeof JSON.parse; stringify: typeof JSO
 const axiosInstance = axios.create({
   timeout: 30_000,
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
-  transformResponse: [data => {
-    try {
-      return JSONBig.parse(data)
-    } catch (e) {
-      return data
-    }
-  }]
+  transformResponse: [
+    (data) => {
+      try {
+        return losslessJson.parse(data)
+      } catch (e) {
+        return data
+      }
+    },
+  ],
 })
 
 /**
@@ -97,9 +107,36 @@ axios.interceptors.response.use(config => {
 /**
  * 向gen各个模块提供axios实例，方法内可改，方法本体勿删
  */
-export async function requireAxios(): AxiosInstance {
-  // 可以等待请求一些异步配置 ...
-  // await some async configure ...
+type HttpUtil = {
+  post: (...arg0: any[]) => Promise&lt;any>
+  get: (...arg0: any[]) => Promise&lt;any>
+  put: (...arg0: any[]) => Promise&lt;any>
+  delete: (...arg0: any[]) => Promise&lt;any>
+  patch: (...arg0: any[]) => Promise&lt;any>
+}
+/**
+ * api方法的返回值类型，正常带响应码的axios应该返回的是AxiosPromise，像这样：
+ * export type HttpResult&lt;T> = AxiosPromise&lt;T>
+ * 但是下面提供http方法的时候取了.data，所以返回值就变为了Promise&lt;T>
+ */
+export type HttpResult&lt;T> = Promise&lt;T>
+
+let http: HttpUtil
+export async function requireHttpUtil(): AxiosInstance {
+  if (http) {
+    return http
+  }
+  // 可以等待请求一些异步配置之类的 ...
+  // const port = await getPrefix()
+  // axios.defaults.baseURL = `http://localhost:${port}`
+  http = {
+    // 如果本项目只要response里的data，直接在这里处理就行
+    get: async (url: string) => (await axiosInstance.get(url)).data,
+    post: async (url: string, param?: any) => (await axiosInstance.post(url, param)).data,
+    patch: async (url: string, param?: any) => (await axiosInstance.patch(url, param)).data,
+    delete: async (url: string) => (await axiosInstance.delete(url)).data,
+    put: async (url: string, param?: any) => (await axiosInstance.put(url, param)).data,
+  }
   return axiosInstance
 }
 

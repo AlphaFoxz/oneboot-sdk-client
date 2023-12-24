@@ -26,5 +26,5 @@ export type SdkCodeTemplateDto = {
   /**
    *  包含其他模板 
    */
-  includes: Record<string, SdkCodeTemplateDto>
+  imports: Record<string, SdkCodeTemplateDto>
 }
