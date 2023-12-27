@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import router from '@/router'
 import { Window } from '@tauri-apps/api/window'
+
 const routerGo = (name: string) => {
   router.push({ name })
 }
@@ -9,6 +10,9 @@ const newWindowFn = (url: string) => {
     url,
     minHeight: 600,
     minWidth: 800,
+    width: 1366,
+    height: 768,
+    fileDropEnabled: false,
   })
 }
 </script>
@@ -34,6 +38,8 @@ const newWindowFn = (url: string) => {
   <a-button type="primary" @click="routerGo('CheckServerCode')">服务端代码检查</a-button>
   <br />
   <a-button type="primary" @click="routerGo('CheckServiceStatus')">服务状态检查（待完成）</a-button>
+  <br />
+  <a-button type="primary" @click="routerGo('WikiUtil')">Wiki工具</a-button>
   <br />
   <a-button type="primary" @click="routerGo('Settings')">设置</a-button>
 </template>

@@ -88,7 +88,7 @@ onMounted(render)
         class="inline-block w-full h-full text-black"
       ><code ref="templateCachedCodeRef" class="hidden">package {{ packagePrefix }}.{{ moduleName }}.service.crud;
 
-import com.github.alphafoxz.oneboot.common.interfaces.framework.impl.AbstractCachedCrudService;
+import com.github.alphafoxz.oneboot.common.standard.framework.impl.AbstractCachedCrudService;
 import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.{{ PoName }};
 import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.pojos.{{ PoName }}Po;
 import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.records.{{ PoName }}Record;

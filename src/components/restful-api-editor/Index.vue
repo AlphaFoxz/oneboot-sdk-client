@@ -108,7 +108,7 @@ const settingsMenu = ref([
   {
     label: '退出',
     handler: () => {
-      router.back()
+      router.push({ name: 'Home' })
     },
   },
 ])
@@ -141,14 +141,14 @@ const handleNewFolder = (path: string, resolve: () => void, reject: (msg?: strin
     }
   })
 }
-const handleSaveFile = (path: string, value: string, resolve: () => void, reject: (msg?: string) => void) => {
+const handleSaveFile = async (path: string, value: string, resolve: () => void, reject: (msg?: string) => void) => {
   const currentPath =
     monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
+  if (path.endsWith('.restful')) {
+    await api.checkErr(monaco, files.value[path].content!, currentPath === path ? monacoStore.getEditor() : undefined)
+  }
   utils.rust_api.createOrUpdateFile(path, value).then((res) => {
     if (res) {
-      if (path.endsWith('.restful')) {
-        api.checkErr(monaco, files.value[path].content!, currentPath === path ? monacoStore.getEditor() : undefined)
-      }
       resolve()
     } else {
       reject('保存失败，请检查服务端报错信息')

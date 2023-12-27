@@ -37,6 +37,11 @@ const routes = [
     component: () => import('@/views/Settings.vue'),
   },
   {
+    path: '/wikiUtil',
+    name: 'WikiUtil',
+    component: () => import('@/views/WikiUtil.vue'),
+  },
+  {
     path: '/checkClientCode',
     name: 'CheckClientCode',
     component: () => import('@/views/CheckClientCode.vue'),

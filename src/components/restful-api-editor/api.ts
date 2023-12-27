@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/primitives'
+import { invoke } from '@tauri-apps/api/core'
 import * as types from './define'
 type IStandaloneCodeEditor = types.monaco_editor.IStandaloneCodeEditor
 

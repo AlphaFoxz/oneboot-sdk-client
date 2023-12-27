@@ -1,5 +1,4 @@
-import { primitives } from '@tauri-apps/api'
-const invoke = primitives.invoke
+import { invoke } from '@tauri-apps/api/core'
 export enum SdkFileTypeEnum {
   LOCAL_FILE = 0,
   LOCAL_DIR = 1,

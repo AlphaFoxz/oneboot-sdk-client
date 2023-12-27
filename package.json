@@ -7,13 +7,14 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "update-tauri": "pnpm update @tauri-apps/cli @tauri-apps/api @tauri-apps/plugin-shell @tauri-apps/plugin-store"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
-    "@tauri-apps/api": "2.0.0-alpha.12",
-    "@tauri-apps/plugin-shell": "2.0.0-alpha.3",
-    "@tauri-apps/plugin-store": "2.0.0-alpha.3",
+    "@tauri-apps/api": "2.0.0-alpha.13",
+    "@tauri-apps/plugin-shell": "2.0.0-alpha.5",
+    "@tauri-apps/plugin-store": "2.0.0-alpha.5",
     "ant-design-vue": "^4.0.7",
     "axios": "^1.6.2",
     "lossless-json": "^4.0.1",
@@ -27,7 +28,7 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "2.0.0-alpha.18",
+    "@tauri-apps/cli": "2.0.0-alpha.20",
     "@types/node": "^20.10.4",
     "@vitejs/plugin-vue": "^4.5.2",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
