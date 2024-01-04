@@ -2,8 +2,14 @@
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import { ref, watch, nextTick, onMounted } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import Button from 'primevue/button'
+import Dropdown from 'primevue/dropdown'
+import InputText from 'primevue/inputtext'
 import * as utils from '@/utils'
 import { useRouter } from 'vue-router'
+
+const toast = useToast()
 const router = useRouter()
 const highlightCode = ref('')
 const copyRef = ref<HTMLTextAreaElement>()
@@ -13,15 +19,15 @@ const templateAbacCachedCodeRef = ref<HTMLInputElement>()
 const packagePrefix = ref('com.github.alphafoxz.oneboot')
 
 const moduleOptions = ref([
-  { value: 'app', label: 'app' },
-  { value: 'preset_sys', label: 'preset_sys' },
-  { value: 'sdk', label: 'sdk' },
+  { label: 'app', value: 'app' },
+  { label: 'preset_sys', value: 'preset_sys' },
+  { label: 'sdk', value: 'sdk' },
 ])
 const moduleName = ref(moduleOptions.value[0].value)
 
 const serviceTypeOptions = ref([
-  { value: 'abacCachedCrud', label: '权限+缓存+增删改查' },
-  { value: 'cachedCrud', label: '缓存+增删改查' },
+  { label: '权限+缓存+增删改查', value: 'abacCachedCrud' },
+  { label: '缓存+增删改查', value: 'cachedCrud' },
 ])
 const serviceType = ref(serviceTypeOptions.value[0].value)
 
@@ -29,9 +35,6 @@ const poInput = ref('')
 const PoName = ref('')
 const PO_NAME = ref('')
 const render = () => {
-  if (/^\s*$/.test(poInput.value)) {
-    return
-  }
   const r =
     serviceType.value === 'abacCachedCrud'
       ? templateAbacCachedCodeRef.value || { innerText: '' }
@@ -42,11 +45,11 @@ const render = () => {
 const handleCopy = () => {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(copyRef.value!.value)
-    utils.global_message.api.success('复制成功')
+    toast.add({ severity: 'success', summary: '复制成功', life: 2000 })
   } else {
     copyRef.value!.select()
     document.execCommand('copy')
-    utils.global_message.api.success('复制成功')
+    toast.add({ severity: 'success', summary: '复制成功', life: 2000 })
   }
 }
 watch(poInput, () => {
@@ -68,18 +71,34 @@ onMounted(render)
 </script>
 
 <template>
-  <a-layout>
-    <a-layout-header>
-      <a-button class="text-white" @click="router.push({ name: 'Home' })">返回</a-button>
-      <label class="text-white">模块:</label>
-      <a-select class="w-1/6" show-search v-model:value="moduleName" :options="moduleOptions"></a-select>
-      <label class="text-white">实体:</label>
-      <a-input class="w-1/4" v-model:value="poInput" placeholder="表名/实体名"></a-input>
-      <label class="text-white">类型:</label>
-      <a-select class="w-1/4" show-search v-model:value="serviceType" :options="serviceTypeOptions"></a-select>
-      <a-button class="text-white" @click="handleCopy">复制</a-button>
-    </a-layout-header>
-    <a-layout-content>
+  <div>
+    <div>
+      <Button label="返回" @click="router.push({ name: 'Home' })"></Button>
+      <label>模块:</label>
+      <Dropdown
+        class="w-1/6"
+        show-search
+        v-model="moduleName"
+        placeholder="选择一个模块名"
+        :options="moduleOptions"
+        optionLabel="label"
+        optionValue="value"
+      />
+      <label>实体:</label>
+      <InputText class="w-1/4" v-model="poInput" placeholder="表名/实体名" />
+      <label>类型:</label>
+      <Dropdown
+        class="w-1/4"
+        show-search
+        v-model="serviceType"
+        placeholder="生成crud的类型"
+        :options="serviceTypeOptions"
+        optionLabel="label"
+        optionValue="value"
+      />
+      <Button label="复制" @click="handleCopy"></Button>
+    </div>
+    <div class="bg-white">
       <textarea ref="copyRef" style="display: none"></textarea>
       <pre
         class="inline-block w-full h-full text-black"
@@ -205,6 +224,6 @@ public class {{ PoName }}Crud extends AbstractAbacCachedCrudService&lt;{{ PoName
 }
 </code>
 </pre>
-    </a-layout-content>
-  </a-layout>
+    </div>
+  </div>
 </template>

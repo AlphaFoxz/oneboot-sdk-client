@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import Button from 'primevue/button'
+
 const router = useRouter()
 </script>
 
 <template>
-  <a-layout style="min-height: 100%">
-    <a-layout-header>
-      <a-button class="text-white" @click="router.push({ name: 'Home' })">返回</a-button>
-      <a-space class="text-white">数据库设计原则（设计期间拟定）</a-space>
-    </a-layout-header>
-    <a-layout-content class="text-black">
+  <div style="min-height: 100%">
+    <div>
+      <Button label="返回" class="text-white" @click="router.push({ name: 'Home' })"></Button>
+      <label class="text-white">数据库设计原则（设计期间拟定）</label>
+    </div>
+    <div class="bg-white text-black">
       <h1 class="text-3xl">设计规范</h1>
       <p><a href="https://developer.aliyun.com/article/60899">阿里云相关规范</a></p>
       <p>
@@ -87,8 +89,8 @@ const router = useRouter()
         schema)，应该为每个应用分配对应的schema，schema_name最好与user name一致。
       </p>
       <p>7. query中的别名不能使用 "小写字母，下划线，数字" 以外的字符，例如中文。</p>
-    </a-layout-content>
-  </a-layout>
+    </div>
+  </div>
 </template>
 
 <style scoped>

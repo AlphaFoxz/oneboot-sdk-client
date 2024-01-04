@@ -64,7 +64,7 @@ class_field      = ${
     (modifier ~ WHITESPACE+)? ~ (((contain_list | contain_map | contain_set) ~ WHITESPACE*) | ((intype | utype) ~ WHITESPACE+)) ~ class_field_name ~ (WHITESPACE* ~ ";")?
 }
 class            = ${
-    "class" ~ WHITESPACE+ ~ class_name ~ WHITESPACE* ~ "{" ~ (WHITESPACE | COMMENT)* ~ (class_field ~ (WHITESPACE | COMMENT)*)* ~ "}"
+    "class" ~ WHITESPACE+ ~ class_name ~ WHITESPACE* ~ "{" ~ (WHITESPACE | COMMENT | class_field)* ~ "}"
 }
 
 // 枚举定义
@@ -88,7 +88,7 @@ interface_function      = ${
     (void | type) ~ WHITESPACE+ ~ interface_function_name ~ WHITESPACE* ~ "(" ~ WHITESPACE* ~ ((WHITESPACE | COMMENT)* ~ param ~ WHITESPACE* ~ ("," ~ (WHITESPACE | COMMENT)* ~ param)* ~ WHITESPACE*)? ~ ")" ~ (WHITESPACE* ~ ";")?
 }
 interface               = ${
-    "interface" ~ WHITESPACE+ ~ interface_name ~ WHITESPACE* ~ "{" ~ ((WHITESPACE | COMMENT | annotation)* ~ interface_function ~ (WHITESPACE | COMMENT)*)* ~ "}"
+    "interface" ~ WHITESPACE+ ~ interface_name ~ WHITESPACE* ~ "{" ~ (WHITESPACE | COMMENT | annotation | interface_function)* ~ "}"
 }
 
 // 注解定义

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { SdkVersionApi } from '@/api/gen/sdk/apis/SdkVersionApi'
-import { global_message } from '@/utils'
+import { useToast } from 'primevue/usetoast'
 import { onMounted, ref } from 'vue'
 import { Store } from '@tauri-apps/plugin-store'
 import { useRouter } from 'vue-router'
+import Button from 'primevue/button'
+import InputSwitch from 'primevue/inputswitch'
 
+const toast = useToast()
 const router = useRouter()
 const msg = ref('')
 const hideSuccessed = ref(false)
@@ -19,7 +22,7 @@ const check = async () => {
   const res = await SdkVersionApi.getRestfulTemplateHash()
   console.info('res', res)
   if (!res.success) {
-    global_message.api.error('服务端代码检查失败，请检查后端服务和网络连接')
+    toast.add({ severity: 'error', summary: '服务端代码检查失败，请检查后端服务和网络连接' })
     return
   }
   const store = await getStore()
@@ -57,23 +60,18 @@ onMounted(async () => {
 </script>
 
 <template>
-  <a-layout>
-    <a-layout-header>
+  <div>
+    <div>
       <p class="text-white">
-        <a-button class="text-white" @click="router.push({ name: 'Home' })">返回</a-button>
-        前端代码检查
-        <a-switch
-          class="text-white"
-          v-model:checked="hideSuccessed"
-          checked-children="过滤一致记录"
-          un-checked-children="显示全部结果"
-          @change="check"
-        >
-        </a-switch>
+        <Button class="text-white" label="返回" @click="router.push({ name: 'Home' })"></Button>
+        <label>前端代码检查</label>
+        <br />
+        <label>只显示异常记录</label>
+        <InputSwitch class="text-white" v-model:checked="hideSuccessed" @change="check" />
       </p>
-    </a-layout-header>
-    <a-layout-content>
+    </div>
+    <div>
       <pre class="text-black">{{ msg }}</pre>
-    </a-layout-content>
-  </a-layout>
+    </div>
+  </div>
 </template>

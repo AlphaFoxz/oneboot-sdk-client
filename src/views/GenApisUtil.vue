@@ -3,7 +3,10 @@ import { useRouter } from 'vue-router'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import { ref, onMounted } from 'vue'
-import { global_message } from '@/utils'
+import { useToast } from 'primevue/usetoast'
+import Button from 'primevue/button'
+
+const toast = useToast()
 const router = useRouter()
 const highlightCode = ref('')
 const copyRef = ref<HTMLTextAreaElement>()
@@ -11,11 +14,11 @@ const templateCodeRef = ref<HTMLElement>()
 const handleCopy = () => {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(copyRef.value!.value)
-    global_message.api.success('复制成功')
+    toast.add({ severity: 'success', summary: '复制成功', life: 2000 })
   } else {
     copyRef.value!.select()
     document.execCommand('copy')
-    global_message.api.success('复制成功')
+    toast.add({ severity: 'success', summary: '复制成功', life: 2000 })
   }
 }
 onMounted(() => {
@@ -26,20 +29,20 @@ onMounted(() => {
 </script>
 
 <template>
-  <a-layout>
-    <a-layout-header>
-      <a-button class="text-white" @click="router.push({ name: 'Home' })">返回</a-button>
-      <a-space class="text-white">前段apis目录 自定义apisUtil.ts代码示例</a-space>
-      <a-button class="text-white" @click="handleCopy">复制</a-button>
-    </a-layout-header>
-    <a-layout-content>
+  <div>
+    <div>
+      <Button label="返回" @click="router.push({ name: 'Home' })"></Button>
+      <label class="text-white">前端apis目录 自定义apis-util.ts代码示例</label>
+      <Button label="复制" @click="handleCopy"></Button>
+    </div>
+    <div class="bg-white">
       <textarea ref="copyRef" style="display: none"></textarea>
       <pre
         class="inline-block w-full h-full text-black"
       ><code class="whitespace-pre-wrap overflow-ellipsis overflow-hidden" v-html="highlightCode"></code></pre>
       <pre
         class="inline-block w-full h-full text-black"
-      ><code ref="templateCodeRef" class="hidden">import axios, { type AxiosInstance } from 'axios'
+      ><code ref="templateCodeRef" class="hidden">import axios from 'axios'
 import * as losslessJson from 'lossless-json'
 
 /**
@@ -89,7 +92,8 @@ axiosInstance.defaults.baseURL = '/api'
 axios.interceptors.request.use(config => {
   // Do something
   return config
-}, _error => {
+}, error => {
+  console.error('自定义错误请求回调：请求失败', error)
   // Do something
 })
 
@@ -100,7 +104,7 @@ axios.interceptors.response.use(config => {
   // Do something
   return config
 }, error => {
-  console.error('自定义错误回调：请求失败', error)
+  console.error('自定义错误响应回调：请求失败', error)
   // Do something
 })
 
@@ -122,7 +126,7 @@ type HttpUtil = {
 export type HttpResult&lt;T> = Promise&lt;T>
 
 let http: HttpUtil
-export async function requireHttpUtil(): AxiosInstance {
+export async function requireHttpUtil(): Promise&lt;HttpUtil> {
   if (http) {
     return http
   }
@@ -173,6 +177,6 @@ export type Page&lt;T> = {
 }
 </code>
 </pre>
-    </a-layout-content>
-  </a-layout>
+    </div>
+  </div>
 </template>
