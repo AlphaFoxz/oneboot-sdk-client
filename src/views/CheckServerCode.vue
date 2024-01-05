@@ -27,7 +27,9 @@ const check = async () => {
   msg.value = result
 }
 onMounted(async () => {
-  check()
+  check().catch((e) => {
+    toast.add({ severity: 'error', summary: '服务端代码检查失败，请检查后端服务和网络连接：' + e.message })
+  })
 })
 </script>
 
