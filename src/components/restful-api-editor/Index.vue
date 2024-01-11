@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { Modal as AModal, Tabs as ATabs, TabPane as ATabPane } from 'ant-design-vue'
-import { ref, watch } from 'vue'
+import { ComputedRef, ref, watch } from 'vue'
 import { Editor, type Files, useMessage, useMonaco, useHotkey } from 'monaco-tree-editor'
 import 'monaco-tree-editor/index.css'
 import * as utils from '@/utils'
@@ -76,9 +76,7 @@ const handleReload = (resolve: () => void, reject: (msg?: string) => void) => {
         console.debug('请求结果', res)
         const container = loadFile(res.data, {}, 0)
         resolve()
-        setTimeout(() => {
-          files.value = container
-        })
+        files.value = container
       } else {
         reject('加载文件树失败，请检查服务端报错信息')
       }
@@ -198,7 +196,7 @@ const sqlTitle = ref<string[]>([])
 const sqlIndex = ref(-1)
 const sqlContent = ref<string[]>([])
 const sqlVisible = ref(false)
-const handleContextmenuSelect = async (path: string, item: { label: string; value: string }) => {
+const handleContextmenuSelect = async (path: string, item: { label: string | ComputedRef<string>; value: string }) => {
   const currentPath =
     monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
   if (item.value === 'generateTsCode') {

@@ -25,6 +25,7 @@ contain_list_type     = @{ type }
 contain_list          = !{ "list" ~ "<" ~ contain_list_type ~ ">" }
 contain_set_type      = @{ type }
 contain_set           = !{ "set" ~ "<" ~ contain_set_type ~ ">" }
+ref_enum              = !{ "enum" ~ "<" ~ utype ~ ">" }
 intype                = ${
     "boolean"
   | "byte"
@@ -49,6 +50,7 @@ type = ${
   | contain_map
   | contain_list
   | contain_set
+  | ref_enum
   | utype
 }
 
@@ -61,7 +63,7 @@ modifier = @{ "required" | "optional" }
 class_name       = @{ utype_customname }
 class_field_name = @{ (ASCII_ALPHANUMERIC | "_")+ }
 class_field      = ${
-    (modifier ~ WHITESPACE+)? ~ (((contain_list | contain_map | contain_set) ~ WHITESPACE*) | ((intype | utype) ~ WHITESPACE+)) ~ class_field_name ~ (WHITESPACE* ~ ";")?
+    (modifier ~ WHITESPACE+)? ~ (((contain_list | contain_map | contain_set | ref_enum) ~ WHITESPACE*) | ((intype | utype) ~ WHITESPACE+)) ~ class_field_name ~ (WHITESPACE* ~ ";")?
 }
 class            = ${
     "class" ~ WHITESPACE+ ~ class_name ~ WHITESPACE* ~ "{" ~ (WHITESPACE | COMMENT | class_field)* ~ "}"

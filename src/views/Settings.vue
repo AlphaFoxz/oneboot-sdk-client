@@ -83,6 +83,7 @@ const openErrorNotification = (content: string) => {
         id="tsGenDir"
         title="ts代码会在该目录生成，如：【配置的目录】/gen/app/AppTestApi.ts"
         placeholder="D:\projects\oneboot_front\src\apis"
+        style="min-width: 40%"
         v-model="tsGenDir"
       />
     </div>
