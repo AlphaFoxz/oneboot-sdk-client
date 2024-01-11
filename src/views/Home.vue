@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
 import router from '@/router'
+import { nanoid } from 'nanoid'
 import { Window } from '@tauri-apps/api/window'
 
 const routerLink = (name: string) => {
   router.push({ name })
 }
 const newWindowFn = (url: string) => {
-  new Window('新窗口', {
+  new Window(nanoid(), {
     url,
     minHeight: 600,
     minWidth: 800,
@@ -22,6 +23,9 @@ const newWindowFn = (url: string) => {
   <h1>Oneboot SDK模块 开发工具</h1>
   <Button label="Restful接口设计器" @click="routerLink('GenRestfulApi')"></Button>
   <Button label="[新窗口]" @click="newWindowFn('/genRestfulApi')"></Button>
+  <br />
+  <Button label="Restful语法说明" @click="routerLink('RulesOfRestfulLanguage')"></Button>
+  <Button label="[新窗口]" @click="newWindowFn('/rulesOfRestfulLanguage')"></Button>
   <br />
   <Button label="后端CrudService代码生成" @click="routerLink('GenCrudService')"></Button>
   <Button label="[新窗口]" @click="newWindowFn('/genCrudService')"></Button>

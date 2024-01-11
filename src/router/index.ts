@@ -32,6 +32,11 @@ const routes = [
     component: () => import('@/views/RulesOfJava.vue'),
   },
   {
+    path: '/rulesOfRestfulLanguage',
+    name: 'RulesOfRestfulLanguage',
+    component: () => import('@/views/RulesOfRestfulLanguage.vue'),
+  },
+  {
     path: '/settings',
     name: 'Settings',
     component: () => import('@/views/Settings.vue'),
