@@ -72,7 +72,7 @@ onMounted(async () => {
         <InputSwitch class="text-white" v-model:checked="hideSuccessed" @change="check" />
       </p>
     </div>
-    <div>
+    <div class="bg-white text-black">
       <pre class="text-black">{{ msg }}</pre>
     </div>
   </div>

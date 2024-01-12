@@ -41,6 +41,7 @@ const newWindowFn = (url: string) => {
   <Button label="前端代码检查" @click="routerLink('CheckClientCode')"></Button>
   <br />
   <Button label="服务端代码检查" @click="routerLink('CheckServerCode')"></Button>
+  <Button label="[新窗口]" @click="newWindowFn('/checkServerCode')"></Button>
   <br />
   <Button label="服务状态检查（待完成）" @click="routerLink('CheckServiceStatus')"></Button>
   <br />
