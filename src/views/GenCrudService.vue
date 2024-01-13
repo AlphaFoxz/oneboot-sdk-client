@@ -42,16 +42,13 @@ const render = () => {
   highlightCode.value = hljs.highlight(r.innerText, { language: 'java' }).value
   copyRef.value!.value = r.innerText
 }
-const handleCopy = () => {
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(copyRef.value!.value)
-    toast.add({ severity: 'success', summary: '复制成功', life: 2000 })
-  } else {
-    copyRef.value!.select()
-    document.execCommand('copy')
-    toast.add({ severity: 'success', summary: '复制成功', life: 2000 })
+const handleGen = () => {
+  if (/^\s*$/.test(PoName.value)) {
+    toast.add({ severity: 'warn', summary: '请输入表名', life: 2000 })
+    return
   }
 }
+const handleGenAll = () => {}
 watch(poInput, () => {
   if (poInput.value.includes('_')) {
     PO_NAME.value = poInput.value.toUpperCase().trim()
@@ -84,8 +81,6 @@ onMounted(render)
         optionLabel="label"
         optionValue="value"
       />
-      <label>实体:</label>
-      <InputText class="w-1/4" v-model="poInput" placeholder="表名/实体名" />
       <label>类型:</label>
       <Dropdown
         class="w-1/4"
@@ -96,7 +91,11 @@ onMounted(render)
         optionLabel="label"
         optionValue="value"
       />
-      <Button label="复制" @click="handleCopy"></Button>
+      <br />
+      <label>表名:</label>
+      <InputText class="w-1/4" v-model="poInput" placeholder="表名/实体名" />
+      <Button label="生成" @click="handleGen"></Button>
+      <Button label="生成选定模块的全部表" @click="handleGenAll"></Button>
     </div>
     <div class="bg-white">
       <textarea ref="copyRef" style="display: none"></textarea>

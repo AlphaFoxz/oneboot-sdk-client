@@ -314,6 +314,7 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
     ref="editorRef"
     @reload="handleReload"
     :files="files"
+    language="zh-CN"
     @new-file="handleNewFile"
     @new-folder="handleNewFolder"
     @save-file="handleSaveFile"
@@ -322,13 +323,13 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
     @delete-file="handleDeleteFile"
     @delete-folder="handleDeleteFile"
     :file-menu="[
-      { label: 'Generate Java Code', value: 'generateJavaCode' },
+      { label: '生成JAVA代码', value: 'generateJavaCode' },
       {
-        label: 'Generate Ts Code',
+        label: '生成Typescript代码',
         value: 'generateTsCode',
       },
       {
-        label: 'Generate Db SQL',
+        label: '预览SQL',
         value: 'generateDbSql',
       },
     ]"
@@ -338,4 +339,3 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
     @drag-in-editor="handleDragInEditor"
   />
 </template>
-<!--  -->
