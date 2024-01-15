@@ -4,7 +4,7 @@ import {
   requireJSON as _JSON,
   type Page as _Page,
   type HttpResult as _HttpResult
-} from '../../../apisUtil'
+} from '../../../apis-util'
 
 /**
  * 版本检查接口
@@ -23,4 +23,3 @@ export const SdkVersionApi = {
     return (await _http()).get(`/_sdk/version/checkRestfulJava`)
   },
 }
-

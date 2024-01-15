@@ -1,6 +1,5 @@
 import * as SdkCodeTemplateDto from './SdkCodeTemplateDto'
 import * as SdkFileInfoDto from './SdkFileInfoDto'
-
 // 响应体的data字段是list
 /**
  * 字符串列表响应实体
@@ -21,11 +20,11 @@ export type SdkListResponseDto = {
   /**
    * 消息
    */
-  message: string | null
+  message: string | undefined
   /**
    * 数据内容
    */
-  data: string[] | null
+  data: string[] | undefined
 }
 // 响应体的data字段是map
 /**
@@ -47,11 +46,11 @@ export type SdkMapResponseDto = {
   /**
    * 消息
    */
-  message: string | null
+  message: string | undefined
   /**
    * 数据内容
    */
-  data: Record<string, string> | null
+  data: Record<string, string> | undefined
 }
 // 响应体的data字段是long
 /**
@@ -73,11 +72,11 @@ export type SdkLongResponseDto = {
   /**
    * 消息
    */
-  message: string | null
+  message: string | undefined
   /**
    * 数据内容
    */
-  data: bigint | null
+  data: bigint | undefined
 }
 // 响应体的data字段是double
 /**
@@ -99,11 +98,11 @@ export type SdkDoubleResponseDto = {
   /**
    * 消息
    */
-  message: string | null
+  message: string | undefined
   /**
    * 数据内容
    */
-  data: number | null
+  data: number | undefined
 }
 // 响应体的data字段是binary
 /**
@@ -125,11 +124,11 @@ export type SdkBinaryResponseDto = {
   /**
    * 消息
    */
-  message: string | null
+  message: string | undefined
   /**
    * 数据内容
    */
-  data: string | null
+  data: string | undefined
 }
 // 响应体的data字段是string
 /**
@@ -151,11 +150,11 @@ export type SdkStringResponseDto = {
   /**
    * 消息
    */
-  message: string | null
+  message: string | undefined
   /**
    * 数据内容
    */
-  data: string | null
+  data: string | undefined
 }
 // 响应体的data字段是SdkCodeTemplateDto
 /**
@@ -177,11 +176,11 @@ export type SdkCodeTemplateResponseDto = {
   /**
    * 消息
    */
-  message: string | null
+  message: string | undefined
   /**
    * 数据内容
    */
-  data: SdkCodeTemplateDto.SdkCodeTemplateDto | null
+  data: SdkCodeTemplateDto.SdkCodeTemplateDto | undefined
 }
 // 响应体的data字段是SdkFileInfoDto
 /**
@@ -203,9 +202,9 @@ export type SdkFileTreeResponseDto = {
   /**
    * 消息
    */
-  message: string | null
+  message: string | undefined
   /**
    * 数据内容
    */
-  data: SdkFileInfoDto.SdkFileInfoDto | null
+  data: SdkFileInfoDto.SdkFileInfoDto | undefined
 }

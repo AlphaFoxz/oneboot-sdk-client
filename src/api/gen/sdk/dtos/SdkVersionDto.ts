@@ -1,12 +1,11 @@
-
 /**
  * 版本检查响应
  */
 export type SdkVersionCheckResponse = {
-  id: bigint | null
+  id: bigint | undefined
   taskId: bigint
   success: boolean
-  message: string | null
+  message: string | undefined
   data: SdkVersionCheckDto[]
 }
 /**

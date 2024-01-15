@@ -4,7 +4,7 @@ import {
   requireJSON as _JSON,
   type Page as _Page,
   type HttpResult as _HttpResult
-} from '../../../apisUtil'
+} from '../../../apis-util'
 
 /**
  * thrift功能接口（rpc跨语言通信）
@@ -29,4 +29,3 @@ export const SdkThriftApi = {
     return (await _http()).get(`/_sdk/thrift/getTemplateContentByPath?filePath=${encodeURI(p_filePath.toString())}`)
   },
 }
-

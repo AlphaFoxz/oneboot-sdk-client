@@ -106,6 +106,11 @@ export function camelToUpperSnake(str: string): string {
 /**
  * Camel转SNAKE_CASE
  */
+export function snakeToLowerCamel(str: string): string {
+  if (!str) return str
+  str = str.toLowerCase()
+  return str.replace(/_(\w)/g, (_, c) => c.toUpperCase())
+}
 export function snakeToUpperCamel(str: string): string {
   if (!str) return str
   str = str.toLowerCase()

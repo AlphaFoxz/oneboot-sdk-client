@@ -6,7 +6,9 @@ import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
 import Dropdown from 'primevue/dropdown'
 import InputText from 'primevue/inputtext'
+import InputSwitch from 'primevue/inputswitch'
 import * as utils from '@/utils'
+import { SdkGenCodeApi, SdkCrudServiceTypeEnum } from '@/api'
 import { useRouter } from 'vue-router'
 
 const toast = useToast()
@@ -26,29 +28,52 @@ const moduleOptions = ref([
 const moduleName = ref(moduleOptions.value[0].value)
 
 const serviceTypeOptions = ref([
-  { label: '权限+缓存+增删改查', value: 'abacCachedCrud' },
-  { label: '缓存+增删改查', value: 'cachedCrud' },
+  { label: '权限+缓存+增删改查', value: SdkCrudServiceTypeEnum.ABAC_CACHED },
+  { label: '缓存+增删改查', value: SdkCrudServiceTypeEnum.CACHED },
 ])
-const serviceType = ref(serviceTypeOptions.value[0].value)
+const serviceType = ref(SdkCrudServiceTypeEnum.ABAC_CACHED)
 
 const poInput = ref('')
+const poName = ref('')
 const PoName = ref('')
 const PO_NAME = ref('')
+const isForce = ref(false)
 const render = () => {
   const r =
-    serviceType.value === 'abacCachedCrud'
+    serviceType.value === SdkCrudServiceTypeEnum.ABAC_CACHED
       ? templateAbacCachedCodeRef.value || { innerText: '' }
       : templateCachedCodeRef.value || { innerText: '' }
   highlightCode.value = hljs.highlight(r.innerText, { language: 'java' }).value
   copyRef.value!.value = r.innerText
 }
+/**
+ * 生成当前输入的表
+ */
 const handleGen = () => {
   if (/^\s*$/.test(PoName.value)) {
     toast.add({ severity: 'warn', summary: '请输入表名', life: 2000 })
     return
   }
+  SdkGenCodeApi.generateTableCrud(moduleName.value, poName.value, serviceType.value, isForce.value)
+    .then(() => {
+      toast.add({ severity: 'success', summary: '生成成功，请刷新ide后检查正确性', life: 3000 })
+    })
+    .catch((e: Error) => {
+      toast.add({ severity: 'error', summary: '生成失败，请检查报错信息' + e.message, life: 3000 })
+    })
 }
-const handleGenAll = () => {}
+/**
+ * 生成所有crud
+ */
+const handleGenAll = () => {
+  SdkGenCodeApi.generateModuleCrud(moduleName.value, serviceType.value, isForce.value)
+    .then(() => {
+      toast.add({ severity: 'success', summary: '生成成功，请刷新ide后检查正确性', life: 3000 })
+    })
+    .catch((e: Error) => {
+      toast.add({ severity: 'error', summary: '生成失败，请检查报错信息' + e.message, life: 3000 })
+    })
+}
 watch(poInput, () => {
   if (poInput.value.includes('_')) {
     PO_NAME.value = poInput.value.toUpperCase().trim()
@@ -56,6 +81,7 @@ watch(poInput, () => {
     PO_NAME.value = utils.camelToUpperSnake(poInput.value).trim()
   }
   PoName.value = utils.snakeToUpperCamel(PO_NAME.value)
+  poName.value = utils.snakeToLowerCamel(PO_NAME.value)
   nextTick(render)
 })
 watch(moduleName, () => {
@@ -96,6 +122,8 @@ onMounted(render)
       <InputText class="w-1/4" v-model="poInput" placeholder="表名/实体名" />
       <Button label="生成" @click="handleGen"></Button>
       <Button label="生成选定模块的全部表" @click="handleGenAll"></Button>
+      <label>强制覆盖已有代码:</label>
+      <InputSwitch v-model="isForce" />
     </div>
     <div class="bg-white">
       <textarea ref="copyRef" style="display: none"></textarea>

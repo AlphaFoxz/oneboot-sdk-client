@@ -4,7 +4,7 @@ import {
   requireJSON as _JSON,
   type Page as _Page,
   type HttpResult as _HttpResult
-} from '../../../apisUtil'
+} from '../../../apis-util'
 
 /**
  * Sdk模块基本信息接口
@@ -35,4 +35,3 @@ export const SdkInfoApi = {
     return (await _http()).get(`/_sdk/info/checkRpcImplements`)
   },
 }
-
