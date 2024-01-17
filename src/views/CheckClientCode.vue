@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SdkVersionApi } from '@/api/gen/sdk/apis/SdkVersionApi'
+import { SdkVersionApi } from '@/api'
 import { useToast } from 'primevue/usetoast'
 import { onMounted, ref } from 'vue'
 import { Store } from '@tauri-apps/plugin-store'
@@ -21,12 +21,12 @@ const check = async () => {
   let result: CheckResult[] = []
   const res = await SdkVersionApi.getRestfulTemplateHash()
   console.info('res', res)
-  if (!res.success) {
+  if (!res.data.success) {
     toast.add({ severity: 'error', summary: '服务端代码检查失败，请检查后端服务和网络连接' })
     return
   }
   const store = await getStore()
-  for (let dto of res.data) {
+  for (let dto of res.data.data) {
     const tmpResult: CheckResult = {
       same: false,
       message: '',

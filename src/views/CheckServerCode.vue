@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SdkVersionApi } from '@/api/gen/sdk/apis/SdkVersionApi'
+import { SdkVersionApi } from '@/api'
 import { onMounted, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
@@ -14,11 +14,11 @@ const check = async () => {
   let result = ''
   const res = await SdkVersionApi.checkRestfulJava()
   console.info('res', res)
-  if (!res.success) {
+  if (!res.data.success) {
     toast.add({ severity: 'error', summary: '服务端代码检查失败，请检查后端服务和网络连接' })
     return
   }
-  for (let dto of res.data) {
+  for (let dto of res.data.data) {
     if (hideSuccessed.value && dto.same) {
       continue
     }

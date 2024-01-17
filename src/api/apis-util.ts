@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosPromise } from 'axios'
 import * as losslessJson from 'lossless-json'
 import { Store } from '@tauri-apps/plugin-store'
 import { settings } from '@/constants'
@@ -86,9 +86,9 @@ type HttpUtil = {
 /**
  * api方法的返回值类型，正常带响应码的axios应该返回的是AxiosPromise，像这样：
  * export type HttpResult<T> = AxiosPromise<T>
- * 但是下面提供http方法的时候取了.data，所以返回值就变为了Promise<T>
+ * 但是如果下面提供http方法的时候取了.data，返回值就变为了Promise<T>
  */
-export type HttpResult<T> = Promise<T>
+export type HttpResult<T> = AxiosPromise<T>
 
 let http: HttpUtil
 export async function requireHttpUtil(): Promise<HttpUtil> {
@@ -99,11 +99,11 @@ export async function requireHttpUtil(): Promise<HttpUtil> {
   const port = await settingsStore.get(settings.KEY_BACKEND_PORT)
   axiosInstance.defaults.baseURL = `http://${host}:${port}`
   http = {
-    get: async (url: string) => (await axiosInstance.get(url)).data,
-    post: async (url: string, param?: any) => (await axiosInstance.post(url, param)).data,
-    patch: async (url: string, param?: any) => (await axiosInstance.patch(url, param)).data,
-    delete: async (url: string) => (await axiosInstance.delete(url)).data,
-    put: async (url: string, param?: any) => (await axiosInstance.put(url, param)).data,
+    get: async (url: string, config?: any) => await axiosInstance.get(url, config),
+    post: async (url: string, data?: any, config?: any) => await axiosInstance.post(url, data, config),
+    patch: async (url: string, data?: any, config?: any) => await axiosInstance.patch(url, data, config),
+    delete: async (url: string, config?: any) => await axiosInstance.delete(url, config),
+    put: async (url: string, data?: any, config?: any) => await axiosInstance.put(url, data, config),
   }
   return http
 }

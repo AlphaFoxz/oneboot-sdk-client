@@ -42,7 +42,7 @@ onMounted(() => {
       ><code class="whitespace-pre-wrap overflow-ellipsis overflow-hidden" v-html="highlightCode"></code></pre>
       <pre
         class="inline-block w-full h-full text-black"
-      ><code ref="templateCodeRef" class="hidden">import axios from 'axios'
+      ><code ref="templateCodeRef" class="hidden">import axios, { AxiosPromise } from 'axios'
 import * as losslessJson from 'lossless-json'
 
 /**
@@ -121,27 +121,23 @@ type HttpUtil = {
 /**
  * api方法的返回值类型，正常带响应码的axios应该返回的是AxiosPromise，像这样：
  * export type HttpResult&lt;T> = AxiosPromise&lt;T>
- * 但是下面提供http方法的时候取了.data，所以返回值就变为了Promise&lt;T>
+ * 但是如果下面提供http方法的时候取了.data，返回值就变为了Promise&lt;T>
  */
-export type HttpResult&lt;T> = Promise&lt;T>
+export type HttpResult&lt;T> = AxiosPromise&lt;T>
 
 let http: HttpUtil
 export async function requireHttpUtil(): Promise&lt;HttpUtil> {
   if (http) {
     return http
   }
-  // 可以等待请求一些异步配置之类的 ...
-  // const port = await getPrefix()
-  // axios.defaults.baseURL = `http://localhost:${port}`
   http = {
-    // 如果本项目只要response里的data，直接在这里处理就行
-    get: async (url: string) => (await axiosInstance.get(url)).data,
-    post: async (url: string, param?: any) => (await axiosInstance.post(url, param)).data,
-    patch: async (url: string, param?: any) => (await axiosInstance.patch(url, param)).data,
-    delete: async (url: string) => (await axiosInstance.delete(url)).data,
-    put: async (url: string, param?: any) => (await axiosInstance.put(url, param)).data,
+    get: async (url: string, param?: any) => await axiosInstance.get(url, param),
+    post: async (url: string, param?: any) => await axiosInstance.post(url, param),
+    patch: async (url: string, param?: any) => await axiosInstance.patch(url, param),
+    delete: async (url: string, param?: any) => await axiosInstance.delete(url, param),
+    put: async (url: string, param?: any) => await axiosInstance.put(url, param),
   }
-  return axiosInstance
+  return http
 }
 
 /**
