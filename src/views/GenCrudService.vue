@@ -18,7 +18,7 @@ const copyRef = ref<HTMLTextAreaElement>()
 
 const templateCachedCodeRef = ref<HTMLInputElement>()
 const templateAbacCachedCodeRef = ref<HTMLInputElement>()
-const packagePrefix = ref('com.github.alphafoxz.oneboot')
+const basePackage = ref('com.github.alphafoxz.oneboot')
 
 const moduleOptions = ref([
   { label: 'app', value: 'app' },
@@ -132,12 +132,12 @@ onMounted(render)
       ><code class="whitespace-pre-wrap overflow-ellipsis overflow-hidden" v-html="highlightCode"></code></pre>
       <pre
         class="inline-block w-full h-full text-black"
-      ><code ref="templateCachedCodeRef" class="hidden">package {{ packagePrefix }}.{{ moduleName }}.service.crud;
+      ><code ref="templateCachedCodeRef" class="hidden">package {{ basePackage }}.{{ moduleName }}.service.crud;
 
 import com.github.alphafoxz.oneboot.common.standard.framework.impl.AbstractCachedCrudService;
-import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.{{ PoName }};
-import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.pojos.{{ PoName }}Po;
-import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.records.{{ PoName }}Record;
+import {{ basePackage }}.{{ moduleName }}.gen.jooq.tables.{{ PoName }};
+import {{ basePackage }}.{{ moduleName }}.gen.jooq.tables.pojos.{{ PoName }}Po;
+import {{ basePackage }}.{{ moduleName }}.gen.jooq.tables.records.{{ PoName }}Record;
 import jakarta.annotation.Resource;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -147,7 +147,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import static {{ packagePrefix }}.{{ moduleName }}.gen.jooq.Tables.{{ PO_NAME }};
+import static {{ basePackage }}.{{ moduleName }}.gen.jooq.Tables.{{ PO_NAME }};
 
 /**
  * {{ PoName }}表增删改查service
@@ -171,16 +171,16 @@ public class {{ PoName }}Crud extends AbstractCachedCrudService&lt;{{ PoName }},
 }
 </code>
 <code ref="templateAbacCachedCodeRef" class="hidden">
-package {{ packagePrefix }}.{{ moduleName }}.service.crud;
+package {{ basePackage }}.{{ moduleName }}.service.crud;
 
-import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.{{ PoName }};
-import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.pojos.{{ PoName }}Po;
-import {{ packagePrefix }}.{{ moduleName }}.gen.jooq.tables.records.{{ PoName }}Record;
-import {{ packagePrefix }}.common.interfaces.access_control.AbacPolicy;
-import {{ packagePrefix }}.common.interfaces.framework.impl.AbstractAbacCachedCrudService;
-import {{ packagePrefix }}.common.toolkit.coding.ArrayUtil;
-import {{ packagePrefix }}.common.toolkit.coding.CollUtil;
-import {{ packagePrefix }}.preset_sys.service.abac.policy.PsysAbacOwnerPolicy;
+import {{ basePackage }}.{{ moduleName }}.gen.jooq.tables.{{ PoName }};
+import {{ basePackage }}.{{ moduleName }}.gen.jooq.tables.pojos.{{ PoName }}Po;
+import {{ basePackage }}.{{ moduleName }}.gen.jooq.tables.records.{{ PoName }}Record;
+import {{ basePackage }}.common.standard.access_control.AbacPolicy;
+import {{ basePackage }}.common.standard.framework.impl.AbstractAbacCachedCrudService;
+import {{ basePackage }}.common.toolkit.coding.ArrayUtil;
+import {{ basePackage }}.common.toolkit.coding.CollUtil;
+import {{ basePackage }}.preset_sys.service.abac.policy.PsysAbacOwnerPolicy;
 import jakarta.annotation.Resource;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -193,7 +193,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import static {{ packagePrefix }}.{{ moduleName }}.gen.jooq.Tables.{{ PO_NAME }};
+import static {{ basePackage }}.{{ moduleName }}.gen.jooq.Tables.{{ PO_NAME }};
 
 /**
  * {{ PoName }}表增删改查service

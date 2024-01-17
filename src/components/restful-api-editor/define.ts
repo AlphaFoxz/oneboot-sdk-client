@@ -47,3 +47,9 @@ export declare namespace monaco_editor {
   export type IEditorOptions = editor.IEditorOptions
   export type IGlobalEditorOptions = editor.IGlobalEditorOptions
 }
+
+export enum GenTypeEnum {
+  GEN_JAVA_CODE = 'generateJavaCode',
+  GEN_TS_CODE = 'generateTsCode',
+  GEN_DB_SQL = 'generateDbSql',
+}

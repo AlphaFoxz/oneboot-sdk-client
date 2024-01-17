@@ -22,6 +22,11 @@ const routes = [
     component: () => import('@/views/GenApisUtil.vue'),
   },
   {
+    path: '/genApiDocs',
+    name: 'GenApiDocs',
+    component: () => import('@/views/GenApiDocs.vue'),
+  },
+  {
     path: '/rulesOfDatabase',
     name: 'RulesOfDatabase',
     component: () => import('@/views/RulesOfDatabase.vue'),
@@ -40,11 +45,6 @@ const routes = [
     path: '/settings',
     name: 'Settings',
     component: () => import('@/views/Settings.vue'),
-  },
-  {
-    path: '/wikiUtil',
-    name: 'WikiUtil',
-    component: () => import('@/views/WikiUtil.vue'),
   },
   {
     path: '/checkClientCode',

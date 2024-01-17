@@ -30,6 +30,8 @@ const newWindowFn = (url: string) => {
   <Button label="后端CrudService代码生成" @click="routerLink('GenCrudService')"></Button>
   <Button label="[新窗口]" @click="newWindowFn('/genCrudService')"></Button>
   <br />
+  <Button label="生成Api文档" @click="routerLink('GenApiDocs')"></Button>
+  <br />
   <Button label="自定义apis-util.ts代码示例" @click="routerLink('GenApisUtil')"></Button>
   <br />
   <Button label="数据库设计原则" @click="routerLink('RulesOfDatabase')"></Button>
@@ -44,8 +46,6 @@ const newWindowFn = (url: string) => {
   <Button label="[新窗口]" @click="newWindowFn('/checkServerCode')"></Button>
   <br />
   <Button label="服务状态检查（待完成）" @click="routerLink('CheckServiceStatus')"></Button>
-  <br />
-  <Button label="Wiki工具" @click="routerLink('WikiUtil')"></Button>
   <br />
   <Button label="设置" @click="routerLink('Settings')"></Button>
 </template>

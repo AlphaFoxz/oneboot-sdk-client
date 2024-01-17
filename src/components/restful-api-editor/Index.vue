@@ -9,6 +9,7 @@ import * as api from './api'
 import { SdkFileTypeEnum } from '@/utils/rust_api'
 import { registerRestful } from './restful'
 import * as monaco from 'monaco-editor'
+import { GenTypeEnum } from './define'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 
 window.MonacoEnvironment = {
@@ -199,16 +200,18 @@ const sqlVisible = ref(false)
 const handleContextmenuSelect = async (path: string, item: { label: string | ComputedRef<string>; value: string }) => {
   const currentPath =
     monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
-  if (item.value === 'generateTsCode') {
+  if (item.value === GenTypeEnum.GEN_TS_CODE) {
     const ok = await api.checkErr(
       monaco,
       files.value[path].content!,
       currentPath === path ? monacoStore.getEditor() : undefined
     )
     if (ok) {
+      const msgId = messageStore.info({ content: '正在生成Ts代码...', loading: true, closeable: true })
       utils.rust_api
         .generateTsApi(path)
         .then(() => {
+          messageStore.close(msgId)
           messageStore.success({
             content: '代码已生成，请稍后重新编译项目并验证',
             timeoutMs: 5000,
@@ -216,6 +219,7 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
           })
         })
         .catch(() => {
+          messageStore.close(msgId)
           messageStore.error({
             content: '保存失败，请检查是否有网络错误',
             closeable: true,
@@ -227,16 +231,18 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
         closeable: true,
       })
     }
-  } else if (item.value === 'generateJavaCode') {
+  } else if (item.value === GenTypeEnum.GEN_JAVA_CODE) {
     const ok = await api.checkErr(
       monaco,
       files.value[path].content!,
       currentPath === path ? monacoStore.getEditor() : undefined
     )
     if (ok) {
+      const msgId = messageStore.info({ content: '正在生成Java代码...', loading: true, closeable: true })
       utils.rust_api
         .generateJavaApi(path)
         .then(() => {
+          messageStore.close(msgId)
           messageStore.success({
             content: '代码已生成，请稍后重新编译项目并验证',
             timeoutMs: 5000,
@@ -244,6 +250,7 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
           })
         })
         .catch(() => {
+          messageStore.close(msgId)
           messageStore.error({
             content: '保存失败，请检查是否有网络错误',
             closeable: true,
@@ -255,7 +262,7 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
         closeable: true,
       })
     }
-  } else if (item.value === 'generateDbSql') {
+  } else if (item.value === GenTypeEnum.GEN_DB_SQL) {
     const ok = await api.checkErr(
       monaco,
       files.value[path].content!,
@@ -323,14 +330,14 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
     @delete-file="handleDeleteFile"
     @delete-folder="handleDeleteFile"
     :file-menu="[
-      { label: '生成JAVA代码', value: 'generateJavaCode' },
+      { label: '生成JAVA代码', value: GenTypeEnum.GEN_JAVA_CODE },
       {
         label: '生成Typescript代码',
-        value: 'generateTsCode',
+        value: GenTypeEnum.GEN_TS_CODE,
       },
       {
         label: '预览SQL',
-        value: 'generateDbSql',
+        value: GenTypeEnum.GEN_DB_SQL,
       },
     ]"
     :folder-menu="[]"
