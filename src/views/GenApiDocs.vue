@@ -17,9 +17,7 @@ const download = (data: Blob, fileName: string) => {
 }
 const handleGenWordApi = (moduleName: string) => {
   SdkGenDocApi.generateWordApi(moduleName).then((res) => {
-    const data = new Blob([res.data], {
-      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=UTF-8',
-    })
+    const data = new Blob([res.data], { type: 'application/octet-stream;charset=utf-8' })
     const fileName = decodeURI(res.headers['content-disposition'].split('=')[1])
     download(data, fileName)
   })

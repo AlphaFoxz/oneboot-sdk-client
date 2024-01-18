@@ -101,6 +101,7 @@ annotation_name  = @{
   | "putUri"
   | "patchUri"
   | "deleteUri"
+  | "formData"
   | "page"
   | "request"
   | "response"

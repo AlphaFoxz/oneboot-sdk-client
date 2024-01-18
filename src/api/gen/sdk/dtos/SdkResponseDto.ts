@@ -128,7 +128,7 @@ export type SdkBinaryResponseDto = {
   /**
    * 数据内容
    */
-  data: string | undefined
+  data: File | undefined
 }
 // 响应体的data字段是string
 /**
