@@ -109,6 +109,7 @@ const router = useRouter()
         >
       </p>
       <p><b>@page</b>：指定当前接口返回值为分页数据，生成的代码返回值会包装在分页对象中</p>
+      <p><b>@formData</b>：指定当前接口为表单提交的数据</p>
 
       <h1 class="text-3xl">示例</h1>
       <h2>接口</h2>
