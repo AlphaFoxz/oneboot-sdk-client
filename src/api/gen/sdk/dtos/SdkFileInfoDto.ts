@@ -6,7 +6,7 @@ export type SdkFileInfoDto = {
   separator: string
   content: string | undefined
   ext: string | undefined
-  fileType: number
+  fileType: SdkFileTypeEnum.SdkFileTypeEnum
   isReadOnly: boolean
   isEmpty: boolean
   children: SdkFileInfoDto[] | undefined

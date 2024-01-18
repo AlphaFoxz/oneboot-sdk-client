@@ -11,10 +11,10 @@ namespace f_SdkGenCodeApi {
   export async function generateJavaRpc(): _HttpResult<SdkResponseDto.SdkListResponseDto> {
     return (await _http()).get(`/_sdk/genCode/generateJavaRpc`, {})
   }
-  export async function generateTableCrud(p_moduleName: string, p_poName: string, p_serviceType: number, p_force: boolean): _HttpResult<null> {
+  export async function generateTableCrud(p_moduleName: string, p_poName: string, p_serviceType: SdkCrudServiceTypeEnum.SdkCrudServiceTypeEnum, p_force: boolean): _HttpResult<null> {
     return (await _http()).get(`/_sdk/genCode/generateTableCrud?moduleName=${encodeURI(p_moduleName.toString())}&poName=${encodeURI(p_poName.toString())}&serviceType=${encodeURI(p_serviceType.toString())}&force=${encodeURI(p_force.toString())}`, {})
   }
-  export async function generateModuleCrud(p_moduleName: string, p_serviceType: number, p_force: boolean): _HttpResult<null> {
+  export async function generateModuleCrud(p_moduleName: string, p_serviceType: SdkCrudServiceTypeEnum.SdkCrudServiceTypeEnum, p_force: boolean): _HttpResult<null> {
     return (await _http()).get(`/_sdk/genCode/generateModuleCrud?moduleName=${encodeURI(p_moduleName.toString())}&serviceType=${encodeURI(p_serviceType.toString())}&force=${encodeURI(p_force.toString())}`, {})
   }
 }
