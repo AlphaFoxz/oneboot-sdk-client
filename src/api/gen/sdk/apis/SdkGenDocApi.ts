@@ -11,11 +11,6 @@ namespace f_SdkGenDocApi {
       responseType: 'blob',
     })
   }
-  export async function generateExcelApi(p_moduleName: string): _HttpResult<string> {
-    return (await _http()).get(`/_sdk/genDoc/generateExcelApi?moduleName=${encodeURI(p_moduleName.toString())}`, {
-      responseType: 'blob',
-    })
-  }
 }
 /**
  * 文档生成接口
@@ -26,9 +21,4 @@ export const SdkGenDocApi = {
    * @param p_moduleName 模块名称
    */
   generateWordApi: f_SdkGenDocApi.generateWordApi,
-  /**
-   * 生成Excel Api文档
-   * @param p_moduleName 模块名称
-   */
-  generateExcelApi: f_SdkGenDocApi.generateExcelApi,
 }

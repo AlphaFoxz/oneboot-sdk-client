@@ -22,13 +22,6 @@ const handleGenWordApi = (moduleName: string) => {
     download(data, fileName)
   })
 }
-const handleGenExcelApi = (moduleName: string) => {
-  SdkGenDocApi.generateExcelApi(moduleName).then((res) => {
-    const data = new Blob([res.data], { type: 'application/octet-stream;charset=utf-8' })
-    const fileName = decodeURI(res.headers['content-disposition'].split('=')[1])
-    download(data, fileName)
-  })
-}
 </script>
 
 <template>
@@ -38,14 +31,10 @@ const handleGenExcelApi = (moduleName: string) => {
       <label class="text-white">生成Api文档</label>
     </div>
     <div class="bg-white text-black">
-      <h1 class="text-3xl">生成Api（Word版本）</h1>
+      <h1 class="text-3xl">生成Word Api（docx）</h1>
       <Button label="preset_sys" class="text-black" @click="handleGenWordApi('preset_sys')"></Button>
       <Button label="app" class="text-black" @click="handleGenWordApi('preset_sys')"></Button>
       <Button label="sdk" class="text-black" @click="handleGenWordApi('sdk')"></Button>
-      <h1 class="text-3xl">生成Api（Excel版）</h1>
-      <Button label="preset_sys" class="text-black" @click="handleGenExcelApi('preset_sys')"></Button>
-      <Button label="app" class="text-black" @click="handleGenExcelApi('preset_sys')"></Button>
-      <Button label="sdk" class="text-black" @click="handleGenExcelApi('sdk')"></Button>
     </div>
   </div>
 </template>
