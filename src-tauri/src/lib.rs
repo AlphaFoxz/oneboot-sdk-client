@@ -22,6 +22,7 @@ pub fn run() {
         })
         .invoke_handler(tauri::generate_handler![
             restful::api::check_restful_code_err,
+            restful::api::get_base_package,
             restful::api::get_restful_template_file_tree,
             restful::api::get_template_content_by_path,
             restful::api::delete_file,

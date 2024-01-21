@@ -1,4 +1,5 @@
 import { invoke } from '@tauri-apps/api/core'
+import { SdkStringResponseDto } from '@/api/gen/sdk/dtos/SdkResponseDto'
 export enum SdkFileTypeEnum {
   LOCAL_FILE = 0,
   LOCAL_DIR = 1,
@@ -71,4 +72,8 @@ export async function generateSql(
   filePath: string
 ): Promise<{ success: boolean; data: { [k: string]: string } | undefined }> {
   return invoke('generate_sql', { filePath })
+}
+
+export async function getBasePackage(): Promise<SdkStringResponseDto> {
+  return invoke('get_base_package')
 }

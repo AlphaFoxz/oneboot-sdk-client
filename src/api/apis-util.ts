@@ -107,7 +107,6 @@ export async function requireHttpUtil(): Promise<HttpUtil> {
   }
   return http
 }
-axiosInstance.post('', '', { headers: { 'Content-Type': 'multipart/form-data' } })
 /**
  * 分页信息
  */

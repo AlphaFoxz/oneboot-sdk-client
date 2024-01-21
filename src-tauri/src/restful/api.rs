@@ -11,6 +11,12 @@ pub fn check_restful_code_err(code: &str) -> parser::CheckResult {
     parser::restful::check_restful_code_err(code)
 }
 
+/// Check thrift code
+#[tauri::command]
+pub async fn get_base_package() -> Result<sdk_response_dto::SdkStringResponseDto, Error> {
+    Ok(restful_dsl_api::get_base_package().await?)
+}
+
 ///获取restful模板文件树
 #[tauri::command]
 pub async fn get_restful_template_file_tree(

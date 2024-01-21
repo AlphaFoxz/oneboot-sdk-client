@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { Modal as AModal, Tabs as ATabs, TabPane as ATabPane } from 'ant-design-vue'
-import { ComputedRef, ref, watch } from 'vue'
+import { ComputedRef, onMounted, ref, watch } from 'vue'
 import { Editor, type Files, useMessage, useMonaco, useHotkey } from 'monaco-tree-editor'
 import 'monaco-tree-editor/index.css'
 import * as utils from '@/utils'
@@ -158,6 +158,12 @@ const handleRename = (path: string, newPath: string, resolve: () => void, reject
     }
   })
 }
+const basePackage = ref('')
+onMounted(() => {
+  utils.rust_api.getBasePackage().then((res) => {
+    basePackage.value = res.data!
+  })
+})
 const handleDragInEditor = (srcPath: string, targetPath: string, type: 'file' | 'folder') => {
   if (!targetPath.endsWith('.restful')) {
     return
@@ -170,10 +176,10 @@ const handleDragInEditor = (srcPath: string, targetPath: string, type: 'file' | 
   } else {
     str = srcPath.replace(monacoStore.prefix.value, '')
     const tsNamespace = str.replaceAll(monacoStore.fileSeparator.value, '.')
-    const javaNamespace: any = str.split(monacoStore.fileSeparator.value)
+    const javaNamespace: any = str.replaceAll('-', '_').split(monacoStore.fileSeparator.value)
     javaNamespace.splice(2, 0, 'gen', 'restful')
-    str = `namespace java com.github.alphafoxz.oneboot${javaNamespace.join('.')}\n`
-    str += `namespace ts gen${tsNamespace}\n`
+    str = `namespace java ${basePackage.value.replaceAll('-', '_')}${javaNamespace.join('.')}\n`
+    str += `namespace ts gen${tsNamespace.replaceAll('-', '_')}\n`
   }
   editor.executeEdits('drop', [{ range: new monaco.Range(lineIndex, 0, lineIndex, 0), text: str }])
 }
