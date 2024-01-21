@@ -1,5 +1,4 @@
 import * as SdkCodeTemplateDto from './SdkCodeTemplateDto'
-
 export type SdkListRequestDto = {
   id: bigint
   taskId: bigint

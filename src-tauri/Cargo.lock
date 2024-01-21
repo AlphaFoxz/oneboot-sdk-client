@@ -2194,6 +2194,7 @@ dependencies = [
  "thiserror",
  "thrift",
  "tokio",
+ "url",
 ]
 
 [[package]]

@@ -49,7 +49,8 @@ export declare namespace monaco_editor {
 }
 
 export enum GenTypeEnum {
-  GEN_JAVA_CODE = 'generateJavaCode',
-  GEN_TS_CODE = 'generateTsCode',
+  GEN_JAVA_SERVER_CODE = 'generateJavaServerCode',
+  GEN_TS_CLIENT_CODE = 'generateTsClientCode',
+  GEN_RUST_CLIENT_CODE = 'generateRustClientCode',
   GEN_DB_SQL = 'generateDbSql',
 }

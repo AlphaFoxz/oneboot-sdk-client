@@ -4,14 +4,14 @@ export enum SdkFileTypeEnum {
   LOCAL_DIR = 1,
 }
 export interface SdkFileInfoDto {
-  file_path: string
-  parent_dir: string
-  file_name: string
+  filePath: string
+  parentDir: string
+  fileName: string
   separator: string
   content: string | null
   ext: string
-  file_type: SdkFileTypeEnum
-  is_read_only: boolean
+  fileType: SdkFileTypeEnum
+  isReadOnly: boolean
   isEmpty: boolean
   children: Array<SdkFileInfoDto>
 }
@@ -55,12 +55,16 @@ export async function renameFile(filePath: string, newPath: string): Promise<any
   return invoke('rename_file', { filePath, newPath })
 }
 
-export async function generateJavaApi(filePath: string): Promise<void> {
-  return invoke('generate_java_api', { filePath })
+export async function generateJavaServerApi(filePath: string): Promise<void> {
+  return invoke('generate_java_server_api', { filePath })
 }
 
-export async function generateTsApi(filePath: string): Promise<void> {
-  return invoke('generate_ts_api', { filePath })
+export async function generateTsClientApi(filePath: string): Promise<void> {
+  return invoke('generate_ts_client_api', { filePath })
+}
+
+export async function generateRustClientApi(filePath: string): Promise<void> {
+  return invoke('generate_rust_client_api', { filePath })
 }
 
 export async function generateSql(

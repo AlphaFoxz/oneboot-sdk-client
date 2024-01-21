@@ -19,9 +19,8 @@ async fn get_io_protocols(
     use crate::core::http;
     use crate::core::store;
     let mut c = transport::TTcpChannel::new();
-    let backend_host = store::get_settings_value(store::BACKEND_HOST.clone())
-        .await
-        .unwrap_or("127.0.0.1".into());
+    let backend_host =
+        store::get_settings_value(store::KEY_BACKEND_HOST.clone()).unwrap_or("127.0.0.1".into());
     let backend_host = backend_host.as_str().unwrap_or("127.0.0.1");
     let rpc_server_port = http::get_rpc_server_port(backend_host.to_string())
         .await

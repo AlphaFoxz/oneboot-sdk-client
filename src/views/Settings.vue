@@ -12,13 +12,15 @@ const toast = useToast()
 const store = new Store(settings.FILE_NAME)
 const backendHost = ref('')
 const backendPort = ref('')
-const tsGenDir = ref('')
+const tsClientGenDir = ref('')
+const rustClientGenDir = ref('')
 const isTestingUrl = ref(false)
 
 onMounted(async () => {
   backendHost.value = (await store.get(settings.KEY_BACKEND_HOST)) || ''
   backendPort.value = (await store.get(settings.KEY_BACKEND_PORT)) || ''
-  tsGenDir.value = (await store.get(settings.KEY_TS_GEN_DIR)) || ''
+  tsClientGenDir.value = (await store.get(settings.KEY_TS_CLIENT_GEN_DIR)) || ''
+  rustClientGenDir.value = (await store.get(settings.KEY_RUST_CLIENT_GEN_DIR)) || ''
 })
 
 const handleTestUrl = async () => {
@@ -42,7 +44,8 @@ const handleTestUrl = async () => {
 const handleSaveAll = async () => {
   await store.set(settings.KEY_BACKEND_HOST, backendHost.value)
   await store.set(settings.KEY_BACKEND_PORT, backendPort.value)
-  await store.set(settings.KEY_TS_GEN_DIR, tsGenDir.value)
+  await store.set(settings.KEY_TS_CLIENT_GEN_DIR, tsClientGenDir.value)
+  await store.set(settings.KEY_RUST_CLIENT_GEN_DIR, rustClientGenDir.value)
   store
     .save()
     .then(() => {
@@ -78,13 +81,23 @@ const openErrorNotification = (content: string) => {
       <Button @click="handleTestUrl" :loading="isTestingUrl">测试连接</Button>
     </div>
     <div class="flex flex-column gap-2">
-      <label for="tsGenDir">TS代码生成目录</label>
+      <label for="tsGenDir">TS客户端代码生成目录</label>
       <InputText
         id="tsGenDir"
         title="ts代码会在该目录生成，如：【配置的目录】/gen/app/AppTestApi.ts"
         placeholder="D:\projects\oneboot_front\src\apis"
         style="min-width: 40%"
-        v-model="tsGenDir"
+        v-model="tsClientGenDir"
+      />
+    </div>
+    <div class="flex flex-column gap-2">
+      <label for="rustGenDir">Rust客户端代码生成目录</label>
+      <InputText
+        id="rustGenDir"
+        title="ts代码会在该目录生成，如：【配置的目录】/gen/app/AppTestApi.ts"
+        placeholder="D:\projects\oneboot_front\src\apis"
+        style="min-width: 40%"
+        v-model="rustClientGenDir"
       />
     </div>
     <div class="flex flex-column gap-2">

@@ -35,6 +35,7 @@ use crate::thrift::gen::dtos::sdk_response_dto;
 
 pub trait TSdkGenCodeIfaceSyncClient {
   fn preview_generate_ts_api(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkMapResponseDto>;
+  fn preview_generate_rust_api(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkMapResponseDto>;
   fn generate_java_api(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
   fn generate_java_rpc(&mut self, task_id: i64) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
   fn preview_generate_sql(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto) -> thrift::Result<sdk_response_dto::SdkMapResponseDto>;
@@ -87,6 +88,33 @@ impl <C: TThriftClient + TSdkGenCodeIfaceSyncClientMarker> TSdkGenCodeIfaceSyncC
       }
       verify_expected_message_type(TMessageType::Reply, message_ident.message_type)?;
       let result = SdkGenCodeIfacePreviewGenerateTsApiResult::read_from_in_protocol(self.i_prot_mut())?;
+      self.i_prot_mut().read_message_end()?;
+      result.ok_or()
+    }
+  }
+  fn preview_generate_rust_api(&mut self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkMapResponseDto> {
+    (
+      {
+        self.increment_sequence_number();
+        let message_ident = TMessageIdentifier::new("previewGenerateRustApi", TMessageType::Call, self.sequence_number());
+        let call_args = SdkGenCodeIfacePreviewGenerateRustApiArgs { template_dto, gen_dir };
+        self.o_prot_mut().write_message_begin(&message_ident)?;
+        call_args.write_to_out_protocol(self.o_prot_mut())?;
+        self.o_prot_mut().write_message_end()?;
+        self.o_prot_mut().flush()
+      }
+    )?;
+    {
+      let message_ident = self.i_prot_mut().read_message_begin()?;
+      verify_expected_sequence_number(self.sequence_number(), message_ident.sequence_number)?;
+      verify_expected_service_call("previewGenerateRustApi", &message_ident.name)?;
+      if message_ident.message_type == TMessageType::Exception {
+        let remote_error = thrift::Error::read_application_error_from_in_protocol(self.i_prot_mut())?;
+        self.i_prot_mut().read_message_end()?;
+        return Err(thrift::Error::Application(remote_error))
+      }
+      verify_expected_message_type(TMessageType::Reply, message_ident.message_type)?;
+      let result = SdkGenCodeIfacePreviewGenerateRustApiResult::read_from_in_protocol(self.i_prot_mut())?;
       self.i_prot_mut().read_message_end()?;
       result.ok_or()
     }
@@ -180,6 +208,7 @@ impl <C: TThriftClient + TSdkGenCodeIfaceSyncClientMarker> TSdkGenCodeIfaceSyncC
 
 pub trait SdkGenCodeIfaceSyncHandler {
   fn handle_preview_generate_ts_api(&self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkMapResponseDto>;
+  fn handle_preview_generate_rust_api(&self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto, gen_dir: String) -> thrift::Result<sdk_response_dto::SdkMapResponseDto>;
   fn handle_generate_java_api(&self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
   fn handle_generate_java_rpc(&self, task_id: i64) -> thrift::Result<sdk_response_dto::SdkListResponseDto>;
   fn handle_preview_generate_sql(&self, template_dto: sdk_request_dto::SdkCodeTemplateRequestDto) -> thrift::Result<sdk_response_dto::SdkMapResponseDto>;
@@ -197,6 +226,9 @@ impl <H: SdkGenCodeIfaceSyncHandler> SdkGenCodeIfaceSyncProcessor<H> {
   }
   fn process_preview_generate_ts_api(&self, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
     TSdkGenCodeIfaceProcessFunctions::process_preview_generate_ts_api(&self.handler, incoming_sequence_number, i_prot, o_prot)
+  }
+  fn process_preview_generate_rust_api(&self, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
+    TSdkGenCodeIfaceProcessFunctions::process_preview_generate_rust_api(&self.handler, incoming_sequence_number, i_prot, o_prot)
   }
   fn process_generate_java_api(&self, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
     TSdkGenCodeIfaceProcessFunctions::process_generate_java_api(&self.handler, incoming_sequence_number, i_prot, o_prot)
@@ -240,6 +272,43 @@ impl TSdkGenCodeIfaceProcessFunctions {
               )
             };
             let message_ident = TMessageIdentifier::new("previewGenerateTsApi", TMessageType::Exception, incoming_sequence_number);
+            o_prot.write_message_begin(&message_ident)?;
+            thrift::Error::write_application_error_to_out_protocol(&ret_err, o_prot)?;
+            o_prot.write_message_end()?;
+            o_prot.flush()
+          },
+        }
+      },
+    }
+  }
+  pub fn process_preview_generate_rust_api<H: SdkGenCodeIfaceSyncHandler>(handler: &H, incoming_sequence_number: i32, i_prot: &mut dyn TInputProtocol, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
+    let args = SdkGenCodeIfacePreviewGenerateRustApiArgs::read_from_in_protocol(i_prot)?;
+    match handler.handle_preview_generate_rust_api(args.template_dto, args.gen_dir) {
+      Ok(handler_return) => {
+        let message_ident = TMessageIdentifier::new("previewGenerateRustApi", TMessageType::Reply, incoming_sequence_number);
+        o_prot.write_message_begin(&message_ident)?;
+        let ret = SdkGenCodeIfacePreviewGenerateRustApiResult { result_value: Some(handler_return) };
+        ret.write_to_out_protocol(o_prot)?;
+        o_prot.write_message_end()?;
+        o_prot.flush()
+      },
+      Err(e) => {
+        match e {
+          thrift::Error::Application(app_err) => {
+            let message_ident = TMessageIdentifier::new("previewGenerateRustApi", TMessageType::Exception, incoming_sequence_number);
+            o_prot.write_message_begin(&message_ident)?;
+            thrift::Error::write_application_error_to_out_protocol(&app_err, o_prot)?;
+            o_prot.write_message_end()?;
+            o_prot.flush()
+          },
+          _ => {
+            let ret_err = {
+              ApplicationError::new(
+                ApplicationErrorKind::Unknown,
+                e.to_string()
+              )
+            };
+            let message_ident = TMessageIdentifier::new("previewGenerateRustApi", TMessageType::Exception, incoming_sequence_number);
             o_prot.write_message_begin(&message_ident)?;
             thrift::Error::write_application_error_to_out_protocol(&ret_err, o_prot)?;
             o_prot.write_message_end()?;
@@ -368,6 +437,9 @@ impl <H: SdkGenCodeIfaceSyncHandler> TProcessor for SdkGenCodeIfaceSyncProcessor
     let res = match &*message_ident.name {
       "previewGenerateTsApi" => {
         self.process_preview_generate_ts_api(message_ident.sequence_number, i_prot, o_prot)
+      },
+      "previewGenerateRustApi" => {
+        self.process_preview_generate_rust_api(message_ident.sequence_number, i_prot, o_prot)
       },
       "generateJavaApi" => {
         self.process_generate_java_api(message_ident.sequence_number, i_prot, o_prot)
@@ -504,6 +576,128 @@ impl SdkGenCodeIfacePreviewGenerateTsApiResult {
   }
   fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
     let struct_ident = TStructIdentifier::new("SdkGenCodeIfacePreviewGenerateTsApiResult");
+    o_prot.write_struct_begin(&struct_ident)?;
+    if let Some(ref fld_var) = self.result_value {
+      o_prot.write_field_begin(&TFieldIdentifier::new("result_value", TType::Struct, 0))?;
+      fld_var.write_to_out_protocol(o_prot)?;
+      o_prot.write_field_end()?
+    }
+    o_prot.write_field_stop()?;
+    o_prot.write_struct_end()
+  }
+}
+
+//
+// SdkGenCodeIfacePreviewGenerateRustApiArgs
+//
+
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+struct SdkGenCodeIfacePreviewGenerateRustApiArgs {
+  template_dto: sdk_request_dto::SdkCodeTemplateRequestDto,
+  gen_dir: String,
+}
+
+impl SdkGenCodeIfacePreviewGenerateRustApiArgs {
+  fn read_from_in_protocol(i_prot: &mut dyn TInputProtocol) -> thrift::Result<SdkGenCodeIfacePreviewGenerateRustApiArgs> {
+    i_prot.read_struct_begin()?;
+    let mut f_1: Option<sdk_request_dto::SdkCodeTemplateRequestDto> = None;
+    let mut f_2: Option<String> = None;
+    loop {
+      let field_ident = i_prot.read_field_begin()?;
+      if field_ident.field_type == TType::Stop {
+        break;
+      }
+      let field_id = field_id(&field_ident)?;
+      match field_id {
+        1 => {
+          let val = sdk_request_dto::SdkCodeTemplateRequestDto::read_from_in_protocol(i_prot)?;
+          f_1 = Some(val);
+        },
+        2 => {
+          let val = i_prot.read_string()?;
+          f_2 = Some(val);
+        },
+        _ => {
+          i_prot.skip(field_ident.field_type)?;
+        },
+      };
+      i_prot.read_field_end()?;
+    }
+    i_prot.read_struct_end()?;
+    verify_required_field_exists("SdkGenCodeIfacePreviewGenerateRustApiArgs.template_dto", &f_1)?;
+    verify_required_field_exists("SdkGenCodeIfacePreviewGenerateRustApiArgs.gen_dir", &f_2)?;
+    let ret = SdkGenCodeIfacePreviewGenerateRustApiArgs {
+      template_dto: f_1.expect("auto-generated code should have checked for presence of required fields"),
+      gen_dir: f_2.expect("auto-generated code should have checked for presence of required fields"),
+    };
+    Ok(ret)
+  }
+  fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
+    let struct_ident = TStructIdentifier::new("previewGenerateRustApi_args");
+    o_prot.write_struct_begin(&struct_ident)?;
+    o_prot.write_field_begin(&TFieldIdentifier::new("templateDto", TType::Struct, 1))?;
+    self.template_dto.write_to_out_protocol(o_prot)?;
+    o_prot.write_field_end()?;
+    o_prot.write_field_begin(&TFieldIdentifier::new("genDir", TType::String, 2))?;
+    o_prot.write_string(&self.gen_dir)?;
+    o_prot.write_field_end()?;
+    o_prot.write_field_stop()?;
+    o_prot.write_struct_end()
+  }
+}
+
+//
+// SdkGenCodeIfacePreviewGenerateRustApiResult
+//
+
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+struct SdkGenCodeIfacePreviewGenerateRustApiResult {
+  result_value: Option<sdk_response_dto::SdkMapResponseDto>,
+}
+
+impl SdkGenCodeIfacePreviewGenerateRustApiResult {
+  fn ok_or(self) -> thrift::Result<sdk_response_dto::SdkMapResponseDto> {
+    if self.result_value.is_some() {
+      Ok(self.result_value.unwrap())
+    } else {
+      Err(
+        thrift::Error::Application(
+          ApplicationError::new(
+            ApplicationErrorKind::MissingResult,
+            "no result received for SdkGenCodeIfacePreviewGenerateRustApi"
+          )
+        )
+      )
+    }
+  }
+  fn read_from_in_protocol(i_prot: &mut dyn TInputProtocol) -> thrift::Result<SdkGenCodeIfacePreviewGenerateRustApiResult> {
+    i_prot.read_struct_begin()?;
+    let mut f_0: Option<sdk_response_dto::SdkMapResponseDto> = None;
+    loop {
+      let field_ident = i_prot.read_field_begin()?;
+      if field_ident.field_type == TType::Stop {
+        break;
+      }
+      let field_id = field_id(&field_ident)?;
+      match field_id {
+        0 => {
+          let val = sdk_response_dto::SdkMapResponseDto::read_from_in_protocol(i_prot)?;
+          f_0 = Some(val);
+        },
+        _ => {
+          i_prot.skip(field_ident.field_type)?;
+        },
+      };
+      i_prot.read_field_end()?;
+    }
+    i_prot.read_struct_end()?;
+    let ret = SdkGenCodeIfacePreviewGenerateRustApiResult {
+      result_value: f_0,
+    };
+    Ok(ret)
+  }
+  fn write_to_out_protocol(&self, o_prot: &mut dyn TOutputProtocol) -> thrift::Result<()> {
+    let struct_ident = TStructIdentifier::new("SdkGenCodeIfacePreviewGenerateRustApiResult");
     o_prot.write_struct_begin(&struct_ident)?;
     if let Some(ref fld_var) = self.result_value {
       o_prot.write_field_begin(&TFieldIdentifier::new("result_value", TType::Struct, 0))?;

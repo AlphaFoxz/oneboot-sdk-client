@@ -3,8 +3,7 @@ use crate::core::error::Error;
 // TODO 结构化Response
 pub async fn get_rpc_server_port(host: String) -> Result<u32, Error> {
     use crate::core::store;
-    let http_port = store::get_settings_value(store::BACKEND_PORT.clone())
-        .await
+    let http_port = store::get_settings_value(store::KEY_BACKEND_PORT.clone())
         .unwrap()
         .as_str()
         .unwrap_or("8080")

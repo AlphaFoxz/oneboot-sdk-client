@@ -54,13 +54,13 @@ hotkeyStore.listen('editor', (e) => {
 // ================ 加载文件 load files ================
 const files = ref<Files>({})
 const loadFile = (file: utils.rust_api.SdkFileInfoDto, container: Files, level: number) => {
-  container[file.file_path] = {
-    path: file.file_path + (file.file_type === SdkFileTypeEnum.LOCAL_DIR ? '/' : ''),
-    name: file.file_name,
+  container[file.filePath] = {
+    path: file.filePath + (file.fileType === SdkFileTypeEnum.LOCAL_DIR ? '/' : ''),
+    name: file.fileName,
     content: file.content || '',
     readonly: level < 3,
-    isFolder: file.file_type === SdkFileTypeEnum.LOCAL_DIR,
-    isFile: file.file_type === SdkFileTypeEnum.LOCAL_FILE,
+    isFolder: file.fileType === SdkFileTypeEnum.LOCAL_DIR,
+    isFile: file.fileType === SdkFileTypeEnum.LOCAL_FILE,
   }
   if (file.children) {
     file.children.forEach((element) => {
@@ -200,62 +200,30 @@ const sqlVisible = ref(false)
 const handleContextmenuSelect = async (path: string, item: { label: string | ComputedRef<string>; value: string }) => {
   const currentPath =
     monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
-  if (item.value === GenTypeEnum.GEN_TS_CODE) {
+  if (item.value === GenTypeEnum.GEN_TS_CLIENT_CODE) {
     const ok = await api.checkErr(
       monaco,
       files.value[path].content!,
       currentPath === path ? monacoStore.getEditor() : undefined
     )
     if (ok) {
-      const msgId = messageStore.info({ content: '正在生成Ts代码...', loading: true, closeable: true })
-      utils.rust_api
-        .generateTsApi(path)
-        .then(() => {
-          messageStore.close(msgId)
-          messageStore.success({
-            content: '代码已生成，请稍后重新编译项目并验证',
-            timeoutMs: 5000,
-            closeable: true,
-          })
-        })
-        .catch(() => {
-          messageStore.close(msgId)
-          messageStore.error({
-            content: '保存失败，请检查是否有网络错误',
-            closeable: true,
-          })
-        })
+      handleGenTsClientApi(path)
     } else {
       messageStore.error({
         content: '存在语法错误，无法生成',
         closeable: true,
       })
     }
-  } else if (item.value === GenTypeEnum.GEN_JAVA_CODE) {
+  } else if (item.value === GenTypeEnum.GEN_RUST_CLIENT_CODE) {
+    handleGenRustClientApi(path)
+  } else if (item.value === GenTypeEnum.GEN_JAVA_SERVER_CODE) {
     const ok = await api.checkErr(
       monaco,
       files.value[path].content!,
       currentPath === path ? monacoStore.getEditor() : undefined
     )
     if (ok) {
-      const msgId = messageStore.info({ content: '正在生成Java代码...', loading: true, closeable: true })
-      utils.rust_api
-        .generateJavaApi(path)
-        .then(() => {
-          messageStore.close(msgId)
-          messageStore.success({
-            content: '代码已生成，请稍后重新编译项目并验证',
-            timeoutMs: 5000,
-            closeable: true,
-          })
-        })
-        .catch(() => {
-          messageStore.close(msgId)
-          messageStore.error({
-            content: '保存失败，请检查是否有网络错误',
-            closeable: true,
-          })
-        })
+      handleGenJavaServerApi(path)
     } else {
       messageStore.error({
         content: '存在语法错误，无法生成',
@@ -269,36 +237,7 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
       currentPath === path ? monacoStore.getEditor() : undefined
     )
     if (ok) {
-      utils.rust_api.generateSql(path).then((res) => {
-        if (res.success) {
-          messageStore.success({
-            content: 'SQL已生成',
-            timeoutMs: 5000,
-            closeable: true,
-          })
-          if (!res.data) {
-            sqlTitle.value = []
-            sqlContent.value = []
-            sqlIndex.value = -1
-            return
-          }
-          const titles: string[] = []
-          const contents: string[] = []
-          Object.keys(res.data).forEach((key) => {
-            titles.push(key)
-            contents.push(res.data![key])
-            sqlContent.value = contents
-            sqlTitle.value = titles
-            sqlIndex.value = 0
-          })
-          sqlVisible.value = true
-        } else {
-          messageStore.error({
-            content: 'SQL生成失败',
-            closeable: true,
-          })
-        }
-      })
+      handleGenDbSql(path)
     } else {
       messageStore.error({
         content: '存在语法错误，无法生成',
@@ -306,6 +245,98 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
       })
     }
   }
+}
+const handleGenTsClientApi = (path: string) => {
+  const msgId = messageStore.info({ content: '正在生成ts客户端代码...', loading: true, closeable: true })
+  utils.rust_api
+    .generateTsClientApi(path)
+    .then(() => {
+      messageStore.close(msgId)
+      messageStore.success({
+        content: '代码已生成，请稍后重新编译项目并验证',
+        timeoutMs: 5000,
+        closeable: true,
+      })
+    })
+    .catch(() => {
+      messageStore.close(msgId)
+      messageStore.error({
+        content: '保存失败，请检查是否有网络错误',
+        closeable: true,
+      })
+    })
+}
+const handleGenRustClientApi = (path: string) => {
+  const msgId = messageStore.info({ content: '正在生成Rust客户端代码...', loading: true, closeable: true })
+  utils.rust_api
+    .generateRustClientApi(path)
+    .then(() => {
+      messageStore.close(msgId)
+      messageStore.success({
+        content: '代码已生成，请稍后重新编译项目并验证',
+        timeoutMs: 5000,
+        closeable: true,
+      })
+    })
+    .catch(() => {
+      messageStore.close(msgId)
+      messageStore.error({
+        content: '保存失败，请检查是否有网络错误',
+        closeable: true,
+      })
+    })
+}
+const handleGenJavaServerApi = (path: string) => {
+  const msgId = messageStore.info({ content: '正在生成Java服务端代码...', loading: true, closeable: true })
+  utils.rust_api
+    .generateJavaServerApi(path)
+    .then(() => {
+      messageStore.close(msgId)
+      messageStore.success({
+        content: '代码已生成，请稍后重新编译项目并验证',
+        timeoutMs: 5000,
+        closeable: true,
+      })
+    })
+    .catch(() => {
+      messageStore.close(msgId)
+      messageStore.error({
+        content: '保存失败，请检查是否有网络错误',
+        closeable: true,
+      })
+    })
+}
+const handleGenDbSql = (path: string) => {
+  utils.rust_api.generateSql(path).then((res) => {
+    if (res.success) {
+      messageStore.success({
+        content: 'SQL已生成',
+        timeoutMs: 5000,
+        closeable: true,
+      })
+      if (!res.data) {
+        sqlTitle.value = []
+        sqlContent.value = []
+        sqlIndex.value = -1
+        return
+      }
+      const titles: string[] = []
+      const contents: string[] = []
+      Object.keys(res.data).forEach((key) => {
+        titles.push(key)
+        contents.push(res.data![key])
+        sqlContent.value = contents
+        sqlTitle.value = titles
+        sqlIndex.value = 0
+      })
+      sqlVisible.value = true
+    } else {
+      messageStore.error({
+        content: 'SQL生成失败',
+        closeable: true,
+      })
+    }
+  })
 }
 </script>
 
@@ -330,10 +361,14 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
     @delete-file="handleDeleteFile"
     @delete-folder="handleDeleteFile"
     :file-menu="[
-      { label: '生成JAVA代码', value: GenTypeEnum.GEN_JAVA_CODE },
+      { label: '生成JAVA服务端代码', value: GenTypeEnum.GEN_JAVA_SERVER_CODE },
       {
-        label: '生成Typescript代码',
-        value: GenTypeEnum.GEN_TS_CODE,
+        label: '生成ts客户端代码',
+        value: GenTypeEnum.GEN_TS_CLIENT_CODE,
+      },
+      {
+        label: '生成Rust客户端代码',
+        value: GenTypeEnum.GEN_RUST_CLIENT_CODE,
       },
       {
         label: '预览SQL',
