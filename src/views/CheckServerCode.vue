@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { SdkVersionApi } from '@/api'
 import { onMounted, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
+import { checkRestfulFileVersion } from '@/utils/rust_api'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import InputSwitch from 'primevue/inputswitch'
@@ -12,13 +12,13 @@ const msg = ref('')
 const hideSuccessed = ref(false)
 const check = async () => {
   let result = ''
-  const res = await SdkVersionApi.checkRestfulJava()
+  const res = await checkRestfulFileVersion()
   console.info('res', res)
-  if (!res.data.success) {
+  if (!res) {
     toast.add({ severity: 'error', summary: '服务端代码检查失败，请检查后端服务和网络连接' })
     return
   }
-  for (let dto of res.data.data) {
+  for (let dto of res.data) {
     if (hideSuccessed.value && dto.same) {
       continue
     }

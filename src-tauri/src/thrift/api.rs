@@ -76,7 +76,6 @@ pub async fn create_or_update_file(
     file_path: &str,
     content: &str,
 ) -> Result<sdk_response_dto::SdkStringResponseDto, Error> {
-    use ifaces::sdk_info_iface::TSdkInfoIfaceSyncClient;
     let c = client::try_get_sdk_info_client().await;
     if c.is_err() {
         eprint!("error {:?}", c.err());
@@ -101,7 +100,6 @@ pub async fn create_or_update_file(
 pub async fn create_folder(
     folder_path: &str,
 ) -> Result<sdk_response_dto::SdkStringResponseDto, Error> {
-    use ifaces::sdk_info_iface::TSdkInfoIfaceSyncClient;
     let c = client::try_get_sdk_info_client().await;
     if c.is_err() {
         eprint!("error {:?}", c.err());

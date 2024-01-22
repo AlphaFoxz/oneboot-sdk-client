@@ -130,8 +130,9 @@ const handleSaveFile = async (path: string, value: string, resolve: () => void, 
   const currentPath =
     monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
   if (path.endsWith('.restful')) {
-    await api.checkErr(monaco, files.value[path].content!, currentPath === path ? monacoStore.getEditor() : undefined)
+    api.checkErr(monaco, value, currentPath === path ? monacoStore.getEditor() : undefined)
   }
+
   utils.rust_api.createOrUpdateFile(path, value).then((res) => {
     if (res) {
       resolve()

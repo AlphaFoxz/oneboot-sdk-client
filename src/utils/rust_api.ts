@@ -1,5 +1,6 @@
 import { invoke } from '@tauri-apps/api/core'
 import { SdkStringResponseDto } from '@/api/gen/sdk/dtos/SdkResponseDto'
+import { SdkVersionCheckResponse } from '@/api/gen/sdk/dtos/SdkVersionDto'
 export enum SdkFileTypeEnum {
   LOCAL_FILE = 0,
   LOCAL_DIR = 1,
@@ -76,4 +77,8 @@ export async function generateSql(
 
 export async function getBasePackage(): Promise<SdkStringResponseDto> {
   return invoke('get_base_package')
+}
+
+export async function checkRestfulFileVersion(): Promise<SdkVersionCheckResponse> {
+  return invoke('check_restful_file_version')
 }

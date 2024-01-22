@@ -33,6 +33,7 @@ pub fn run() {
             restful::api::generate_ts_client_api,
             restful::api::generate_rust_client_api,
             restful::api::generate_sql,
+            restful::api::check_restful_file_version
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,5 +1,7 @@
 use super::gen::sdk::apis::restful_dsl_api::restful_dsl_api;
-use super::gen::sdk::dtos::{sdk_code_template_dto, sdk_request_dto, sdk_response_dto};
+use super::gen::sdk::dtos::{
+    sdk_code_template_dto, sdk_request_dto, sdk_response_dto, sdk_version_dto,
+};
 use crate::core::error::Error;
 use crate::core::parser;
 use crate::core::util;
@@ -218,4 +220,10 @@ pub async fn generate_sql(file_path: &str) -> Result<BTreeMap<String, serde_json
         result.insert("success".into(), true.into());
     }
     Ok(result)
+}
+
+#[tauri::command]
+pub async fn check_restful_file_version() -> Result<sdk_version_dto::SdkVersionCheckResponse, Error>
+{
+    Ok(restful_dsl_api::check_restful_file_version().await?)
 }

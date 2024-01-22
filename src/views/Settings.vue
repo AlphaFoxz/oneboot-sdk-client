@@ -6,7 +6,7 @@ import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import { settings } from '@/constants'
-import axios, { AxiosError } from 'axios'
+import { getBasePackage } from '@/utils/rust_api'
 
 const toast = useToast()
 const store = new Store(settings.FILE_NAME)
@@ -25,19 +25,15 @@ onMounted(async () => {
 
 const handleTestUrl = async () => {
   isTestingUrl.value = true
-  axios
-    .get(`http://${backendHost.value}:${backendPort.value}/_sdk`)
+
+  getBasePackage()
     .then(() => {
       openSuccessNotification('连通性测试成功')
       isTestingUrl.value = false
     })
-    .catch((e: AxiosError) => {
-      if (e.response && e.response.status) {
-        openErrorNotification('已连通，但后端可能没有以开发模式运行')
-      } else {
-        console.error('catch', e)
-        openErrorNotification(`连通性测试失败，服务不可访问 http://${backendHost.value}:${backendPort.value}`)
-      }
+    .catch((e: Error) => {
+      console.error('catch', e)
+      openErrorNotification(`连通性测试失败，访问失败 http://${backendHost.value}:${backendPort.value}`)
       isTestingUrl.value = false
     })
 }
