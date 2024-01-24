@@ -18,8 +18,6 @@ pub enum Error {
     #[error(transparent)]
     IoError(#[from] std::io::Error),
     #[error(transparent)]
-    ThriftError(#[from] thrift::Error),
-    #[error(transparent)]
     PestParseThriftError(#[from] pest::error::Error<super::parser::thrift::Rule>),
     #[error(transparent)]
     PestParseRestError(#[from] pest::error::Error<super::parser::restful::Rule>),

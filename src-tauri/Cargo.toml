@@ -27,7 +27,6 @@ serde_json = "1.0"
 serde_repr = "0.1.18"
 
 url = "2.5.0"
-thrift = "0.17.0"
 rs-snowflake = "0.6.0"
 lazy_static = "1.4.0"
 pest = { version = "2.7.2", features = ["std", "pretty-print"] }

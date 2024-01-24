@@ -1,6 +1,5 @@
 pub mod core;
 pub mod restful;
-pub mod thrift;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
