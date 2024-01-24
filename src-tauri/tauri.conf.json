@@ -12,6 +12,20 @@
   },
   "tauri": {
     "bundle": {
+      "windows": {
+        "allowDowngrades": true,
+        "certificateThumbprint": null,
+        "digestAlgorithm": null,
+        "nsis": null,
+        "timestampUrl": null,
+        "tsp": false,
+        "webviewFixedRuntimePath": null,
+        "webviewInstallMode": {
+          "silent": true,
+          "type": "embedBootstrapper"
+        },
+        "wix": null
+      },
       "active": true,
       "targets": ["msi", "app", "updater"],
       "identifier": "com.github.alphafoxz.oneboot.sdk.client",
