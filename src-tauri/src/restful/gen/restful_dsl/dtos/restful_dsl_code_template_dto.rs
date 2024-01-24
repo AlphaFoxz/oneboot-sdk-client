@@ -1,8 +1,7 @@
-use serde::{Deserialize, Serialize};
 /// 代码模板实体
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SdkCodeTemplateDto {
+pub struct RestfulDslCodeTemplateDto {
     /// 文件路径
     pub file_path: String,
     /// 系统分隔符
@@ -14,10 +13,10 @@ pub struct SdkCodeTemplateDto {
     /// 文件内容
     pub content: String,
     /// 包含其他模板
-    pub imports: std::collections::HashMap<String, SdkCodeTemplateDto>,
+    pub imports: std::collections::HashMap<String, RestfulDslCodeTemplateDto>,
 }
-impl Into<SdkCodeTemplateDto> for String {
-    fn into(self) -> SdkCodeTemplateDto {
+impl std::convert::Into<RestfulDslCodeTemplateDto> for String {
+    fn into(self) -> RestfulDslCodeTemplateDto {
         serde_json::from_str(self.as_str()).unwrap()
     }
 }

@@ -1,18 +1,18 @@
-pub mod sdk;
+pub mod restful_dsl;
 
 use crate::core::error::Error;
 use crate::core::parser;
 use async_recursion::async_recursion;
-use sdk::apis::restful_dsl_api::restful_dsl_api;
-use sdk::dtos::sdk_code_template_dto::SdkCodeTemplateDto;
+use restful_dsl::apis::restful_dsl_api::restful_dsl_api;
+use restful_dsl::dtos::restful_dsl_code_template_dto::RestfulDslCodeTemplateDto;
 
-impl SdkCodeTemplateDto {
+impl RestfulDslCodeTemplateDto {
     #[async_recursion]
     pub async fn try_build_import(
         &mut self,
         template_path: String,
         import_path: String,
-    ) -> Result<Option<SdkCodeTemplateDto>, Error> {
+    ) -> Result<Option<RestfulDslCodeTemplateDto>, Error> {
         let mut template;
         template = restful_dsl_api::get_template_content_by_import_path(
             template_path.clone(),

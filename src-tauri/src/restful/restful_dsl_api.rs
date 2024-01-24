@@ -1,6 +1,7 @@
-use super::gen::sdk::apis::restful_dsl_api::restful_dsl_api;
-use super::gen::sdk::dtos::{
-    sdk_code_template_dto, sdk_request_dto, sdk_response_dto, sdk_version_dto,
+use super::gen::restful_dsl::apis::restful_dsl_api::restful_dsl_api;
+use super::gen::restful_dsl::dtos::{
+    restful_dsl_code_template_dto, restful_dsl_request_dto, restful_dsl_response_dto,
+    restful_dsl_version_dto,
 };
 use crate::core::error::Error;
 use crate::core::parser;
@@ -15,14 +16,15 @@ pub fn check_restful_code_err(code: &str) -> parser::CheckResult {
 
 /// Check thrift code
 #[tauri::command]
-pub async fn get_base_package() -> Result<sdk_response_dto::SdkStringResponseDto, Error> {
+pub async fn get_base_package(
+) -> Result<restful_dsl_response_dto::RestfulDslStringResponseDto, Error> {
     Ok(restful_dsl_api::get_base_package().await?)
 }
 
 ///获取restful模板文件树
 #[tauri::command]
 pub async fn get_restful_template_file_tree(
-) -> Result<sdk_response_dto::SdkFileTreeResponseDto, Error> {
+) -> Result<restful_dsl_response_dto::RestfulDslFileTreeResponseDto, Error> {
     let result = restful_dsl_api::get_restful_template_file_tree().await;
     if result.is_err() {
         return Err("请求失败".into());
@@ -34,7 +36,7 @@ pub async fn get_restful_template_file_tree(
 #[tauri::command]
 pub async fn get_template_content_by_path(
     file_path: &str,
-) -> Result<sdk_response_dto::SdkCodeTemplateResponseDto, Error> {
+) -> Result<restful_dsl_response_dto::RestfulDslCodeTemplateResponseDto, Error> {
     let result = restful_dsl_api::get_template_content_by_path(file_path.to_string()).await;
     if result.is_err() {
         return Err("请求失败".into());
@@ -44,7 +46,9 @@ pub async fn get_template_content_by_path(
 
 // 删除文件
 #[tauri::command]
-pub async fn delete_file(file_path: &str) -> Result<sdk_response_dto::SdkListResponseDto, Error> {
+pub async fn delete_file(
+    file_path: &str,
+) -> Result<restful_dsl_response_dto::RestfulDslListResponseDto, Error> {
     let result = restful_dsl_api::delete_file(file_path.to_string()).await;
     if result.is_err() {
         return Err("请求失败".into());
@@ -57,7 +61,7 @@ pub async fn delete_file(file_path: &str) -> Result<sdk_response_dto::SdkListRes
 pub async fn create_or_update_file(
     file_path: &str,
     content: &str,
-) -> Result<sdk_response_dto::SdkStringResponseDto, Error> {
+) -> Result<restful_dsl_response_dto::RestfulDslStringResponseDto, Error> {
     let result =
         restful_dsl_api::create_or_update_file(file_path.to_string(), content.to_string()).await;
     if result.is_err() {
@@ -71,7 +75,7 @@ pub async fn create_or_update_file(
 #[tauri::command]
 pub async fn create_folder(
     folder_path: &str,
-) -> Result<sdk_response_dto::SdkStringResponseDto, Error> {
+) -> Result<restful_dsl_response_dto::RestfulDslStringResponseDto, Error> {
     let result = restful_dsl_api::create_folder(folder_path.to_string()).await;
     if result.is_err() {
         eprint!("error {:?}", result.err().unwrap());
@@ -85,7 +89,7 @@ pub async fn create_folder(
 pub async fn rename_file(
     file_path: &str,
     new_path: &str,
-) -> Result<sdk_response_dto::SdkStringResponseDto, Error> {
+) -> Result<restful_dsl_response_dto::RestfulDslStringResponseDto, Error> {
     let result = restful_dsl_api::rename_file(file_path.to_string(), new_path.to_string()).await;
     if result.is_err() {
         eprint!("error {:?}", result.err().unwrap());
@@ -97,12 +101,14 @@ pub async fn rename_file(
 /// 根据文件路径生成java api
 #[tauri::command]
 pub async fn generate_java_server_api(file_path: &str) -> Result<(), Error> {
-    let value =
-        sdk_code_template_dto::SdkCodeTemplateDto::try_from_file_path(file_path.into()).await;
+    let value = restful_dsl_code_template_dto::RestfulDslCodeTemplateDto::try_from_file_path(
+        file_path.into(),
+    )
+    .await;
     if value.is_err() {
         return Err("请求失败".into());
     }
-    let req_dto = sdk_request_dto::SdkCodeTemplateRequestDto {
+    let req_dto = restful_dsl_request_dto::RestfulDslCodeTemplateRequestDto {
         id: util::next_snowflake_id(),
         task_id: util::next_snowflake_id(),
         data: value.unwrap(),
@@ -128,12 +134,14 @@ pub async fn generate_ts_client_api(file_path: &str) -> Result<(), Error> {
     } else {
         gen_dir = res.unwrap().as_str().unwrap().to_string();
     }
-    let value =
-        sdk_code_template_dto::SdkCodeTemplateDto::try_from_file_path(file_path.into()).await;
+    let value = restful_dsl_code_template_dto::RestfulDslCodeTemplateDto::try_from_file_path(
+        file_path.into(),
+    )
+    .await;
     if value.is_err() {
         return Err("请求失败".into());
     }
-    let req_dto = sdk_request_dto::SdkCodeTemplateRequestDto {
+    let req_dto = restful_dsl_request_dto::RestfulDslCodeTemplateRequestDto {
         id: util::next_snowflake_id(),
         task_id: util::next_snowflake_id(),
         data: value.unwrap(),
@@ -166,12 +174,14 @@ pub async fn generate_rust_client_api(file_path: &str) -> Result<(), Error> {
     } else {
         gen_dir = res.unwrap().as_str().unwrap().to_string();
     }
-    let value =
-        sdk_code_template_dto::SdkCodeTemplateDto::try_from_file_path(file_path.into()).await;
+    let value = restful_dsl_code_template_dto::RestfulDslCodeTemplateDto::try_from_file_path(
+        file_path.into(),
+    )
+    .await;
     if value.is_err() {
         return Err("请求失败".into());
     }
-    let req_dto = sdk_request_dto::SdkCodeTemplateRequestDto {
+    let req_dto = restful_dsl_request_dto::RestfulDslCodeTemplateRequestDto {
         id: util::next_snowflake_id(),
         task_id: util::next_snowflake_id(),
         data: value.unwrap(),
@@ -197,12 +207,14 @@ pub async fn generate_rust_client_api(file_path: &str) -> Result<(), Error> {
 pub async fn generate_sql(file_path: &str) -> Result<BTreeMap<String, serde_json::Value>, Error> {
     let mut result = BTreeMap::<String, serde_json::Value>::new();
     result.insert("success".into(), false.into());
-    let value =
-        sdk_code_template_dto::SdkCodeTemplateDto::try_from_file_path(file_path.into()).await;
+    let value = restful_dsl_code_template_dto::RestfulDslCodeTemplateDto::try_from_file_path(
+        file_path.into(),
+    )
+    .await;
     if value.is_err() {
         return Ok(result);
     }
-    let req_dto = sdk_request_dto::SdkCodeTemplateRequestDto {
+    let req_dto = restful_dsl_request_dto::RestfulDslCodeTemplateRequestDto {
         id: util::next_snowflake_id(),
         task_id: util::next_snowflake_id(),
         data: value.unwrap(),
@@ -223,7 +235,7 @@ pub async fn generate_sql(file_path: &str) -> Result<BTreeMap<String, serde_json
 }
 
 #[tauri::command]
-pub async fn check_restful_file_version() -> Result<sdk_version_dto::SdkVersionCheckResponse, Error>
-{
+pub async fn check_restful_file_version(
+) -> Result<restful_dsl_version_dto::RestfulDslVersionCheckResponse, Error> {
     Ok(restful_dsl_api::check_restful_file_version().await?)
 }

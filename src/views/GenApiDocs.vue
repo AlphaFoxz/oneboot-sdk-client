@@ -16,7 +16,7 @@ const download = (data: Blob, fileName: string) => {
   document.body.removeChild(tmpLink)
 }
 const handleGenWordApi = (moduleName: string) => {
-  SdkGenDocApi.generateWordApi(moduleName).then((res) => {
+  SdkGenDocApi.generateWordApi(moduleName).then((res: any) => {
     const data = new Blob([res.data], { type: 'application/octet-stream;charset=utf-8' })
     const fileName = decodeURI(res.headers['content-disposition'].split('=')[1])
     download(data, fileName)

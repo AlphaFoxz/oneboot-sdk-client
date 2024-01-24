@@ -1,4 +1,5 @@
 import app from '@/app'
+import { onMounted, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 export const useToastService: typeof useToast = () => app.config.globalProperties.$toast
 
@@ -117,8 +118,3 @@ export function snakeToUpperCamel(str: string): string {
   str = str.replace(str[0], str[0].toUpperCase())
   return str.replace(/_(\w)/g, (_, c) => c.toUpperCase())
 }
-
-import * as rust_api from './rust_api'
-import * as dyn_component from './dyn_component'
-import { onMounted, ref } from 'vue'
-export { rust_api, dyn_component }

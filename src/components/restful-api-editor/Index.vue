@@ -6,7 +6,9 @@ import { Editor, type Files, useMessage, useMonaco, useHotkey } from 'monaco-tre
 import 'monaco-tree-editor/index.css'
 import * as utils from '@/utils'
 import * as api from './api'
-import { SdkFileTypeEnum } from '@/utils/rust_api'
+import * as rustApi from '@/api/rust_api'
+import { SdkFileInfoDto } from '@/api/gen/sdk/dtos/SdkFileInfoDto'
+import { SdkFileTypeEnum } from '@/api/gen/sdk/enums/SdkFileTypeEnum'
 import { registerRestful } from './restful'
 import * as monaco from 'monaco-editor'
 import { GenTypeEnum } from './define'
@@ -53,7 +55,7 @@ hotkeyStore.listen('editor', (e) => {
 
 // ================ 加载文件 load files ================
 const files = ref<Files>({})
-const loadFile = (file: utils.rust_api.SdkFileInfoDto, container: Files, level: number) => {
+const loadFile = (file: SdkFileInfoDto, container: Files, level: number) => {
   container[file.filePath] = {
     path: file.filePath + (file.fileType === SdkFileTypeEnum.LOCAL_DIR ? '/' : ''),
     name: file.fileName,
@@ -70,7 +72,7 @@ const loadFile = (file: utils.rust_api.SdkFileInfoDto, container: Files, level: 
   return container
 }
 const handleReload = (resolve: () => void, reject: (msg?: string) => void) => {
-  utils.rust_api
+  rustApi
     .getRestfulTemplateFileTree()
     .then((res) => {
       if (res.success && res.data) {
@@ -109,7 +111,7 @@ window.onresize = () => {
 // ================ 回调函数 callback ================
 const messageStore = useMessage()
 const handleNewFile = (path: string, resolve: () => void, reject: (msg?: string) => void) => {
-  utils.rust_api.createOrUpdateFile(path, '').then((res) => {
+  rustApi.createOrUpdateFile(path, '').then((res) => {
     if (res) {
       resolve()
     } else {
@@ -118,7 +120,7 @@ const handleNewFile = (path: string, resolve: () => void, reject: (msg?: string)
   })
 }
 const handleNewFolder = (path: string, resolve: () => void, reject: (msg?: string) => void) => {
-  utils.rust_api.createFolder(path).then((res) => {
+  rustApi.createFolder(path).then((res) => {
     if (res) {
       resolve()
     } else {
@@ -133,7 +135,7 @@ const handleSaveFile = async (path: string, value: string, resolve: () => void, 
     api.checkErr(monaco, value, currentPath === path ? monacoStore.getEditor() : undefined)
   }
 
-  utils.rust_api.createOrUpdateFile(path, value).then((res) => {
+  rustApi.createOrUpdateFile(path, value).then((res) => {
     if (res) {
       resolve()
     } else {
@@ -142,7 +144,7 @@ const handleSaveFile = async (path: string, value: string, resolve: () => void, 
   })
 }
 const handleDeleteFile = (path: string, resolve: () => void, reject: (msg?: string) => void) => {
-  utils.rust_api.deleteFile(path).then((res) => {
+  rustApi.deleteFile(path).then((res) => {
     if (res && res.success) {
       resolve()
     } else {
@@ -151,7 +153,7 @@ const handleDeleteFile = (path: string, resolve: () => void, reject: (msg?: stri
   })
 }
 const handleRename = (path: string, newPath: string, resolve: () => void, reject: (msg?: string) => void) => {
-  utils.rust_api.renameFile(path, newPath).then((res) => {
+  rustApi.renameFile(path, newPath).then((res) => {
     if (res && res.success) {
       resolve()
     } else {
@@ -161,7 +163,7 @@ const handleRename = (path: string, newPath: string, resolve: () => void, reject
 }
 const basePackage = ref('')
 onMounted(() => {
-  utils.rust_api.getBasePackage().then((res) => {
+  rustApi.getBasePackage().then((res) => {
     basePackage.value = res.data!
   })
 })
@@ -255,7 +257,7 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
 }
 const handleGenTsClientApi = (path: string) => {
   const msgId = messageStore.info({ content: '正在生成ts客户端代码...', loading: true, closeable: true })
-  utils.rust_api
+  rustApi
     .generateTsClientApi(path)
     .then(() => {
       messageStore.close(msgId)
@@ -275,7 +277,7 @@ const handleGenTsClientApi = (path: string) => {
 }
 const handleGenRustClientApi = (path: string) => {
   const msgId = messageStore.info({ content: '正在生成Rust客户端代码...', loading: true, closeable: true })
-  utils.rust_api
+  rustApi
     .generateRustClientApi(path)
     .then(() => {
       messageStore.close(msgId)
@@ -295,7 +297,7 @@ const handleGenRustClientApi = (path: string) => {
 }
 const handleGenJavaServerApi = (path: string) => {
   const msgId = messageStore.info({ content: '正在生成Java服务端代码...', loading: true, closeable: true })
-  utils.rust_api
+  rustApi
     .generateJavaServerApi(path)
     .then(() => {
       messageStore.close(msgId)
@@ -314,7 +316,7 @@ const handleGenJavaServerApi = (path: string) => {
     })
 }
 const handleGenDbSql = (path: string) => {
-  utils.rust_api.generateSql(path).then((res) => {
+  rustApi.generateSql(path).then((res) => {
     if (res.success) {
       messageStore.success({
         content: 'SQL已生成',

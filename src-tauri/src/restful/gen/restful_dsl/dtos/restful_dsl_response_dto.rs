@@ -1,11 +1,10 @@
-use super::sdk_code_template_dto;
-use super::sdk_file_info_dto;
-use serde::{Deserialize, Serialize};
+use super::restful_dsl_code_template_dto;
+use super::restful_dsl_file_info_dto;
 // 响应体的data字段是list
 /// 字符串列表响应实体
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SdkListResponseDto {
+pub struct RestfulDslListResponseDto {
     /// 主键
     pub id: i64,
     /// 任务id
@@ -17,16 +16,16 @@ pub struct SdkListResponseDto {
     /// 数据内容
     pub data: Option<Vec<String>>,
 }
-impl Into<SdkListResponseDto> for String {
-    fn into(self) -> SdkListResponseDto {
+impl std::convert::Into<RestfulDslListResponseDto> for String {
+    fn into(self) -> RestfulDslListResponseDto {
         serde_json::from_str(self.as_str()).unwrap()
     }
 }
 // 响应体的data字段是map
 /// 字符串map响应实体
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SdkMapResponseDto {
+pub struct RestfulDslMapResponseDto {
     /// 主键
     pub id: i64,
     /// 任务id
@@ -38,16 +37,16 @@ pub struct SdkMapResponseDto {
     /// 数据内容
     pub data: Option<std::collections::HashMap<String, String>>,
 }
-impl Into<SdkMapResponseDto> for String {
-    fn into(self) -> SdkMapResponseDto {
+impl std::convert::Into<RestfulDslMapResponseDto> for String {
+    fn into(self) -> RestfulDslMapResponseDto {
         serde_json::from_str(self.as_str()).unwrap()
     }
 }
 // 响应体的data字段是long
 /// 长整型响应实体
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SdkLongResponseDto {
+pub struct RestfulDslLongResponseDto {
     /// 主键
     pub id: i64,
     /// 任务id
@@ -59,16 +58,16 @@ pub struct SdkLongResponseDto {
     /// 数据内容
     pub data: Option<i64>,
 }
-impl Into<SdkLongResponseDto> for String {
-    fn into(self) -> SdkLongResponseDto {
+impl std::convert::Into<RestfulDslLongResponseDto> for String {
+    fn into(self) -> RestfulDslLongResponseDto {
         serde_json::from_str(self.as_str()).unwrap()
     }
 }
 // 响应体的data字段是double
 /// 双精度小数响应实体
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SdkDoubleResponseDto {
+pub struct RestfulDslDoubleResponseDto {
     /// 主键
     pub id: i64,
     /// 任务id
@@ -80,16 +79,16 @@ pub struct SdkDoubleResponseDto {
     /// 数据内容
     pub data: Option<f64>,
 }
-impl Into<SdkDoubleResponseDto> for String {
-    fn into(self) -> SdkDoubleResponseDto {
+impl std::convert::Into<RestfulDslDoubleResponseDto> for String {
+    fn into(self) -> RestfulDslDoubleResponseDto {
         serde_json::from_str(self.as_str()).unwrap()
     }
 }
 // 响应体的data字段是binary
 /// 二进制响应实体
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SdkBinaryResponseDto {
+pub struct RestfulDslBinaryResponseDto {
     /// 主键
     pub id: i64,
     /// 任务id
@@ -101,16 +100,16 @@ pub struct SdkBinaryResponseDto {
     /// 数据内容
     pub data: Option<String>,
 }
-impl Into<SdkBinaryResponseDto> for String {
-    fn into(self) -> SdkBinaryResponseDto {
+impl std::convert::Into<RestfulDslBinaryResponseDto> for String {
+    fn into(self) -> RestfulDslBinaryResponseDto {
         serde_json::from_str(self.as_str()).unwrap()
     }
 }
 // 响应体的data字段是string
 /// 字符串响应实体
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SdkStringResponseDto {
+pub struct RestfulDslStringResponseDto {
     /// 主键
     pub id: i64,
     /// 任务id
@@ -122,16 +121,16 @@ pub struct SdkStringResponseDto {
     /// 数据内容
     pub data: Option<String>,
 }
-impl Into<SdkStringResponseDto> for String {
-    fn into(self) -> SdkStringResponseDto {
+impl std::convert::Into<RestfulDslStringResponseDto> for String {
+    fn into(self) -> RestfulDslStringResponseDto {
         serde_json::from_str(self.as_str()).unwrap()
     }
 }
-// 响应体的data字段是SdkCodeTemplateDto
+// 响应体的data字段是RestfulDslCodeTemplateDto
 /// 代码模板响应实体
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SdkCodeTemplateResponseDto {
+pub struct RestfulDslCodeTemplateResponseDto {
     /// 主键
     pub id: i64,
     /// 任务id
@@ -141,18 +140,18 @@ pub struct SdkCodeTemplateResponseDto {
     /// 消息
     pub message: Option<String>,
     /// 数据内容
-    pub data: Option<sdk_code_template_dto::SdkCodeTemplateDto>,
+    pub data: Option<restful_dsl_code_template_dto::RestfulDslCodeTemplateDto>,
 }
-impl Into<SdkCodeTemplateResponseDto> for String {
-    fn into(self) -> SdkCodeTemplateResponseDto {
+impl std::convert::Into<RestfulDslCodeTemplateResponseDto> for String {
+    fn into(self) -> RestfulDslCodeTemplateResponseDto {
         serde_json::from_str(self.as_str()).unwrap()
     }
 }
-// 响应体的data字段是SdkFileInfoDto
+// 响应体的data字段是RestfulDslFileInfoDto
 /// 文件树响应实体
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SdkFileTreeResponseDto {
+pub struct RestfulDslFileTreeResponseDto {
     /// 主键
     pub id: i64,
     /// 任务id
@@ -162,10 +161,10 @@ pub struct SdkFileTreeResponseDto {
     /// 消息
     pub message: Option<String>,
     /// 数据内容
-    pub data: Option<sdk_file_info_dto::SdkFileInfoDto>,
+    pub data: Option<restful_dsl_file_info_dto::RestfulDslFileInfoDto>,
 }
-impl Into<SdkFileTreeResponseDto> for String {
-    fn into(self) -> SdkFileTreeResponseDto {
+impl std::convert::Into<RestfulDslFileTreeResponseDto> for String {
+    fn into(self) -> RestfulDslFileTreeResponseDto {
         serde_json::from_str(self.as_str()).unwrap()
     }
 }

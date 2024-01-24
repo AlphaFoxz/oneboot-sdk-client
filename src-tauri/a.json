@@ -1,0 +1,225 @@
+{
+  "id": 1749852744056963072,
+  "taskId": 1749852744056963073,
+  "success": true,
+  "data": {
+    "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful",
+    "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen",
+    "fileName": "restful",
+    "separator": "\\",
+    "fileType": 1,
+    "isReadOnly": true,
+    "isEmpty": false,
+    "children": [
+      {
+        "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl",
+        "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful",
+        "fileName": "spring-boot-starter-restful-dsl",
+        "separator": "\\",
+        "fileType": 1,
+        "isReadOnly": true,
+        "isEmpty": false,
+        "children": [
+          {
+            "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\apis",
+            "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl",
+            "fileName": "apis",
+            "separator": "\\",
+            "fileType": 1,
+            "isReadOnly": true,
+            "isEmpty": false,
+            "children": [
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\apis\\RestfulDslApi.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\apis",
+                "fileName": "RestfulDslApi.restful",
+                "separator": "\\",
+                "content": "namespace java com.github.alphafoxz.spring_boot_starter_restful_dsl.gen.restful.apis\r\nnamespace ts gen.restful_dsl.apis\r\nnamespace rs gen.restful_dsl.apis\r\n\r\nimport \"../dtos/RestfulDslResponseDto.restful\"\r\nimport \"../dtos/RestfulDslRequestDto.restful\"\r\nimport \"../dtos/RestfulDslVersionDto.restful\"\r\n\r\n/* restful-dsl接口 */\r\n@uri(/_restfulDsl)\r\ninterface RestfulDslApi {\r\n    /*创建Ts client的Api代码*/\r\n    @postUri(/generateTsClientApi)\r\n    RestfulDslResponseDto.RestfulDslMapResponseDto generateTsClientApi(RestfulDslRequestDto.RestfulDslCodeTemplateRequestDto templateDto, string genDir)\r\n    /*创建rust client的Api代码*/\r\n    @postUri(/generateRustClientApi)\r\n    RestfulDslResponseDto.RestfulDslMapResponseDto generateRustClientApi(RestfulDslRequestDto.RestfulDslCodeTemplateRequestDto templateDto, string genDir)\r\n    /*创建java server的Api代码*/\r\n    @postUri(/generateJavaServerApi)\r\n    RestfulDslResponseDto.RestfulDslListResponseDto generateJavaServerApi(RestfulDslRequestDto.RestfulDslCodeTemplateRequestDto templateDto)\r\n    /*生成sql语句*/\r\n    @postUri(/generateSql)\r\n    RestfulDslResponseDto.RestfulDslMapResponseDto generateSql(RestfulDslRequestDto.RestfulDslCodeTemplateRequestDto templateDto)\r\n\r\n    /* 创建或更新文件 */\r\n    @postUri(/createOrUpdateFile)\r\n    RestfulDslResponseDto.RestfulDslStringResponseDto createOrUpdateFile(string filePath, string content)\r\n    /* 创建文件夹 */\r\n    @postUri(/createFolder)\r\n    RestfulDslResponseDto.RestfulDslStringResponseDto createFolder(string folderPath)\r\n    /* 重命名文件 */\r\n    @postUri(/renameFile)\r\n    RestfulDslResponseDto.RestfulDslStringResponseDto renameFile(string filePath, string newPath)\r\n    /* 删除文件 */\r\n    @postUri(/deleteFile)\r\n    RestfulDslResponseDto.RestfulDslListResponseDto deleteFile(string filePath)\r\n    /* 根据路径获取内容 */\r\n    @postUri(/getTemplateContentByPath)\r\n    RestfulDslResponseDto.RestfulDslCodeTemplateResponseDto getTemplateContentByPath(string filePath)\r\n    /* 获取restful模板文件树 */\r\n    @getUri(/getRestfulTemplateFileTree)\r\n    RestfulDslResponseDto.RestfulDslFileTreeResponseDto getRestfulTemplateFileTree()\r\n    /* 获取引用文件 */\r\n    @getUri(/getTemplateContentByImportPath)\r\n    RestfulDslResponseDto.RestfulDslCodeTemplateResponseDto getTemplateContentByImportPath(string temp_path, string import_path)\r\n    /* 获取包前缀 */\r\n    @getUri(/getBasePackage)\r\n    RestfulDslResponseDto.RestfulDslStringResponseDto getBasePackage()\r\n    /* 检查restful文件版本与生成情况 */\r\n    @getUri(/checkRestfulFileVersion)\r\n    RestfulDslVersionDto.RestfulDslVersionCheckResponse checkRestfulFileVersion()\r\n}\r\n",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              }
+            ]
+          },
+          {
+            "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos",
+            "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl",
+            "fileName": "dtos",
+            "separator": "\\",
+            "fileType": 1,
+            "isReadOnly": true,
+            "isEmpty": false,
+            "children": [
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos\\RestfulDslCodeTemplateDto.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos",
+                "fileName": "RestfulDslCodeTemplateDto.restful",
+                "separator": "\\",
+                "content": "namespace java com.github.alphafoxz.spring_boot_starter_restful_dsl.gen.restful.dtos\r\nnamespace ts gen.restful_dsl.dtos\r\nnamespace rs gen.restful_dsl.dtos\r\n\r\n/* 代码模板实体 */\r\nclass RestfulDslCodeTemplateDto {\r\n    /* 文件路径 */\r\n    required string filePath\r\n    /* 系统分隔符 */\r\n    required string fileSeparator\r\n    /* 命名空间 */\r\n    required map<string, string> namespace\r\n    /* 抽象语法树 */\r\n    optional string ast\r\n    /* 文件内容 */\r\n    required string content\r\n    /* 包含其他模板 */\r\n    required map<string, RestfulDslCodeTemplateDto> imports;\r\n}",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              },
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos\\RestfulDslFileInfoDto.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos",
+                "fileName": "RestfulDslFileInfoDto.restful",
+                "separator": "\\",
+                "content": "namespace java com.github.alphafoxz.spring_boot_starter_restful_dsl.gen.restful.dtos\r\nnamespace ts gen.restful_dsl.dtos\r\nnamespace rs gen.restful_dsl.dtos\r\n\r\nimport \"../enums/RestfulDslFileTypeEnum.restful\"\r\n\r\nclass RestfulDslFileInfoDto {\r\n    required string filePath\r\n    required string parentDir\r\n    required string fileName\r\n    required string separator\r\n    optional string content\r\n    optional string ext\r\n    required enum<RestfulDslFileTypeEnum.RestfulDslFileTypeEnum> fileType\r\n    required boolean isReadOnly\r\n    required boolean isEmpty\r\n    optional list<RestfulDslFileInfoDto> children\r\n}\r\n",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              },
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos\\RestfulDslRequestDto.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos",
+                "fileName": "RestfulDslRequestDto.restful",
+                "separator": "\\",
+                "content": "namespace java com.github.alphafoxz.spring_boot_starter_restful_dsl.gen.restful.dtos\r\nnamespace ts gen.restful_dsl.dtos\r\nnamespace rs gen.restful_dsl.dtos\r\n\r\nimport \"./RestfulDslCodeTemplateDto.restful\"\r\n\r\nclass RestfulDslListRequestDto {\r\n    required long id\r\n    required long taskId\r\n    required list<string> data\r\n}\r\n\r\nclass RestfulDslMapRequestDto {\r\n    required long id\r\n    required long taskId\r\n    required map<string, string> data\r\n}\r\n\r\nclass RestfulDslStringRequestDto {\r\n    required long id\r\n    required long taskId\r\n    required string data\r\n}\r\n\r\nclass RestfulDslLongRequestDto {\r\n    required long id\r\n    required long taskId\r\n    required long data\r\n}\r\n\r\nclass RestfulDslCodeTemplateRequestDto {\r\n    required long id\r\n    required long taskId\r\n    required RestfulDslCodeTemplateDto.RestfulDslCodeTemplateDto data\r\n}",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              },
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos\\RestfulDslResponseDto.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos",
+                "fileName": "RestfulDslResponseDto.restful",
+                "separator": "\\",
+                "content": "namespace java com.github.alphafoxz.spring_boot_starter_restful_dsl.gen.restful.dtos\r\nnamespace ts gen.restful_dsl.dtos\r\nnamespace rs gen.restful_dsl.dtos\r\n\r\nimport \"./RestfulDslCodeTemplateDto.restful\"\r\nimport \"./RestfulDslFileInfoDto.restful\"\r\n\r\n//响应体的data字段是list\r\n/*字符串列表响应实体*/\r\nclass RestfulDslListResponseDto {\r\n    /*主键*/\r\n    required long id\r\n    /*任务id*/\r\n    required long taskId\r\n    /*是否成功*/\r\n    required boolean success\r\n    /*消息*/\r\n    optional string message\r\n    /*数据内容*/\r\n    optional list<string> data\r\n}\r\n\r\n//响应体的data字段是map\r\n/*字符串map响应实体*/\r\nclass RestfulDslMapResponseDto {\r\n    /*主键*/\r\n    required long id\r\n    /*任务id*/\r\n    required long taskId\r\n    /*是否成功*/\r\n    required boolean success\r\n    /*消息*/\r\n    optional string message\r\n    /*数据内容*/\r\n    optional map<string, string> data\r\n}\r\n\r\n//响应体的data字段是long\r\n/*长整型响应实体*/\r\nclass RestfulDslLongResponseDto {\r\n    /*主键*/\r\n    required long id\r\n    /*任务id*/\r\n    required long taskId\r\n    /*是否成功*/\r\n    required boolean success\r\n    /*消息*/\r\n    optional string message\r\n    /*数据内容*/\r\n    optional long data\r\n}\r\n\r\n//响应体的data字段是double\r\n/*双精度小数响应实体*/\r\nclass RestfulDslDoubleResponseDto {\r\n    /*主键*/\r\n    required long id\r\n    /*任务id*/\r\n    required long taskId\r\n    /*是否成功*/\r\n    required boolean success\r\n    /*消息*/\r\n    optional string message\r\n    /*数据内容*/\r\n    optional double data\r\n}\r\n\r\n//响应体的data字段是binary\r\n/*二进制响应实体*/\r\nclass RestfulDslBinaryResponseDto {\r\n    /*主键*/\r\n    required long id\r\n    /*任务id*/\r\n    required long taskId\r\n    /*是否成功*/\r\n    required boolean success\r\n    /*消息*/\r\n    optional string message\r\n    /*数据内容*/\r\n    optional binary data\r\n}\r\n\r\n//响应体的data字段是string\r\n/*字符串响应实体*/\r\nclass RestfulDslStringResponseDto {\r\n    /*主键*/\r\n    required long id\r\n    /*任务id*/\r\n    required long taskId\r\n    /*是否成功*/\r\n    required boolean success\r\n    /*消息*/\r\n    optional string message\r\n    /*数据内容*/\r\n    optional string data\r\n}\r\n\r\n//响应体的data字段是RestfulDslCodeTemplateDto\r\n/*代码模板响应实体*/\r\nclass RestfulDslCodeTemplateResponseDto {\r\n    /*主键*/\r\n    required long id\r\n    /*任务id*/\r\n    required long taskId\r\n    /*是否成功*/\r\n    required boolean success\r\n    /*消息*/\r\n    optional string message\r\n    /*数据内容*/\r\n    optional RestfulDslCodeTemplateDto.RestfulDslCodeTemplateDto data\r\n}\r\n\r\n//响应体的data字段是RestfulDslFileInfoDto\r\n/*文件树响应实体*/\r\nclass RestfulDslFileTreeResponseDto {\r\n    /*主键*/\r\n    required long id\r\n    /*任务id*/\r\n    required long taskId\r\n    /*是否成功*/\r\n    required boolean success\r\n    /*消息*/\r\n    optional string message\r\n    /*数据内容*/\r\n    optional RestfulDslFileInfoDto.RestfulDslFileInfoDto data\r\n}",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              },
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos\\RestfulDslVersionDto.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\dtos",
+                "fileName": "RestfulDslVersionDto.restful",
+                "separator": "\\",
+                "content": "namespace java com.github.alphafoxz.spring_boot_starter_restful_dsl.gen.restful.dtos\r\nnamespace ts gen.restful_dsl.dtos\r\nnamespace rs gen.restful_dsl.dtos\r\n\r\n/*版本检查响应*/\r\nclass RestfulDslVersionCheckResponse {\r\n    optional i64 id\r\n    required i64 taskId\r\n    required boolean success\r\n    optional string message\r\n    required list<RestfulDslVersionCheckDto> data\r\n}\r\n\r\n/*版本检查结果*/\r\nclass RestfulDslVersionCheckDto {\r\n    required string filePath\r\n    required string sha256\r\n    required boolean same\r\n    required string message\r\n}",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              }
+            ]
+          },
+          {
+            "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\enums",
+            "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl",
+            "fileName": "enums",
+            "separator": "\\",
+            "fileType": 1,
+            "isReadOnly": true,
+            "isEmpty": false,
+            "children": [
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\enums\\RestfulDslFileTypeEnum.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl\\enums",
+                "fileName": "RestfulDslFileTypeEnum.restful",
+                "separator": "\\",
+                "content": "namespace java com.github.alphafoxz.spring_boot_starter_restful_dsl.gen.restful.enums\r\nnamespace ts gen.restful_dsl.enums\r\nnamespace rs gen.restful_dsl.enums\r\n\r\n/* 文件类型 */\r\nenum RestfulDslFileTypeEnum {\r\n    /* 本地文件 */\r\n    LOCAL_FILE = 0\r\n    /* 本地文件夹 */\r\n    LOCAL_DIR = 1\r\n}\r\n",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test",
+        "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful",
+        "fileName": "spring-boot-starter-restful-dsl-test",
+        "separator": "\\",
+        "fileType": 1,
+        "isReadOnly": true,
+        "isEmpty": false,
+        "children": [
+          {
+            "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\apis",
+            "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test",
+            "fileName": "apis",
+            "separator": "\\",
+            "fileType": 1,
+            "isReadOnly": true,
+            "isEmpty": false,
+            "children": [
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\apis\\FileApi.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\apis",
+                "fileName": "FileApi.restful",
+                "separator": "\\",
+                "content": "namespace java demo.restful.biz_test.gen.restful.apis\r\nnamespace ts gen.biz_test.apis\r\n\r\n/*文件接口*/\r\n@uri(/file)\r\ninterface FileApi {\r\n    //客户端对应类似这样一个表单：\r\n    //<form>\r\n    //   <input name=\"file\" title=\"*请上传文件\" type=\"file\" />\r\n    //   <input name=\"desc\" title=\"[可选]输入一段描述\" />\r\n    //</from>\r\n    /*上传文件*/\r\n    @formData\r\n    @postUri(/upload)\r\n    boolean upload(\r\n            /*二进制文件*/binary file,\r\n            /*可选说明*/optional string desc\r\n    )\r\n\r\n    //当返回值为list<byte>时，实际上生成的代码会自动优化为byte数组，而不是反直觉的list容器\r\n    /*下载文件*/\r\n    @getUri(/download)\r\n    list<byte> download(/*主键*/i64 id)\r\n}",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              },
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\apis\\UserApi.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\apis",
+                "fileName": "UserApi.restful",
+                "separator": "\\",
+                "content": "namespace java demo.restful.biz_test.gen.restful.apis\r\nnamespace ts gen.biz_test.apis\r\n\r\nimport \"../dtos/UserDto.restful\"\r\n\r\n/*用户接口*/\r\n@uri(/user)\r\ninterface UserApi {\r\n    /*根据id查询用户*/\r\n    @getUri(/query/{id})\r\n    UserDto.UserDto query(/*主键*/i64 id)\r\n\r\n    //无需增加实体，就像调用方法一样去设计这个接口\r\n    /*查询分页*/\r\n    @page\r\n    @getUri(/queryPage/{pageNum}/{pageSize})\r\n    UserDto.UserDto queryPage(\r\n            /*页码*/required i32 pageNum,\r\n            /*每页条数*/required i32 pageSize,\r\n            /*可选 筛选用户名*/optional string username\r\n    )\r\n\r\n    /*注册用户*/\r\n    @postUri(/register)\r\n    UserDto.UserDto register(/*用户信息*/UserDto.UserDto user)\r\n\r\n    /*修改用户信息*/\r\n    @postUri(/update)\r\n    UserDto.UserSimpleDto update(/*用户信息*/UserDto.UserSimpleDto user)\r\n\r\n    /*删除用户*/\r\n    @getUri(/delete/{id})\r\n    boolean delete(/*主键*/i64 id)\r\n}",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              }
+            ]
+          },
+          {
+            "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\dtos",
+            "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test",
+            "fileName": "dtos",
+            "separator": "\\",
+            "fileType": 1,
+            "isReadOnly": true,
+            "isEmpty": false,
+            "children": [
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\dtos\\UserDto.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\dtos",
+                "fileName": "UserDto.restful",
+                "separator": "\\",
+                "content": "namespace java demo.restful.biz_test.gen.restful.dtos\r\nnamespace ts gen.biz_test.dtos\r\n\r\nimport \"../enums/UserEnum.restful\"\r\n\r\n/*用户简易dto*/\r\nclass UserSimpleDto {\r\n    /*主键*/\r\n    i64 id\r\n\r\n    /*姓名*/\r\n    string username\r\n\r\n    /*用户类型*/\r\n    enum<UserEnum.UserTypeEnum> userType\r\n\r\n    /*权限*/\r\n    list<string> roles\r\n}\r\n\r\n/*用户dto*/\r\nclass UserDto {\r\n    /*主键*/\r\n    required i64 id\r\n\r\n    /*姓名*/\r\n    required string username\r\n\r\n    /*用户类型*/\r\n    required enum<UserEnum.UserTypeEnum> userType\r\n\r\n    /*权限*/\r\n    required list<string> roles\r\n\r\n    /*邮箱*/\r\n    optional string email\r\n\r\n    /*性别*/\r\n    optional UserEnum.UserGenderEnum gender\r\n}",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              }
+            ]
+          },
+          {
+            "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\enums",
+            "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test",
+            "fileName": "enums",
+            "separator": "\\",
+            "fileType": 1,
+            "isReadOnly": true,
+            "isEmpty": false,
+            "children": [
+              {
+                "filePath": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\enums\\UserEnum.restful",
+                "parentDir": "F:\\idea_projects\\spring-boot-starter-restful-dsl\\.sdk\\gen\\restful\\spring-boot-starter-restful-dsl-test\\enums",
+                "fileName": "UserEnum.restful",
+                "separator": "\\",
+                "content": "namespace java demo.restful.biz_test.gen.restful.enums\r\nnamespace ts gen.biz_test.enums\r\n\r\n/*用户性别枚举*/\r\nenum UserGenderEnum {\r\n    /*男*/\r\n    MALE = 0\r\n    /*女*/\r\n    FEMALE = 1\r\n    /*未知*/\r\n    UNKNOWN = 2\r\n}\r\n\r\n/*用户类型枚举*/\r\nenum UserTypeEnum {\r\n    /*管理员*/\r\n    ADMIN = 0\r\n    /*普通用户*/\r\n    USER = 1\r\n}",
+                "ext": "restful",
+                "fileType": 0,
+                "isReadOnly": false,
+                "isEmpty": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

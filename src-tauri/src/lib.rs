@@ -21,19 +21,19 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            restful::api::check_restful_code_err,
-            restful::api::get_base_package,
-            restful::api::get_restful_template_file_tree,
-            restful::api::get_template_content_by_path,
-            restful::api::delete_file,
-            restful::api::create_or_update_file,
-            restful::api::create_folder,
-            restful::api::rename_file,
-            restful::api::generate_java_server_api,
-            restful::api::generate_ts_client_api,
-            restful::api::generate_rust_client_api,
-            restful::api::generate_sql,
-            restful::api::check_restful_file_version
+            restful::restful_dsl_api::check_restful_code_err,
+            restful::restful_dsl_api::get_base_package,
+            restful::restful_dsl_api::get_restful_template_file_tree,
+            restful::restful_dsl_api::get_template_content_by_path,
+            restful::restful_dsl_api::delete_file,
+            restful::restful_dsl_api::create_or_update_file,
+            restful::restful_dsl_api::create_folder,
+            restful::restful_dsl_api::rename_file,
+            restful::restful_dsl_api::generate_java_server_api,
+            restful::restful_dsl_api::generate_ts_client_api,
+            restful::restful_dsl_api::generate_rust_client_api,
+            restful::restful_dsl_api::generate_sql,
+            restful::restful_dsl_api::check_restful_file_version
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

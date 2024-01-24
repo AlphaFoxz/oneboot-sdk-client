@@ -1,37 +1,7 @@
 import { invoke } from '@tauri-apps/api/core'
-import { SdkStringResponseDto } from '@/api/gen/sdk/dtos/SdkResponseDto'
-import { SdkVersionCheckResponse } from '@/api/gen/sdk/dtos/SdkVersionDto'
-export enum SdkFileTypeEnum {
-  LOCAL_FILE = 0,
-  LOCAL_DIR = 1,
-}
-export interface SdkFileInfoDto {
-  filePath: string
-  parentDir: string
-  fileName: string
-  separator: string
-  content: string | null
-  ext: string
-  fileType: SdkFileTypeEnum
-  isReadOnly: boolean
-  isEmpty: boolean
-  children: Array<SdkFileInfoDto>
-}
-
-export class SdkFileTreeResponseDtoImpl implements SdkFileTreeResponseDto {
-  id = 0
-  taskId = 0
-  success = true
-  message = ''
-  data = {} as SdkFileInfoDto
-}
-export interface SdkFileTreeResponseDto {
-  id: number
-  taskId: number
-  success: boolean
-  message: string | undefined
-  data: SdkFileInfoDto | undefined
-}
+import { SdkStringResponseDto } from './gen/sdk/dtos/SdkResponseDto'
+import { SdkVersionCheckResponse } from './gen/sdk/dtos/SdkVersionDto'
+import { SdkFileTreeResponseDto, SdkMapResponseDto } from './gen/sdk/dtos/SdkResponseDto'
 
 export async function getRestfulTemplateFileTree(): Promise<SdkFileTreeResponseDto> {
   return invoke('get_restful_template_file_tree')
@@ -69,9 +39,7 @@ export async function generateRustClientApi(filePath: string): Promise<void> {
   return invoke('generate_rust_client_api', { filePath })
 }
 
-export async function generateSql(
-  filePath: string
-): Promise<{ success: boolean; data: { [k: string]: string } | undefined }> {
+export async function generateSql(filePath: string): Promise<SdkMapResponseDto> {
   return invoke('generate_sql', { filePath })
 }
 
