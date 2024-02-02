@@ -52,9 +52,9 @@ const routes = [
     component: () => import('@/views/CheckClientCode.vue'),
   },
   {
-    path: '/checkServerCode',
-    name: 'CheckServerCode',
-    component: () => import('@/views/CheckServerCode.vue'),
+    path: '/checkServerRestfulCode',
+    name: 'CheckServerRestfulCode',
+    component: () => import('@/views/CheckServerRestfulCode.vue'),
   },
   {
     path: '/checkServiceStatus',

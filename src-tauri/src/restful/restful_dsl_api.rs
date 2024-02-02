@@ -8,13 +8,13 @@ use crate::core::parser;
 use crate::core::util;
 use std::collections::BTreeMap;
 
-/// Check thrift code
+/// Check restl code
 #[tauri::command]
 pub fn check_restful_code_err(code: &str) -> parser::CheckResult {
     parser::restful::check_restful_code_err(code)
 }
 
-/// Check thrift code
+/// Check restl code
 #[tauri::command]
 pub async fn get_base_package(
 ) -> Result<restful_dsl_response_dto::RestfulDslStringResponseDto, Error> {

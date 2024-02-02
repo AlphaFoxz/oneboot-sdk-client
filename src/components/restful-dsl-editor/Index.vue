@@ -9,7 +9,7 @@ import * as api from './api'
 import * as rustApi from '@/api/rust_api'
 import { SdkFileInfoDto } from '@/api/gen/sdk/dtos/SdkFileInfoDto'
 import { SdkFileTypeEnum } from '@/api/gen/sdk/enums/SdkFileTypeEnum'
-import { registerRestful } from './restful'
+import { registerRestl } from './restl'
 import * as monaco from 'monaco-editor'
 import { GenTypeEnum } from './define'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
@@ -26,7 +26,7 @@ const monacoStore = useMonaco(monaco)
 watch(monacoStore.isReady, () => {
   monacoStore.getEditor().onDidChangeModelContent(() => {})
 })
-registerRestful(monaco)
+registerRestl(monaco)
 
 // ================ 快捷键 ================
 const hotkeyStore = useHotkey()
@@ -48,7 +48,7 @@ hotkeyStore.listen('editor', (e) => {
   } else if (e.ctrlKey && !e.altKey && !e.shiftKey) {
     if (e.key === 'y' || e.key === 'Y') {
       console.debug(monacoStore.monaco.editor.getModels())
-      monacoStore.getEditor().trigger('keyboard', 'editor.action.openLink', '/sdk/dtos/SdkResponseDto.restful')
+      monacoStore.getEditor().trigger('keyboard', 'editor.action.openLink', '/sdk/dtos/SdkResponseDto.restl')
     }
   }
 })
@@ -131,7 +131,7 @@ const handleNewFolder = (path: string, resolve: () => void, reject: (msg?: strin
 const handleSaveFile = async (path: string, value: string, resolve: () => void, reject: (msg?: string) => void) => {
   const currentPath =
     monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
-  if (path.endsWith('.restful')) {
+  if (path.endsWith('.restl')) {
     api.checkErr(monaco, value, currentPath === path ? monacoStore.getEditor() : undefined)
   }
 
@@ -168,7 +168,7 @@ onMounted(() => {
   })
 })
 const handleDragInEditor = (srcPath: string, targetPath: string, type: 'file' | 'folder') => {
-  if (!targetPath.endsWith('.restful')) {
+  if (!targetPath.endsWith('.restl')) {
     return
   }
   const editor = monacoStore.getEditor()
@@ -180,7 +180,7 @@ const handleDragInEditor = (srcPath: string, targetPath: string, type: 'file' | 
     str = srcPath.replace(monacoStore.prefix.value, '')
     const tsNamespace = str.replaceAll(monacoStore.fileSeparator.value, '.')
     const javaNamespace: any = str.replaceAll('-', '_').split(monacoStore.fileSeparator.value)
-    javaNamespace.splice(2, 0, 'gen', 'restful')
+    javaNamespace.splice(2, 0, 'gen', 'restl')
     str = `namespace java ${basePackage.value.replaceAll('-', '_')}${javaNamespace.join('.')}\n`
     str += `namespace ts gen${tsNamespace.replaceAll('-', '_')}\n`
   }
@@ -390,3 +390,4 @@ const handleGenDbSql = (path: string) => {
     @drag-in-editor="handleDragInEditor"
   />
 </template>
+./restl

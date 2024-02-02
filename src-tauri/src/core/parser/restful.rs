@@ -56,9 +56,9 @@ mod restful_test {
 
     #[test]
     fn import() {
-        let result = RestfulParser::parse(Rule::import, r#"import  "../test.thrift""#);
+        let result = RestfulParser::parse(Rule::import, r#"import  "../test.restl""#);
         assert!(result.is_ok());
-        let result = RestfulParser::parse(Rule::import, r#"import  "D:\test.thrift""#);
+        let result = RestfulParser::parse(Rule::import, r#"import  "D:\test.restl""#);
         assert!(result.is_err());
     }
 
@@ -119,12 +119,12 @@ mod restful_test {
 
     #[test]
     fn root() {
-        let content = r#" namespace java com.github.alphafoxz.oneboot.sdk.gen.thrift.ifaces
+        let content = r#" namespace java com.github.alphafoxz.oneboot.sdk.gen.restl.ifaces
             /*测试用。。。。格式不要太标准
 
             */
-            namespace ts thrift.ifaces
-            import "../structs/SdkResponseStruct.thrift"
+            namespace ts sdk.restl
+            import "../structs/SdkResponseStruct.restl"
 
             //rest类型
             enum ThriftTypeEnum {

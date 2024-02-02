@@ -21,11 +21,16 @@ const newWindowFn = (url: string) => {
 
 <template>
   <h1>Oneboot SDK模块 开发工具</h1>
-  <Button label="Restful接口设计器" @click="routerLink('GenRestfulApi')"></Button>
+  <Button label="RESTful-DSL接口设计器" @click="routerLink('GenRestfulApi')"></Button>
   <Button label="[新窗口]" @click="newWindowFn('/genRestfulApi')"></Button>
   <br />
-  <Button label="Restful语法说明" @click="routerLink('RulesOfRestfulLanguage')"></Button>
+  <Button label="RESTful-DSL语法说明" @click="routerLink('RulesOfRestfulLanguage')"></Button>
   <Button label="[新窗口]" @click="newWindowFn('/rulesOfRestfulLanguage')"></Button>
+  <br />
+  <Button label="RESTful-DSL服务端代码检查" @click="routerLink('CheckServerRestfulCode')"></Button>
+  <Button label="[新窗口]" @click="newWindowFn('/checkServerRestfulCode')"></Button>
+  <br />
+  <Button label="RESTful-DSL前端代码检查（待完成）" @click="routerLink('CheckClientCode')"></Button>
   <br />
   <Button label="后端CrudService代码生成" @click="routerLink('GenCrudService')"></Button>
   <Button label="[新窗口]" @click="newWindowFn('/genCrudService')"></Button>
@@ -39,11 +44,6 @@ const newWindowFn = (url: string) => {
   <br />
   <Button label="Java编写原则" @click="routerLink('RulesOfJava')"></Button>
   <Button label="[新窗口]" @click="newWindowFn('/rulesOfJava')"></Button>
-  <br />
-  <Button label="前端代码检查" @click="routerLink('CheckClientCode')"></Button>
-  <br />
-  <Button label="服务端代码检查" @click="routerLink('CheckServerCode')"></Button>
-  <Button label="[新窗口]" @click="newWindowFn('/checkServerCode')"></Button>
   <br />
   <Button label="服务状态检查（待完成）" @click="routerLink('CheckServiceStatus')"></Button>
   <br />

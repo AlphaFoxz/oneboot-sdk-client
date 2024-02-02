@@ -6,7 +6,7 @@ export async function checkErr(monaco: any, codeStr: string, editorInst?: IStand
   const result = (await invoke('check_restful_code_err', {
     code: codeStr,
   })) as types.component_dto.CheckResult
-  monaco.editor.removeAllMarkers('restful')
+  monaco.editor.removeAllMarkers('restl')
   if (result.success) {
     return true
   }
@@ -28,7 +28,7 @@ export async function checkErr(monaco: any, codeStr: string, editorInst?: IStand
     endColumn = p[1][1]
   }
   if (editorInst) {
-    monaco.editor.setModelMarkers(editorInst.getModel()!, 'restful', [
+    monaco.editor.setModelMarkers(editorInst.getModel()!, 'restl', [
       {
         startLineNumber,
         startColumn,

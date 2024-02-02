@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import RestfulEditor from '@/components/restful-api-editor/Index.vue'
+import RestfulEditor from '@/components/restful-dsl-editor/Index.vue'
 </script>
 
 <template>
