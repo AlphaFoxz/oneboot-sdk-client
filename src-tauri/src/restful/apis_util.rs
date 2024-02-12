@@ -2,12 +2,12 @@ use crate::core::store;
 
 pub fn get_server_uri() -> String {
     let host = store::get_settings_value(store::KEY_BACKEND_HOST.clone())
-        .unwrap()
+        .unwrap_or("127.0.0.1".into())
         .as_str()
         .unwrap_or("127.0.0.1")
         .to_string();
     let port = store::get_settings_value(store::KEY_BACKEND_PORT.clone())
-        .unwrap()
+        .unwrap_or(8080.into())
         .as_i64()
         .unwrap_or(8080)
         .to_string();

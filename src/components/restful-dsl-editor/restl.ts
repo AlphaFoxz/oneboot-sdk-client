@@ -74,8 +74,6 @@ export function registerRestl(monaco: { editor: any; languages: any }) {
       'set',
       'map',
       'void',
-      'required',
-      'optional',
     ],
     tokenizer: {
       root: [

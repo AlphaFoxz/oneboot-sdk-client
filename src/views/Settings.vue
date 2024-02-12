@@ -17,8 +17,8 @@ const rustClientGenDir = ref('')
 const isTestingUrl = ref(false)
 
 onMounted(async () => {
-  backendHost.value = (await store.get(settings.KEY_BACKEND_HOST)) || ''
-  backendPort.value = (await store.get(settings.KEY_BACKEND_PORT)) || ''
+  backendHost.value = (await store.get(settings.KEY_BACKEND_HOST)) || '127.0.0.1'
+  backendPort.value = (await store.get(settings.KEY_BACKEND_PORT)) || '8080'
   tsClientGenDir.value = (await store.get(settings.KEY_TS_CLIENT_GEN_DIR)) || ''
   rustClientGenDir.value = (await store.get(settings.KEY_RUST_CLIENT_GEN_DIR)) || ''
 })

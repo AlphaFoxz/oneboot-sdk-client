@@ -1,38 +1,25 @@
 {
+  "productName": "oneboot-sdk-client",
+  "version": "0.0.1",
+  "identifier": "com.github.alphafoxz.oneboot.sdk.client",
   "build": {
     "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "pnpm build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": false
+    "frontendDist": "../dist"
   },
-  "package": {
-    "productName": "oneboot-sdk-client",
-    "version": "0.0.1"
-  },
-  "tauri": {
-    "bundle": {
-      "windows": {
-        "allowDowngrades": true,
-        "certificateThumbprint": null,
-        "digestAlgorithm": null,
-        "nsis": null,
-        "timestampUrl": null,
-        "tsp": false,
-        "webviewFixedRuntimePath": null,
-        "webviewInstallMode": {
-          "silent": true,
-          "type": "embedBootstrapper"
-        },
-        "wix": null
-      },
-      "active": true,
-      "targets": ["msi", "app", "updater"],
-      "identifier": "com.github.alphafoxz.oneboot.sdk.client",
-      "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
-      "category": "DeveloperTool"
-    },
+  "app": {
+    "macOSPrivateApi": false,
     "security": {
+      "assetProtocol": {
+        "enable": false,
+        "scope": []
+      },
+      "dangerousDisableAssetCspModification": false,
+      "freezePrototype": false,
+      "pattern": {
+        "use": "brownfield"
+      },
       "csp": null
     },
     "windows": [
@@ -47,7 +34,14 @@
         "transparent": false,
         "fileDropEnabled": false
       }
-    ]
+    ],
+    "withGlobalTauri": false
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi", "app", "updater"],
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "category": "DeveloperTool"
   },
   "plugins": {
     "shell": {
