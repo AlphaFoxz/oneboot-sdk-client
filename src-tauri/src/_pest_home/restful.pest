@@ -57,13 +57,13 @@ type = ${
 void = @{ "void" }
 
 // 类型修饰符定义
-modifier = @{ "required" | "optional" }
+required = @{ "!" | "?" }
 
 // class定义
 class_name       = @{ utype_customname }
 class_field_name = @{ (ASCII_ALPHANUMERIC | "_")+ }
 class_field      = ${
-    (modifier ~ WHITESPACE+)? ~ (((contain_list | contain_map | contain_set | ref_enum) ~ WHITESPACE*) | ((intype | utype) ~ WHITESPACE+)) ~ class_field_name ~ (WHITESPACE* ~ ";")?
+    (((contain_list | contain_map | contain_set | ref_enum) ~ WHITESPACE*) | ((intype | utype) ~ WHITESPACE+)) ~ class_field_name ~ (WHITE_SPACE* ~ required)? ~ (WHITESPACE* ~ ";")?
 }
 class            = ${
     "class" ~ WHITESPACE+ ~ class_name ~ WHITESPACE* ~ "{" ~ (WHITESPACE | COMMENT | class_field)* ~ "}"
@@ -81,7 +81,7 @@ enum                    = ${
 
 // 入参定义
 param_name = @{ (ASCII_ALPHANUMERIC | "_")+ }
-param      = ${ (modifier ~ WHITESPACE+)? ~ type ~ WHITESPACE+ ~ param_name }
+param      = ${ type ~ WHITESPACE+ ~ param_name ~ required? }
 
 // interface定义
 interface_name          = @{ utype_customname }
