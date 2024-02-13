@@ -137,7 +137,7 @@ export function registerRestl(monaco: { editor: any; languages: any }) {
       ],
       import_path: [[/\"[^\"]*\"/, { token: 'string', next: '@pop' }]],
       annotation_param: [
-        [/[)]/, { token: 'keyword.operator', next: '@pop' }],
+        [/.*[)]/, { token: 'keyword.operator', next: '@pop' }],
         [/[(]/, { token: 'keyword.operator' }],
         [/[a-zA-Z/{}]+/, { token: 'string' }],
       ],
@@ -149,7 +149,7 @@ export function registerRestl(monaco: { editor: any; languages: any }) {
       interface_body: [
         [/\@[a-zA-Z]+/, { token: 'punctuation.definition.annotation.java' }],
         [/\@[a-zA-Z]+(?=[(])/, { token: 'punctuation.definition.annotation.java', next: '@annotation_param' }],
-        [/\s(?=[}])/, { token: 'operator', next: '@pop' }],
+        [/\W(?=[}])/, { token: 'operator', next: '@pop' }],
         [/\bmap\b/, { token: 'support.type.builtin.ts', next: '@type_t' }],
         [/\bset\b/, { token: 'support.type.builtin.ts', next: '@type_t' }],
         [/\blist\b/, { token: 'support.type.builtin.ts', next: '@type_t' }],
@@ -166,7 +166,7 @@ export function registerRestl(monaco: { editor: any; languages: any }) {
         [/\b[a-zA-Z]+\b/, { token: 'entity.name.class' }],
       ],
       class_body: [
-        [/(?=[}])/, { token: 'operator', next: '@pop' }],
+        [/\W(?=[}])/, { token: 'operator', next: '@pop' }],
         [/\b@[a-zA-Z]+/, { token: 'punctuation.definition.annotation.java', next: '@annotation_param' }],
         [/\bmap\b/, { token: 'support.type.builtin.ts', next: '@type_t' }],
         [/\bset\b/, { token: 'support.type.builtin.ts', next: '@type_t' }],
@@ -183,7 +183,7 @@ export function registerRestl(monaco: { editor: any; languages: any }) {
         [/\b[a-zA-Z]+\b/, { token: 'entity.name.class' }],
       ],
       enum_body: [
-        [/(?=[}])/, { token: 'operator', next: '@pop' }],
+        [/\W(?=[}])/, { token: 'operator', next: '@pop' }],
         [/[a-zA-Z_]+\s*(?=[=])/, { token: 'constant' }],
         [/(?<=[=])[0-9]*/, { token: 'constant.numeric' }],
         [/\/\/.*$/, 'comment'],
