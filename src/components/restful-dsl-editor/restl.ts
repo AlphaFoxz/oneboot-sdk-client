@@ -75,50 +75,6 @@ export function registerRestl(monaco: { editor: any; languages: any }) {
       'map',
       'void',
     ],
-    // tokenizer: {
-    //   root: [
-    //     [/\bnamespace\b/, { token: 'keyword', next: '@namespace_body' }],
-    //     [/[!|?]/, { token: 'keyword.operator.optional' }],
-    //     [
-    //       /[a-zA-Z][\w$]*/,
-    //       {
-    //         cases: {
-    //           '@keyword': 'keyword',
-    //           '@default': 'type',
-    //         },
-    //       },
-    //     ],
-    //     [/[0-9]+\s*:/, 'identifier'],
-    //     [/\"[^\"]*\"/, 'string'],
-
-    //     [/\/\/[\s]*@[^\(]+/, { token: 'tag', next: '@annoValue' }],
-    //     [/\/\/.*$/, 'comment'],
-    //     [/\/\*/, { token: 'comment.doc', next: '@commentDoc' }],
-    //   ],
-    //   annoValue: [
-    //     [/\(|,/, 'delemiter'],
-    //     [/\)/, { token: 'delemiter', next: '@pop' }],
-    //     [/[,]/, 'delemiter'],
-    //     [/[^(\(|\)|,)]*/, 'string'],
-    //   ],
-    //   commentDoc: [
-    //     [/\*\//, { token: 'comment.doc', next: '@pop' }],
-    //     [/[^*/]+/, 'comment.doc'],
-    //     [/[*/]/, 'comment.doc'],
-    //   ],
-    //   namespace_body: [
-    //     [/[a-zA-Z_\.]+\s*$/, { token: 'namespace', next: '@pop' }],
-    //     [/\b[a-zA-Z]+\b/, 'variable'],
-    //   ],
-    //   service_header: [
-    //     [/}/, '@pop'],
-    //     [/\/\/.*$/, 'comment'],
-    //     [/\/\*/, { token: 'comment.doc', next: '@commentDoc' }],
-
-    //     [/\b[a-zA-Z_][\w$]*/, 'type'],
-    //   ],
-    //   service_body: [],
-    // },
     tokenizer: {
       root: [
         [/\bnamespace\b/, { token: 'keyword', next: '@namespace_body' }],
