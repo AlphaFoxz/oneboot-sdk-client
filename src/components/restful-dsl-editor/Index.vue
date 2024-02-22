@@ -209,49 +209,37 @@ const sqlVisible = ref(false)
 const handleContextmenuSelect = async (path: string, item: { label: string | ComputedRef<string>; value: string }) => {
   const currentPath =
     monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
-  if (item.value === GenTypeEnum.GEN_TS_CLIENT_CODE) {
-    const ok = await api.checkErr(
+  const checkFn = async () => {
+    const ok = api.checkErr(
       monaco,
       files.value[path].content!,
       currentPath === path ? monacoStore.getEditor() : undefined
     )
-    if (ok) {
-      handleGenTsClientApi(path)
-    } else {
+    if (!ok) {
       messageStore.error({
         content: '存在语法错误，无法生成',
         closeable: true,
       })
+    }
+    return ok
+  }
+  if (item.value === GenTypeEnum.GEN_TS_CLIENT_CODE) {
+    if (await checkFn()) {
+      handleGenTsClientApi(path)
     }
   } else if (item.value === GenTypeEnum.GEN_RUST_CLIENT_CODE) {
     handleGenRustClientApi(path)
   } else if (item.value === GenTypeEnum.GEN_JAVA_SERVER_CODE) {
-    const ok = await api.checkErr(
-      monaco,
-      files.value[path].content!,
-      currentPath === path ? monacoStore.getEditor() : undefined
-    )
-    if (ok) {
+    if (await checkFn()) {
       handleGenJavaServerApi(path)
-    } else {
-      messageStore.error({
-        content: '存在语法错误，无法生成',
-        closeable: true,
-      })
+    }
+  } else if (item.value === GenTypeEnum.GEN_JAVA_SERVER_MOCK_SERVICE) {
+    if (await checkFn()) {
+      handleGenJavaMockService(path)
     }
   } else if (item.value === GenTypeEnum.GEN_DB_SQL) {
-    const ok = await api.checkErr(
-      monaco,
-      files.value[path].content!,
-      currentPath === path ? monacoStore.getEditor() : undefined
-    )
-    if (ok) {
+    if (await checkFn()) {
       handleGenDbSql(path)
-    } else {
-      messageStore.error({
-        content: '存在语法错误，无法生成',
-        closeable: true,
-      })
     }
   }
 }
@@ -279,6 +267,26 @@ const handleGenRustClientApi = (path: string) => {
   const msgId = messageStore.info({ content: '正在生成Rust客户端代码...', loading: true, closeable: true })
   rustApi
     .generateRustClientApi(path)
+    .then(() => {
+      messageStore.close(msgId)
+      messageStore.success({
+        content: '代码已生成，请稍后重新编译项目并验证',
+        timeoutMs: 5000,
+        closeable: true,
+      })
+    })
+    .catch(() => {
+      messageStore.close(msgId)
+      messageStore.error({
+        content: '保存失败，请检查是否有网络错误',
+        closeable: true,
+      })
+    })
+}
+const handleGenJavaMockService = (path: string) => {
+  const msgId = messageStore.info({ content: '正在生成Java服务端mock service...', loading: true, closeable: true })
+  rustApi
+    .generateJavaServerMockService(path)
     .then(() => {
       messageStore.close(msgId)
       messageStore.success({
@@ -371,6 +379,7 @@ const handleGenDbSql = (path: string) => {
     @delete-folder="handleDeleteFile"
     :file-menu="[
       { label: '生成JAVA服务端代码', value: GenTypeEnum.GEN_JAVA_SERVER_CODE },
+      { label: '生成JAVA服务端模拟代码', value: GenTypeEnum.GEN_JAVA_SERVER_MOCK_SERVICE },
       {
         label: '生成ts客户端代码',
         value: GenTypeEnum.GEN_TS_CLIENT_CODE,

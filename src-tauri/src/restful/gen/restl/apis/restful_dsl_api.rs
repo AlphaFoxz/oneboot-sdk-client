@@ -3,6 +3,7 @@ pub mod restful_dsl_api {
     use super::super::super::dtos::restful_dsl_response_dto;
     use super::super::super::dtos::restful_dsl_request_dto;
     use super::super::super::dtos::restful_dsl_version_dto;
+    use super::super::super::enums::restful_dsl_enum;
     use crate::core::error::Error;
     use super::super::super::super::super::apis_util;
 
@@ -39,6 +40,20 @@ pub mod restful_dsl_api {
         let __param = serde_json::json!(_template_dto);
         let __res = reqwest::Client::new()
             .post(apis_util::get_server_uri() + "/_restfulDsl/generateJavaServerApi")
+            .header("Content-Type", "application/json")
+            .body(__param.to_string())
+            .send()
+            .await;
+        if __res.is_err() {
+            return Err("请求失败".into());
+        }
+        Ok(__res.unwrap().json().await.unwrap())
+    }
+    ///创建java server的mock service代码
+    pub async fn generate_java_server_mock_service(_template_dto: restful_dsl_request_dto::RestfulDslCodeTemplateRequestDto) -> Result<restful_dsl_response_dto::RestfulDslListResponseDto, Error> {
+        let __param = serde_json::json!(_template_dto);
+        let __res = reqwest::Client::new()
+            .post(apis_util::get_server_uri() + "/_restfulDsl/generateJavaServerMockService")
             .header("Content-Type", "application/json")
             .body(__param.to_string())
             .send()
@@ -169,6 +184,17 @@ pub mod restful_dsl_api {
     pub async fn check_restful_file_version() -> Result<restful_dsl_version_dto::RestfulDslVersionCheckResponse, Error> {
         let __res = reqwest::Client::new()
             .get(apis_util::get_server_uri() + "/_restfulDsl/checkRestfulFileVersion")
+            .send()
+            .await;
+        if __res.is_err() {
+            return Err("请求失败".into());
+        }
+        Ok(__res.unwrap().json().await.unwrap())
+    }
+    ///获取当前服务端语言类型
+    pub async fn get_server_language_type() -> Result<restful_dsl_enum::RestfulDslServerLanguageTypeEnum, Error> {
+        let __res = reqwest::Client::new()
+            .get(apis_util::get_server_uri() + "/_restfulDsl/getServerLanguageType")
             .send()
             .await;
         if __res.is_err() {

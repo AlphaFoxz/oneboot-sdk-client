@@ -100,6 +100,29 @@ pub async fn rename_file(
 
 /// 根据文件路径生成java api
 #[tauri::command]
+pub async fn generate_java_server_mock_service(file_path: &str) -> Result<(), Error> {
+    let value = restful_dsl_code_template_dto::RestfulDslCodeTemplateDto::try_from_file_path(
+        file_path.into(),
+    )
+    .await;
+    if value.is_err() {
+        return Err("请求失败".into());
+    }
+    let req_dto = restful_dsl_request_dto::RestfulDslCodeTemplateRequestDto {
+        id: util::next_snowflake_id(),
+        task_id: util::next_snowflake_id(),
+        data: value.unwrap(),
+    };
+    let result = restful_dsl_api::generate_java_server_mock_service(req_dto).await;
+    if result.is_ok() {
+        let result = result.unwrap();
+        if result.success {
+            return Ok(());
+        }
+    }
+    Err("请求失败".into())
+}
+#[tauri::command]
 pub async fn generate_java_server_api(file_path: &str) -> Result<(), Error> {
     let value = restful_dsl_code_template_dto::RestfulDslCodeTemplateDto::try_from_file_path(
         file_path.into(),
@@ -238,4 +261,9 @@ pub async fn generate_sql(file_path: &str) -> Result<BTreeMap<String, serde_json
 pub async fn check_restful_file_version(
 ) -> Result<restful_dsl_version_dto::RestfulDslVersionCheckResponse, Error> {
     Ok(restful_dsl_api::check_restful_file_version().await?)
+}
+
+#[tauri::command]
+pub async fn get_server_language_type() -> Result<i32, Error> {
+    Ok(restful_dsl_api::get_server_language_type().await?.into())
 }

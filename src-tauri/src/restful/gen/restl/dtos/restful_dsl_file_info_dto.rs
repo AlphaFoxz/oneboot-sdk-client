@@ -1,4 +1,4 @@
-use super::super::enums::restful_dsl_file_type_enum;
+use super::super::enums::restful_dsl_enum;
 #[derive(std::fmt::Debug, serde::Deserialize, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct RestfulDslFileInfoDto {
@@ -8,7 +8,7 @@ pub struct RestfulDslFileInfoDto {
     pub separator: String,
     pub content: Option<String>,
     pub ext: Option<String>,
-    pub file_type: restful_dsl_file_type_enum::RestfulDslFileTypeEnum,
+    pub file_type: restful_dsl_enum::RestfulDslFileTypeEnum,
     pub is_read_only: bool,
     pub is_empty: bool,
     pub children: Option<Vec<RestfulDslFileInfoDto>>,

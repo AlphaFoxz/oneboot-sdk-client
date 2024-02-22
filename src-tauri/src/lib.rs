@@ -28,10 +28,12 @@ pub fn run() {
             restful::restful_dsl_api::create_folder,
             restful::restful_dsl_api::rename_file,
             restful::restful_dsl_api::generate_java_server_api,
+            restful::restful_dsl_api::generate_java_server_mock_service,
             restful::restful_dsl_api::generate_ts_client_api,
             restful::restful_dsl_api::generate_rust_client_api,
             restful::restful_dsl_api::generate_sql,
-            restful::restful_dsl_api::check_restful_file_version
+            restful::restful_dsl_api::check_restful_file_version,
+            restful::restful_dsl_api::get_server_language_type,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

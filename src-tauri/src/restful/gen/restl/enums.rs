@@ -1,1 +1,1 @@
-pub mod restful_dsl_file_type_enum;
+pub mod restful_dsl_enum;

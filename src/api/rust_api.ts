@@ -31,6 +31,10 @@ export async function generateJavaServerApi(filePath: string): Promise<void> {
   return invoke('generate_java_server_api', { filePath })
 }
 
+export async function generateJavaServerMockService(filePath: string): Promise<void> {
+  return invoke('generate_java_server_mock_service', { filePath })
+}
+
 export async function generateTsClientApi(filePath: string): Promise<void> {
   return invoke('generate_ts_client_api', { filePath })
 }
@@ -49,4 +53,8 @@ export async function getBasePackage(): Promise<SdkStringResponseDto> {
 
 export async function checkRestfulFileVersion(): Promise<SdkVersionCheckResponse> {
   return invoke('check_restful_file_version')
+}
+
+export async function getServerLanguageType(): Promise<SdkVersionCheckResponse> {
+  return invoke('get_server_language_type')
 }
