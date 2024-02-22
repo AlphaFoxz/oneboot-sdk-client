@@ -1,10 +1,10 @@
-pub mod restful_dsl;
+pub mod restl;
 
 use crate::core::error::Error;
 use crate::core::parser;
 use async_recursion::async_recursion;
-use restful_dsl::apis::restful_dsl_api::restful_dsl_api;
-use restful_dsl::dtos::restful_dsl_code_template_dto::RestfulDslCodeTemplateDto;
+use restl::apis::restful_dsl_api::restful_dsl_api;
+use restl::dtos::restful_dsl_code_template_dto::RestfulDslCodeTemplateDto;
 
 impl RestfulDslCodeTemplateDto {
     #[async_recursion]

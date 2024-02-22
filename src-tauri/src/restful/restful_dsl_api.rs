@@ -1,5 +1,5 @@
-use super::gen::restful_dsl::apis::restful_dsl_api::restful_dsl_api;
-use super::gen::restful_dsl::dtos::{
+use super::gen::restl::apis::restful_dsl_api::restful_dsl_api;
+use super::gen::restl::dtos::{
     restful_dsl_code_template_dto, restful_dsl_request_dto, restful_dsl_response_dto,
     restful_dsl_version_dto,
 };
