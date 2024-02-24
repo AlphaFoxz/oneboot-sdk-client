@@ -8,29 +8,30 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
+    "rustopt": "set RUSTFLAGS=\"-Z threads=8\"",
     "update-tauri": "pnpm update @tauri-apps/cli @tauri-apps/api @tauri-apps/plugin-shell @tauri-apps/plugin-store"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
-    "@tauri-apps/api": "~2.0.0-beta",
-    "@tauri-apps/plugin-shell": "~2.0.0-beta",
-    "@tauri-apps/plugin-store": "~2.0.0-beta",
+    "@tauri-apps/api": "2.0.0-beta.3",
+    "@tauri-apps/plugin-shell": "2.0.0-beta.1",
+    "@tauri-apps/plugin-store": "2.0.0-beta.1",
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.7",
     "lossless-json": "^4.0.1",
     "monaco-editor": "^0.44.0",
     "monaco-tree-editor": "~1.0.2",
-    "nanoid": "^5.0.5",
+    "nanoid": "^5.0.6",
     "node-int64": "^0.4.0",
     "onigasm": "^2.2.5",
     "pinia": "^2.1.7",
-    "primevue": "^3.48.1",
+    "primevue": "^3.49.0",
     "vue": "^3.4.19",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "~2.0.0-beta",
-    "@types/node": "^20.11.17",
+    "@tauri-apps/cli": "2.0.0-beta.4",
+    "@types/node": "^20.11.20",
     "@vitejs/plugin-vue": "^4.6.2",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "autoprefixer": "^10.4.17",
@@ -39,9 +40,9 @@
     "less": "^4.2.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
-    "terser": "^5.27.0",
+    "terser": "^5.28.1",
     "typescript": "^5.3.3",
-    "vite": "^5.1.1",
+    "vite": "^5.1.4",
     "vue-tsc": "^1.8.27"
   }
 }

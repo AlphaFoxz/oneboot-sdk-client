@@ -2,19 +2,21 @@
 import Button from 'primevue/button'
 import router from '@/router'
 import { nanoid } from 'nanoid'
-import { Window } from '@tauri-apps/api/window'
+import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
 
 const routerLink = (name: string) => {
   router.push({ name })
 }
 const newWindowFn = (url: string) => {
-  new Window(nanoid(), {
+  const w = new WebviewWindow('main-' + nanoid(), {
     url,
     minHeight: 600,
     minWidth: 800,
     width: 1366,
     height: 768,
-    fileDropEnabled: false,
+  })
+  w.once('tauri://error', (e) => {
+    console.error(e)
   })
 }
 </script>
