@@ -4,5 +4,5 @@
   "description": "Capability for the main window",
   "windows": ["main", "main-*"],
   "platforms": ["linux", "macOS", "windows"],
-  "permissions": ["webview:allow-create-webview-window"]
+  "permissions": ["store:allow-set", "store:allow-get", "webview:allow-create-webview-window"]
 }
