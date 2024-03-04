@@ -6,7 +6,7 @@ pipeline {
         script {
           if (sh(script: 'command -v rustc', returnStatus: true) != 0) {
             echo 'Installing Rust...'
-            sh "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+            sh "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -y"
           }
         }
         sh 'cargo --version'
