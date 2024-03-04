@@ -30,13 +30,7 @@ export default defineConfig(async ({ mode, command }) => {
       drop: ['console', 'debugger'],
     },
     build: {
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-        },
-      },
-      minify: 'terser',
+      minify: 'esbuild',
     },
 
     // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
