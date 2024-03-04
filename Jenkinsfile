@@ -15,7 +15,7 @@ pipeline {
             sh "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y"
           }
         }
-        sh "export PATH=\"${env.CARGO_BIN}:$PATH\""
+        sh "export PATH=\"${env.CARGO_BIN}:$PATH\" && export"
         sh 'cargo --version'
         sh 'npm install -g pnpm'
         sh 'pnpm -v'
