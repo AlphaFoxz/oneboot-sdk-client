@@ -8,7 +8,8 @@ import Dropdown from 'primevue/dropdown'
 import InputText from 'primevue/inputtext'
 import InputSwitch from 'primevue/inputswitch'
 import * as utils from '@/utils'
-import { SdkGenCodeApi, SdkCrudServiceTypeEnum } from '@/api'
+import { SdkCrudServiceTypeEnum } from '@/api'
+import * as rustApi from '@/api/rust_api'
 import { useRouter } from 'vue-router'
 
 const toast = useToast()
@@ -54,7 +55,8 @@ const handleGen = () => {
     toast.add({ severity: 'warn', summary: '请输入表名', life: 2000 })
     return
   }
-  SdkGenCodeApi.generateTableCrud(moduleName.value, poName.value, serviceType.value, isForce.value)
+  rustApi
+    .generateTableCrud(moduleName.value, poName.value, serviceType.value, isForce.value)
     .then(() => {
       toast.add({ severity: 'success', summary: '生成成功，请刷新ide后检查正确性', life: 3000 })
     })
@@ -66,7 +68,8 @@ const handleGen = () => {
  * 生成所有crud
  */
 const handleGenAll = () => {
-  SdkGenCodeApi.generateModuleCrud(moduleName.value, serviceType.value, isForce.value)
+  rustApi
+    .generateModuleCrud(moduleName.value, serviceType.value, isForce.value)
     .then(() => {
       toast.add({ severity: 'success', summary: '生成成功，请刷新ide后检查正确性', life: 3000 })
     })

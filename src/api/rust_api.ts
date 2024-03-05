@@ -2,6 +2,7 @@ import { invoke } from '@tauri-apps/api/core'
 import { SdkStringResponseDto } from './gen/sdk/dtos/SdkResponseDto'
 import { SdkVersionCheckResponse } from './gen/sdk/dtos/SdkVersionDto'
 import { SdkFileTreeResponseDto, SdkMapResponseDto } from './gen/sdk/dtos/SdkResponseDto'
+import type { SdkCrudServiceTypeEnum } from './gen/sdk/enums/SdkCrudServiceTypeEnum'
 
 export async function getRestfulTemplateFileTree(): Promise<SdkFileTreeResponseDto> {
   return invoke('get_restful_template_file_tree')
@@ -57,4 +58,21 @@ export async function checkRestfulFileVersion(): Promise<SdkVersionCheckResponse
 
 export async function getServerLanguageType(): Promise<SdkVersionCheckResponse> {
   return invoke('get_server_language_type')
+}
+
+export async function generateTableCrud(
+  moduleName: string,
+  poName: String,
+  type: SdkCrudServiceTypeEnum,
+  force: boolean
+): Promise<void> {
+  return invoke('generate_table_crud', { moduleName, poName, type, force })
+}
+
+export async function generateModuleCrud(
+  moduleName: string,
+  type: SdkCrudServiceTypeEnum,
+  force: boolean
+): Promise<void> {
+  return invoke('generate_module_crud', { moduleName, type, force })
 }

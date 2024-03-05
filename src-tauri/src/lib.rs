@@ -34,6 +34,8 @@ pub fn run() {
             restful::restful_dsl_api::generate_sql,
             restful::restful_dsl_api::check_restful_file_version,
             restful::restful_dsl_api::get_server_language_type,
+            restful::sdk_api::generate_table_crud,
+            restful::sdk_api::generate_module_crud,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
