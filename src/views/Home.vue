@@ -34,6 +34,8 @@ const newWindowFn = (url: string) => {
   <br />
   <Button label="RESTful-DSL前端代码检查（待完成）" @click="routerLink('CheckClientCode')"></Button>
   <br />
+  <Button label="领域设计生成器" @click="routerLink('GenDomain')"></Button>
+  <br />
   <Button label="后端CrudService代码生成" @click="routerLink('GenCrudService')"></Button>
   <Button label="[新窗口]" @click="newWindowFn('/genCrudService')"></Button>
   <br />

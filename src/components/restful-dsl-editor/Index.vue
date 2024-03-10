@@ -5,10 +5,9 @@ import { ComputedRef, onMounted, ref, watch } from 'vue'
 import { Editor, type Files, useMessage, useMonaco, useHotkey } from 'monaco-tree-editor'
 import 'monaco-tree-editor/index.css'
 import * as utils from '@/utils'
-import * as api from './api'
-import * as rustApi from '@/api/rust_api'
-import { SdkFileInfoDto } from '@/api/gen/sdk/dtos/SdkFileInfoDto'
-import { SdkFileTypeEnum } from '@/api/gen/sdk/enums/SdkFileTypeEnum'
+import * as valid from './valid'
+import * as api from '@/api'
+import { useServerApi } from '../server-api'
 import { registerRestl } from './restl'
 import * as monaco from 'monaco-editor'
 import { GenTypeEnum } from './define'
@@ -55,39 +54,7 @@ hotkeyStore.listen('editor', (e) => {
 
 // ================ 加载文件 load files ================
 const files = ref<Files>({})
-const loadFile = (file: SdkFileInfoDto, container: Files, level: number) => {
-  container[file.filePath] = {
-    path: file.filePath + (file.fileType === SdkFileTypeEnum.LOCAL_DIR ? '/' : ''),
-    name: file.fileName,
-    content: file.content || '',
-    readonly: level < 3,
-    isFolder: file.fileType === SdkFileTypeEnum.LOCAL_DIR,
-    isFile: file.fileType === SdkFileTypeEnum.LOCAL_FILE,
-  }
-  if (file.children) {
-    file.children.forEach((element) => {
-      container = loadFile(element, container, level + 1)
-    })
-  }
-  return container
-}
-const handleReload = (resolve: () => void, reject: (msg?: string) => void) => {
-  rustApi
-    .getRestfulTemplateFileTree()
-    .then((res) => {
-      if (res.success && res.data) {
-        console.debug('请求结果', res)
-        const container = loadFile(res.data, {}, 0)
-        resolve()
-        files.value = container
-      } else {
-        reject('加载文件树失败，请检查服务端报错信息')
-      }
-    })
-    .catch(() => {
-      reject('加载文件树失败，请检查网络是否正常、后端服务是否正常')
-    })
-}
+const serverApi = useServerApi(files, valid)
 
 // ================ 自定义菜单 custom menu ================
 const router = useRouter()
@@ -110,60 +77,9 @@ window.onresize = () => {
 
 // ================ 回调函数 callback ================
 const messageStore = useMessage()
-const handleNewFile = (path: string, resolve: () => void, reject: (msg?: string) => void) => {
-  rustApi.createOrUpdateFile(path, '').then((res) => {
-    if (res) {
-      resolve()
-    } else {
-      reject('保存失败，请检查服务端报错信息')
-    }
-  })
-}
-const handleNewFolder = (path: string, resolve: () => void, reject: (msg?: string) => void) => {
-  rustApi.createFolder(path).then((res) => {
-    if (res) {
-      resolve()
-    } else {
-      reject('保存失败，请检查服务端报错信息')
-    }
-  })
-}
-const handleSaveFile = async (path: string, value: string, resolve: () => void, reject: (msg?: string) => void) => {
-  const currentPath =
-    monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
-  if (path.endsWith('.restl')) {
-    api.checkErr(monaco, value, currentPath === path ? monacoStore.getEditor() : undefined)
-  }
-
-  rustApi.createOrUpdateFile(path, value).then((res) => {
-    if (res) {
-      resolve()
-    } else {
-      reject('保存失败，请检查服务端报错信息')
-    }
-  })
-}
-const handleDeleteFile = (path: string, resolve: () => void, reject: (msg?: string) => void) => {
-  rustApi.deleteFile(path).then((res) => {
-    if (res && res.success) {
-      resolve()
-    } else {
-      reject('删除文件失败，请检查服务端报错信息')
-    }
-  })
-}
-const handleRename = (path: string, newPath: string, resolve: () => void, reject: (msg?: string) => void) => {
-  rustApi.renameFile(path, newPath).then((res) => {
-    if (res && res.success) {
-      resolve()
-    } else {
-      reject('重命名文件失败，请检查服务端保存信息')
-    }
-  })
-}
 const basePackage = ref('')
 onMounted(() => {
-  rustApi.getBasePackage().then((res) => {
+  api.getBasePackage().then((res) => {
     basePackage.value = res.data!
   })
 })
@@ -210,7 +126,7 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
   const currentPath =
     monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
   const checkFn = async () => {
-    const ok = api.checkErr(
+    const ok = valid.checkErr(
       monaco,
       files.value[path].content!,
       currentPath === path ? monacoStore.getEditor() : undefined
@@ -245,7 +161,7 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
 }
 const handleGenTsClientApi = (path: string) => {
   const msgId = messageStore.info({ content: '正在生成ts客户端代码...', loading: true, closeable: true })
-  rustApi
+  api
     .generateTsClientApi(path)
     .then(() => {
       messageStore.close(msgId)
@@ -265,7 +181,7 @@ const handleGenTsClientApi = (path: string) => {
 }
 const handleGenRustClientApi = (path: string) => {
   const msgId = messageStore.info({ content: '正在生成Rust客户端代码...', loading: true, closeable: true })
-  rustApi
+  api
     .generateRustClientApi(path)
     .then(() => {
       messageStore.close(msgId)
@@ -285,7 +201,7 @@ const handleGenRustClientApi = (path: string) => {
 }
 const handleGenJavaMockService = (path: string) => {
   const msgId = messageStore.info({ content: '正在生成Java服务端mock service...', loading: true, closeable: true })
-  rustApi
+  api
     .generateJavaServerMockService(path)
     .then(() => {
       messageStore.close(msgId)
@@ -305,7 +221,7 @@ const handleGenJavaMockService = (path: string) => {
 }
 const handleGenJavaServerApi = (path: string) => {
   const msgId = messageStore.info({ content: '正在生成Java服务端代码...', loading: true, closeable: true })
-  rustApi
+  api
     .generateJavaServerApi(path)
     .then(() => {
       messageStore.close(msgId)
@@ -324,7 +240,7 @@ const handleGenJavaServerApi = (path: string) => {
     })
 }
 const handleGenDbSql = (path: string) => {
-  rustApi.generateSql(path).then((res) => {
+  api.generateSql(path).then((res) => {
     if (res.success) {
       messageStore.success({
         content: 'SQL已生成',
@@ -367,16 +283,16 @@ const handleGenDbSql = (path: string) => {
   </a-modal>
   <Editor
     ref="editorRef"
-    @reload="handleReload"
+    @reload="serverApi.handleReloadRestfulDsl"
     :files="files"
     language="zh-CN"
-    @new-file="handleNewFile"
-    @new-folder="handleNewFolder"
-    @save-file="handleSaveFile"
-    @rename-file="handleRename"
-    @rename-folder="handleRename"
-    @delete-file="handleDeleteFile"
-    @delete-folder="handleDeleteFile"
+    @new-file="serverApi.handleNewFile"
+    @new-folder="serverApi.handleNewFolder"
+    @save-file="serverApi.handleSaveFile"
+    @rename-file="serverApi.handleRename"
+    @rename-folder="serverApi.handleRename"
+    @delete-file="serverApi.handleDeleteFile"
+    @delete-folder="serverApi.handleDeleteFile"
     :file-menu="[
       { label: '生成JAVA服务端代码', value: GenTypeEnum.GEN_JAVA_SERVER_CODE },
       { label: '生成JAVA服务端模拟代码', value: GenTypeEnum.GEN_JAVA_SERVER_MOCK_SERVICE },
@@ -399,4 +315,3 @@ const handleGenDbSql = (path: string) => {
     @drag-in-editor="handleDragInEditor"
   />
 </template>
-./restl

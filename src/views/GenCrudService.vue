@@ -8,8 +8,7 @@ import Dropdown from 'primevue/dropdown'
 import InputText from 'primevue/inputtext'
 import InputSwitch from 'primevue/inputswitch'
 import * as utils from '@/utils'
-import { SdkCrudServiceTypeEnum } from '@/api'
-import * as rustApi from '@/api/rust_api'
+import * as api from '@/api'
 import { useRouter } from 'vue-router'
 
 const toast = useToast()
@@ -29,10 +28,10 @@ const moduleOptions = ref([
 const moduleName = ref(moduleOptions.value[0].value)
 
 const serviceTypeOptions = ref([
-  { label: '权限+缓存+增删改查', value: SdkCrudServiceTypeEnum.ABAC_CACHED },
-  { label: '缓存+增删改查', value: SdkCrudServiceTypeEnum.CACHED },
+  { label: '权限+缓存+增删改查', value: api.SdkCrudServiceTypeEnum.ABAC_CACHED },
+  { label: '缓存+增删改查', value: api.SdkCrudServiceTypeEnum.CACHED },
 ])
-const serviceType = ref(SdkCrudServiceTypeEnum.ABAC_CACHED)
+const serviceType = ref(api.SdkCrudServiceTypeEnum.ABAC_CACHED)
 
 const poInput = ref('')
 const poName = ref('')
@@ -41,7 +40,7 @@ const PO_NAME = ref('')
 const isForce = ref(false)
 const render = () => {
   const r =
-    serviceType.value === SdkCrudServiceTypeEnum.ABAC_CACHED
+    serviceType.value === api.SdkCrudServiceTypeEnum.ABAC_CACHED
       ? templateAbacCachedCodeRef.value || { innerText: '' }
       : templateCachedCodeRef.value || { innerText: '' }
   highlightCode.value = hljs.highlight(r.innerText, { language: 'java' }).value
@@ -55,7 +54,7 @@ const handleGen = () => {
     toast.add({ severity: 'warn', summary: '请输入表名', life: 2000 })
     return
   }
-  rustApi
+  api
     .generateTableCrud(moduleName.value, poName.value, serviceType.value, isForce.value)
     .then(() => {
       toast.add({ severity: 'success', summary: '生成成功，请刷新ide后检查正确性', life: 3000 })
@@ -68,7 +67,7 @@ const handleGen = () => {
  * 生成所有crud
  */
 const handleGenAll = () => {
-  rustApi
+  api
     .generateModuleCrud(moduleName.value, serviceType.value, isForce.value)
     .then(() => {
       toast.add({ severity: 'success', summary: '生成成功，请刷新ide后检查正确性', life: 3000 })

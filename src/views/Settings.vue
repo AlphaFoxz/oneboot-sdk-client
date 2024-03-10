@@ -6,7 +6,7 @@ import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import { settings } from '@/constants'
-import { getBasePackage } from '@/api/rust_api'
+import { getBasePackage } from '@/api'
 
 const toast = useToast()
 const store = new Store(settings.FILE_NAME)

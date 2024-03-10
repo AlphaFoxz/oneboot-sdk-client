@@ -61,6 +61,11 @@ const routes = [
     name: 'CheckServiceStatus',
     component: () => import('@/views/CheckServiceStatus.vue'),
   },
+  {
+    path: '/genDomain',
+    name: 'GenDomain',
+    component: () => import('@/views/GenDomain.vue'),
+  },
 ] as RouteRecordRaw[]
 
 const router = createRouter({

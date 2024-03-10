@@ -16,7 +16,7 @@ pub fn parse_json_from_string(content: String) -> Result<serde_json::Value, Erro
     let pairs = RestfulParser::parse(Rule::root, content.as_str())?;
     let first = pairs.into_iter().next();
     if first.is_none() {
-        return Err("import bmpn failed. missing root!".into());
+        return Err("import restful_dsl failed. missing root!".into());
     }
     let root = first.unwrap().into_inner();
     Ok(serde_json::json!(&root))

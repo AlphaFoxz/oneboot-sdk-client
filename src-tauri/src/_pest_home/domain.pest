@@ -1,0 +1,43 @@
+comment_line = @{ (!NEWLINE ~ ANY)* }
+// comment_block = @{ (!"*/" ~ ANY)* }
+COMMENT = ${ ("'" ~ blank* ~ comment_line) }
+// | ("/*" ~ comment_block ~ "*/")
+WHITESPACE = _{ " " | "\t" | NEWLINE }
+blank      = _{ "\t" | " " }
+
+script_statement = _{ "!" ~ !NEWLINE ~ ANY* ~ NEWLINE }
+
+start_statement = _{ "@startuml" }
+end_statement   = _{ "@enduml" }
+
+type = {
+    "string"
+  | "i16"
+  | "i32"
+  | "i64"
+  | "short"
+  | "int"
+  | "long"
+}
+
+element_name           = ${
+    "(" ~ WHITESPACE* ~ "\"" ~ element_name_value ~ "\"" ~ WHITESPACE* ~ ")"
+}
+element_name_value     =  { ASCII_ALPHA_UPPER ~ (ASCII_ALPHANUMERIC | "_")* }
+element_body           =  {
+    "[" ~ (element_body_tag | element_body_desc)* ~ "]"
+}
+element_body_tag       = ${ "--" ~ blank* ~ element_body_tag_value ~ blank* ~ "--" }
+element_body_tag_value = @{ ASCII_ALPHANUMERIC* }
+element_body_desc      = @{ (blank | "~" | "=" | "." | "。" | "(" | ")" | "（" | "）" | "[" | "【" | "】" | "+" | "-" | "*" | "/" | "\\" | "_" | "?" | "？" | ":" | "：" | "<" | ">" | "《" | "》" | "\"" | "," | "，" | "%" | "$" | "￥" | "#" | "@" | "!" | "！" | "|" | ASCII_ALPHANUMERIC | HAN)+ }
+
+event       = { "Event" ~ element_name ~ element_body? }
+domainevent = { "DomainEvent" ~ element_name ~ element_body? }
+system      = { "System" ~ element_name ~ element_body? }
+command     = { "Command" ~ element_name ~ element_body? }
+aggregate   = { "Aggregate" ~ element_name ~ element_body? }
+element     = { event | domainevent | system | command | aggregate }
+
+root = {
+    SOI ~ start_statement ~ (script_statement | element | NEWLINE)* ~ end_statement ~ EOI
+}

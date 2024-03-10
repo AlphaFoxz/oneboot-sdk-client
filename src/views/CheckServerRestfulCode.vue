@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
-import { checkRestfulFileVersion } from '@/api/rust_api'
+import { checkRestfulFileVersion } from '@/api'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import InputSwitch from 'primevue/inputswitch'

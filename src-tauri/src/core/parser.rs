@@ -1,3 +1,4 @@
+pub mod domain;
 pub mod restful;
 pub mod thrift;
 
@@ -46,6 +47,29 @@ impl From<pest::error::Error<thrift::Rule>> for CheckResult {
 }
 impl From<pest::error::Error<restful::Rule>> for CheckResult {
     fn from(value: pest::error::Error<restful::Rule>) -> Self {
+        let mut check_result = CheckResult::default();
+        check_result.success = false;
+        check_result.location = Some(ErrorLocation::from(value.location));
+        check_result.line_col = Some(ErrorLocation::from(value.line_col));
+        match value.variant {
+            pest::error::ErrorVariant::ParsingError {
+                positives,
+                negatives,
+            } => {
+                check_result.message = Some(format!(
+                    "期待的元素：{:?}，意外的元素：{:?}",
+                    positives, negatives
+                ));
+            }
+            pest::error::ErrorVariant::CustomError { message } => {
+                check_result.message = Some(message)
+            }
+        }
+        check_result
+    }
+}
+impl From<pest::error::Error<domain::Rule>> for CheckResult {
+    fn from(value: pest::error::Error<domain::Rule>) -> Self {
         let mut check_result = CheckResult::default();
         check_result.success = false;
         check_result.location = Some(ErrorLocation::from(value.location));
