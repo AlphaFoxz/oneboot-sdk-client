@@ -30,8 +30,8 @@ dependencies:
     specifier: ^0.44.0
     version: 0.44.0
   monaco-tree-editor:
-    specifier: ~1.0.2
-    version: 1.0.2(typescript@5.3.3)
+    specifier: ~1.0.3
+    version: 1.0.3(typescript@5.3.3)
   nanoid:
     specifier: ^5.0.6
     version: 5.0.6
@@ -1977,8 +1977,8 @@ packages:
     resolution: {integrity: sha512-5SmjNStN6bSuSE5WPT2ZV+iYn1/yI9sd4Igtk23ChvqB7kDk9lZbB9F5frsuvpB+2njdIeGGFf2G4gbE6rCC9Q==}
     dev: false
 
-  /monaco-tree-editor@1.0.2(typescript@5.3.3):
-    resolution: {integrity: sha512-f6CEi1ZjVYBHz+bA49bRMFNv/HNs7OP0pUMXCWqPjeXNUgy9QY/VEJcx6LZ6DoTnnGnQrR0lqoyUAk0ma96u7g==}
+  /monaco-tree-editor@1.0.3(typescript@5.3.3):
+    resolution: {integrity: sha512-sDOoRgNistaJtWhRvBgnboZxSvk66OQeeV05Y5QpE172wLhG6aF4vDStWhcb567l4OuwaqlyfGB3Nmi/DiBT7w==}
     dependencies:
       '@ant-design/icons-vue': 7.0.1(vue@3.4.19)
       nanoid: 5.0.6
