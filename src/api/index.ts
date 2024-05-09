@@ -84,3 +84,7 @@ export async function generateModuleCrud(
 export async function generateJavaServerDomain(path: string) {
   return invoke('generate_java_server_domain', { path })
 }
+
+export async function generateWordApi(moduleName: string) {
+  return invoke('generate_word_api', { moduleName })
+}
