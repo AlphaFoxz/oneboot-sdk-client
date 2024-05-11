@@ -21,7 +21,6 @@ tauri-build = { version = "2.0.0-beta", features = [] }
 tauri = { version = "2.0.0-beta", features = ["devtools", "tray-icon"] }
 tauri-plugin-shell = "2.0.0-beta"
 tauri-plugin-store = "2.0.0-beta"
-tauri-plugin-updater = "2.0.0-beta.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_repr = "0.1.18"
@@ -41,3 +40,7 @@ async-recursion = "1.0.5"
 # this feature is used for production builds or when `devPath` points to the filesystem
 # DO NOT REMOVE!!
 custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+lto = true
+opt-level = 3

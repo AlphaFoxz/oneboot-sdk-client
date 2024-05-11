@@ -46,12 +46,6 @@
   "plugins": {
     "shell": {
       "open": true
-    },
-    "updater": {
-      "active": false,
-      "endpoints": ["https://releases.myapp.com/{{target}}/{{arch}}/{{current_version}}"],
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDIyMDc1NjZBNDk5NkM0NkMKUldSc3hKWkphbFlISW1KZkJGRDBja1FoZ28xTlcwM093R2hYUEV3bC9RSzJPd2VsMTZuUmtzSE4K"
     }
   }
 }

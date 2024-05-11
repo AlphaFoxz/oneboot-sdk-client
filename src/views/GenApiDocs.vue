@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
-import { SdkGenDocApi } from '@/api'
+import * as api from '@/api'
 
 const router = useRouter()
 const download = (data: Blob, fileName: string) => {
@@ -16,7 +16,7 @@ const download = (data: Blob, fileName: string) => {
   document.body.removeChild(tmpLink)
 }
 const handleGenWordApi = (moduleName: string) => {
-  SdkGenDocApi.generateWordApi(moduleName).then((res: any) => {
+  api.generateWordApi(moduleName).then((res: any) => {
     const data = new Blob([res.data], { type: 'application/octet-stream;charset=utf-8' })
     const fileName = decodeURI(res.headers['content-disposition'].split('=')[1])
     download(data, fileName)
