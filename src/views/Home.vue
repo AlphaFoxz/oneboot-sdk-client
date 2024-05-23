@@ -7,13 +7,14 @@ import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
 const routerLink = (name: string) => {
   router.push({ name })
 }
-const newWindowFn = (url: string) => {
+const newWindowFn = (url: string, dragDropEnabled = false) => {
   const w = new WebviewWindow('main-' + nanoid(), {
     url,
     minHeight: 600,
     minWidth: 800,
     width: 1366,
     height: 768,
+    dragDropEnabled,
   })
   w.once('tauri://error', (e) => {
     console.error(e)
