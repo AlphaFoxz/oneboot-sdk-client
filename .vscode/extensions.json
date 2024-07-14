@@ -7,6 +7,6 @@
     "rust-lang.rust-analyzer",
     "tauri-apps.tauri-vscode",
     "vadimcn.vscode-lldb",
-    "vue.volar",
+    "Vue.volar",
   ],
 }
