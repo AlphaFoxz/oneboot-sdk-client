@@ -79,9 +79,10 @@ const handleNewFolder = (path: string, resolve: () => void, reject: (msg?: strin
 }
 const handleSaveFile = async (path: string, value: string, resolve: () => void, reject: (msg?: string) => void) => {
   const currentPath =
-    monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
+    monacoStore._state.prefix.value +
+    monacoStore.state.currentPath.value.replaceAll('/', monacoStore._state.fileSeparator.value)
   if (path.endsWith('.restl')) {
-    valid.checkErr(monaco, value, currentPath === path ? monacoStore.getEditor() : undefined)
+    valid.checkErr(monaco, value, currentPath === path ? monacoStore.action.getEditor() : undefined)
   }
 
   api.createOrUpdateFile(path, value).then((res) => {

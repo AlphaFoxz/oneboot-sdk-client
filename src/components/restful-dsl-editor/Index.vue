@@ -22,8 +22,9 @@ window.MonacoEnvironment = {
 
 // ================ 注册语言 ================
 const monacoStore = useMonaco(monaco)
-watch(monacoStore.isReady, () => {
-  monacoStore.getEditor().onDidChangeModelContent(() => {})
+watch(monacoStore.state.isReady, (n) => {
+  if (!n) return
+  monacoStore.action.getEditor().onDidChangeModelContent(() => {})
 })
 registerRestl(monaco)
 
@@ -32,22 +33,22 @@ const hotkeyStore = useHotkey()
 hotkeyStore.listen('editor', (e) => {
   if (e.ctrlKey && e.altKey && !e.shiftKey) {
     if (e.key === 'ArrowLeft') {
-      monacoStore.getEditor().trigger('keyboard', 'cursorUndo', null)
+      monacoStore.action.getEditor().trigger('keyboard', 'cursorUndo', null)
     } else if (e.key === 'ArrowRight') {
-      monacoStore.getEditor().trigger('keyboard', 'cursorRedo', null)
+      monacoStore.action.getEditor().trigger('keyboard', 'cursorRedo', null)
     }
   } else if (e.ctrlKey && !e.altKey && e.shiftKey) {
     if (e.key === '?' || e.key === '/') {
-      monacoStore.getEditor().trigger('keyboard', 'editor.action.blockComment', null)
+      monacoStore.action.getEditor().trigger('keyboard', 'editor.action.blockComment', null)
     } else if (e.key === 'ArrowUp') {
-      monacoStore.getEditor().trigger('keyboard', 'editor.action.moveLinesUpAction', null)
+      monacoStore.action.getEditor().trigger('keyboard', 'editor.action.moveLinesUpAction', null)
     } else if (e.key === 'ArrowDown') {
-      monacoStore.getEditor().trigger('keyboard', 'editor.action.moveLinesDownAction', null)
+      monacoStore.action.getEditor().trigger('keyboard', 'editor.action.moveLinesDownAction', null)
     }
   } else if (e.ctrlKey && !e.altKey && !e.shiftKey) {
     if (e.key === 'y' || e.key === 'Y') {
-      console.debug(monacoStore.monaco.editor.getModels())
-      monacoStore.getEditor().trigger('keyboard', 'editor.action.openLink', '/sdk/dtos/SdkResponseDto.restl')
+      console.debug(monacoStore.state.monaco.editor.getModels())
+      monacoStore.action.getEditor().trigger('keyboard', 'editor.action.openLink', '/sdk/dtos/SdkResponseDto.restl')
     }
   }
 })
@@ -87,15 +88,15 @@ const handleDragInEditor = (srcPath: string, targetPath: string, type: 'file' | 
   if (!targetPath.endsWith('.restl')) {
     return
   }
-  const editor = monacoStore.getEditor()
+  const editor = monacoStore.action.getEditor()
   const lineIndex = editor.getPosition()?.lineNumber!
   let str = ''
   if (type === 'file') {
     str += 'import "' + relativePathFrom(srcPath, targetPath) + '"'
   } else {
-    str = srcPath.replace(monacoStore.prefix.value, '')
-    const tsNamespace = str.replaceAll(monacoStore.fileSeparator.value, '.')
-    const javaNamespace: any = str.replaceAll('-', '_').split(monacoStore.fileSeparator.value)
+    str = srcPath.replace(monacoStore._state.prefix.value, '')
+    const tsNamespace = str.replaceAll(monacoStore._state.fileSeparator.value, '.')
+    const javaNamespace: any = str.replaceAll('-', '_').split(monacoStore._state.fileSeparator.value)
     javaNamespace.splice(2, 0, 'gen', 'restl')
     str = `namespace java ${basePackage.value.replaceAll('-', '_')}${javaNamespace.join('.')}\n`
     str += `namespace ts gen${tsNamespace.replaceAll('-', '_')}\n`
@@ -124,15 +125,16 @@ const sqlContent = ref<string[]>([])
 const sqlVisible = ref(false)
 const handleContextmenuSelect = async (path: string, item: { label: string | ComputedRef<string>; value: string }) => {
   const currentPath =
-    monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
+    monacoStore._state.prefix.value +
+    monacoStore.state.currentPath.value.replaceAll('/', monacoStore._state.fileSeparator.value)
   const checkFn = async () => {
     const ok = valid.checkErr(
       monaco,
       files.value[path].content!,
-      currentPath === path ? monacoStore.getEditor() : undefined
+      currentPath === path ? monacoStore.action.getEditor() : undefined
     )
     if (!ok) {
-      messageStore.error({
+      messageStore.action.error({
         content: '存在语法错误，无法生成',
         closeable: true,
       })
@@ -160,80 +162,84 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
   }
 }
 const handleGenTsClientApi = (path: string) => {
-  const msgId = messageStore.info({ content: '正在生成ts客户端代码...', loading: true, closeable: true })
+  const msgId = messageStore.action.info({ content: '正在生成ts客户端代码...', loading: true, closeable: true })
   api
     .generateTsClientApi(path)
     .then(() => {
-      messageStore.close(msgId)
-      messageStore.success({
+      messageStore.action.close(msgId)
+      messageStore.action.success({
         content: '代码已生成，请稍后重新编译项目并验证',
         timeoutMs: 5000,
         closeable: true,
       })
     })
     .catch(() => {
-      messageStore.close(msgId)
-      messageStore.error({
+      messageStore.action.close(msgId)
+      messageStore.action.error({
         content: '保存失败，请检查是否有网络错误',
         closeable: true,
       })
     })
 }
 const handleGenRustClientApi = (path: string) => {
-  const msgId = messageStore.info({ content: '正在生成Rust客户端代码...', loading: true, closeable: true })
+  const msgId = messageStore.action.info({ content: '正在生成Rust客户端代码...', loading: true, closeable: true })
   api
     .generateRustClientApi(path)
     .then(() => {
-      messageStore.close(msgId)
-      messageStore.success({
+      messageStore.action.close(msgId)
+      messageStore.action.success({
         content: '代码已生成，请稍后重新编译项目并验证',
         timeoutMs: 5000,
         closeable: true,
       })
     })
     .catch(() => {
-      messageStore.close(msgId)
-      messageStore.error({
+      messageStore.action.close(msgId)
+      messageStore.action.error({
         content: '保存失败，请检查是否有网络错误',
         closeable: true,
       })
     })
 }
 const handleGenJavaMockService = (path: string) => {
-  const msgId = messageStore.info({ content: '正在生成Java服务端mock service...', loading: true, closeable: true })
+  const msgId = messageStore.action.info({
+    content: '正在生成Java服务端mock service...',
+    loading: true,
+    closeable: true,
+  })
   api
     .generateJavaServerMockService(path)
     .then(() => {
-      messageStore.close(msgId)
-      messageStore.success({
+      messageStore.action.close(msgId)
+      messageStore.action.success({
         content: '代码已生成，请稍后重新编译项目并验证',
         timeoutMs: 5000,
         closeable: true,
       })
     })
     .catch(() => {
-      messageStore.close(msgId)
-      messageStore.error({
+      messageStore.action.close(msgId)
+      messageStore.action.error({
         content: '保存失败，请检查是否有网络错误',
         closeable: true,
       })
     })
 }
 const handleGenJavaServerApi = (path: string) => {
-  const msgId = messageStore.info({ content: '正在生成Java服务端代码...', loading: true, closeable: true })
+  const msgId = messageStore.action.info({ content: '正在生成Java服务端代码...', loading: true, closeable: true })
   api
     .generateJavaServerApi(path)
     .then(() => {
-      messageStore.close(msgId)
-      messageStore.success({
+      messageStore.action.close(msgId)
+      messageStore.action.success({
         content: '代码已生成，请稍后重新编译项目并验证',
         timeoutMs: 5000,
         closeable: true,
       })
     })
     .catch(() => {
-      messageStore.close(msgId)
-      messageStore.error({
+      messageStore.action.close(msgId)
+      messageStore.action.error({
         content: '保存失败，请检查是否有网络错误',
         closeable: true,
       })
@@ -242,7 +248,7 @@ const handleGenJavaServerApi = (path: string) => {
 const handleGenDbSql = (path: string) => {
   api.generateSql(path).then((res) => {
     if (res.success) {
-      messageStore.success({
+      messageStore.action.success({
         content: 'SQL已生成',
         timeoutMs: 5000,
         closeable: true,
@@ -264,7 +270,7 @@ const handleGenDbSql = (path: string) => {
       })
       sqlVisible.value = true
     } else {
-      messageStore.error({
+      messageStore.action.error({
         content: 'SQL生成失败',
         closeable: true,
       })

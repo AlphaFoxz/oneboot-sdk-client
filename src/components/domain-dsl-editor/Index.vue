@@ -12,8 +12,8 @@ import * as api from '@/api'
 
 // ================ 注册语言 ================
 const monacoStore = useMonaco(monaco)
-watch(monacoStore.isReady, () => {
-  monacoStore.getEditor().onDidChangeModelContent(() => {})
+watch(monacoStore.state.isReady, () => {
+  monacoStore.action.getEditor().onDidChangeModelContent(() => {})
 })
 registerPuml(monaco)
 
@@ -51,15 +51,16 @@ onMounted(() => {
 
 const handleContextmenuSelect = async (path: string, item: { label: string | ComputedRef<string>; value: string }) => {
   const currentPath =
-    monacoStore.prefix.value + monacoStore.currentPath.value.replaceAll('/', monacoStore.fileSeparator.value)
+    monacoStore._state.prefix.value +
+    monacoStore.state.currentPath.value.replaceAll('/', monacoStore._state.fileSeparator.value)
   const checkFn = async () => {
     const ok = valid.checkErr(
       monaco,
       files.value[path].content!,
-      currentPath === path ? monacoStore.getEditor() : undefined
+      currentPath === path ? monacoStore.action.getEditor() : undefined
     )
     if (!ok) {
-      messageStore.error({
+      messageStore.action.error({
         content: '存在语法错误，无法生成',
         closeable: true,
       })
@@ -73,20 +74,20 @@ const handleContextmenuSelect = async (path: string, item: { label: string | Com
   }
 }
 const handleGenJavaServerCode = async (path: string) => {
-  const msgId = messageStore.info({ content: '正在生成服务端代码...', loading: true, closeable: true })
+  const msgId = messageStore.action.info({ content: '正在生成服务端代码...', loading: true, closeable: true })
   api
     .generateJavaServerDomain(path)
     .then(() => {
-      messageStore.close(msgId)
-      messageStore.success({
+      messageStore.action.close(msgId)
+      messageStore.action.success({
         content: '代码已生成，请稍后重新编译项目并验证',
         timeoutMs: 5000,
         closeable: true,
       })
     })
     .catch(() => {
-      messageStore.close(msgId)
-      messageStore.error({
+      messageStore.action.close(msgId)
+      messageStore.action.error({
         content: '保存失败，请检查是否有网络错误',
         closeable: true,
       })
