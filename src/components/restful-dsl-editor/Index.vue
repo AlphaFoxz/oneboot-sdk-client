@@ -61,6 +61,12 @@ const serverApi = useServerApi(files, valid)
 const router = useRouter()
 const settingsMenu = ref([
   {
+    label: '重新加载',
+    handler: () => {
+      router.go(0)
+    },
+  },
+  {
     label: '退出',
     handler: () => {
       router.push({ name: 'Home' })
