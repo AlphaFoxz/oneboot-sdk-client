@@ -12,6 +12,7 @@ import { registerRestl } from './restl'
 import * as monaco from 'monaco-editor'
 import { GenTypeEnum } from './define'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import oneDarkPro from './one-dark-pro'
 
 window.MonacoEnvironment = {
   getWorker: function (_moduleId, _label: string) {
@@ -25,8 +26,9 @@ const monacoStore = useMonaco(monaco)
 watch(monacoStore.state.isReady, (n) => {
   if (!n) return
   monacoStore.action.getEditor().onDidChangeModelContent(() => {})
+  monacoStore.action.defineTheme('dark', oneDarkPro)
+  registerRestl(monaco)
 })
-registerRestl(monaco)
 
 // ================ 快捷键 ================
 const hotkeyStore = useHotkey()
