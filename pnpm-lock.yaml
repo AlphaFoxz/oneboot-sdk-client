@@ -33,8 +33,8 @@ importers:
         specifier: ^0.50.0
         version: 0.50.0
       monaco-tree-editor:
-        specifier: ~1.1.0-rc.1
-        version: 1.1.0-rc.1
+        specifier: ^1.1.0
+        version: 1.1.0
       nanoid:
         specifier: ^5.0.7
         version: 5.0.7
@@ -1198,8 +1198,8 @@ packages:
   monaco-editor@0.50.0:
     resolution: {integrity: sha512-8CclLCmrRRh+sul7C08BmPBP3P8wVWfBHomsTcndxg5NRCEPfu/mc2AGU8k37ajjDVXcXFc12ORAMUkmk+lkFA==}
 
-  monaco-tree-editor@1.1.0-rc.1:
-    resolution: {integrity: sha512-WQrW8R+Ozx9vScxJXeGTlPe7ZSsE58DK9Ic0Mt/fnMbuQVA8CkiHhY9WU6E+HHTLcv1UKpRhKpOT1eji6/vS2w==}
+  monaco-tree-editor@1.1.0:
+    resolution: {integrity: sha512-A2PRNyapabLG0SIFP7eMcDRB+7KNref+ADnhYnPybFo5Tj9OUSYZYWsBl7gMnBhaS63D5a2iTRnizvQwE+ACmA==}
 
   ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
@@ -2724,7 +2724,7 @@ snapshots:
 
   monaco-editor@0.50.0: {}
 
-  monaco-tree-editor@1.1.0-rc.1:
+  monaco-tree-editor@1.1.0:
     dependencies:
       nanoid: 5.0.7
 

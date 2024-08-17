@@ -20,7 +20,7 @@
     "axios": "^1.7.2",
     "lossless-json": "^4.0.1",
     "monaco-editor": "^0.50.0",
-    "monaco-tree-editor": "~1.1.0-rc.1",
+    "monaco-tree-editor": "^1.1.0",
     "nanoid": "^5.0.7",
     "node-int64": "^0.4.0",
     "onigasm": "^2.2.5",
