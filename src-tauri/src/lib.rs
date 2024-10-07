@@ -1,3 +1,5 @@
+use tauri_plugin_store::StoreExt;
+
 pub mod core;
 pub mod restful;
 
@@ -8,8 +10,7 @@ pub fn run() {
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
-            let mut store =
-                tauri_plugin_store::StoreBuilder::new(".settings.dat").build(app.handle().clone());
+            let store = app.handle().store_builder(".settings.dat").build();
             let mut lock = crate::core::store::SETTINGS_STORE.lock().unwrap();
             let res = store.load();
             if res.is_err() {

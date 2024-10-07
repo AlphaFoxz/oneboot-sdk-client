@@ -19,5 +19,5 @@ pub fn get_settings_value(s: String) -> Option<Value> {
     let inner = &mut *SETTINGS_STORE.lock().unwrap();
     let store = inner.as_mut().unwrap();
     store.load().unwrap();
-    store.get(s).cloned()
+    store.get(s).clone()
 }
