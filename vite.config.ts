@@ -1,13 +1,12 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { internalIpV4 } from 'internal-ip'
 import { fileURLToPath, URL } from 'node:url'
 
 const mobile = !!/android|ios/.exec(process.env.TAURI_PLATFORM)
 
 // https://vitejs.dev/config/
-export default defineConfig(async ({ mode, command }) => {
+export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd())
   return {
     plugins: [vue(), vueJsx()],
@@ -44,7 +43,7 @@ export default defineConfig(async ({ mode, command }) => {
       hmr: mobile
         ? {
             protocol: 'ws',
-            host: await internalIpV4(),
+            host: '0.0.0.0',
             port: 1421,
           }
         : undefined,

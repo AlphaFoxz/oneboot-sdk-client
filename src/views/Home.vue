@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
-import router from '@/router'
+import { router } from '@/plugins/router'
 import { nanoid } from 'nanoid'
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
 

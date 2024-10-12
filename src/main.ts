@@ -1,8 +1,11 @@
-import app from './app'
-import router from './router'
-import PrimeModel from './primevue'
-import './styles.css'
+import './assets/styles/global.css'
 
-app.use(router)
-PrimeModel.mountTo(app)
+import { createApp } from 'vue'
+import App from './App.vue'
+import { applyRouterPlugin } from './plugins/router'
+import { applyPrimeVuePlugin } from './plugins/primevue'
+
+const app = createApp(App)
+applyRouterPlugin(app)
+applyPrimeVuePlugin(app)
 app.mount('#app')

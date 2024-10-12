@@ -1,7 +1,4 @@
-import app from '@/app'
 import { onMounted, ref } from 'vue'
-import { useToast } from 'primevue/usetoast'
-export const useToastService: typeof useToast = () => app.config.globalProperties.$toast
 
 /**
  * 函数防抖（间隔不超过delay毫秒的多次调用会被合并为最后一次调用，最终延迟时间为[delay]毫秒）

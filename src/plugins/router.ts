@@ -1,3 +1,4 @@
+import { App } from 'vue'
 import { RouteRecordRaw, createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -68,9 +69,11 @@ const routes = [
   },
 ] as RouteRecordRaw[]
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(),
   routes,
 })
 
-export default router
+export function applyRouterPlugin(app: App) {
+  app.use(router)
+}
