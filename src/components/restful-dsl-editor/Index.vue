@@ -49,7 +49,7 @@ hotkeyStore.listen('editor', (e) => {
     }
   } else if (e.ctrlKey && !e.altKey && !e.shiftKey) {
     if (e.key === 'y' || e.key === 'Y') {
-      console.debug(monacoStore.state.monaco.editor.getModels())
+      console.debug(monacoStore.state.monaco.value!.editor.getModels())
       monacoStore.action.getEditor().trigger('keyboard', 'editor.action.openLink', '/sdk/dtos/SdkResponseDto.restl')
     }
   }

@@ -2,7 +2,7 @@
 import * as api from '@/api'
 import { useToast } from 'primevue/usetoast'
 import { onMounted, ref } from 'vue'
-import { Store } from '@tauri-apps/plugin-store'
+import { createStore } from '@tauri-apps/plugin-store'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import InputSwitch from 'primevue/inputswitch'
@@ -12,7 +12,7 @@ const router = useRouter()
 const msg = ref('')
 const hideSuccessed = ref(false)
 const getStore = async () => {
-  const store = new Store('.ts_code_version.dat')
+  const store = await createStore('.ts_code_version.dat')
   await store.save()
   return store
 }

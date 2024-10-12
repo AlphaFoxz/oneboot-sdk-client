@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Store } from '@tauri-apps/plugin-store'
-import router from '@/router'
+import { createStore, Store } from '@tauri-apps/plugin-store'
+import { router } from '@/plugins/router'
 import { onMounted, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
@@ -9,7 +9,18 @@ import { settings } from '@/constants'
 import { getBasePackage } from '@/api'
 
 const toast = useToast()
-const store = new Store(settings.FILE_NAME)
+const store = ref<Store>()
+async function untilReady(): Promise<void> {
+  return new Promise((resolve) => {
+    if (store.value) {
+      resolve()
+    } else {
+      setTimeout(() => {
+        untilReady().then(resolve)
+      }, 100)
+    }
+  })
+}
 const backendHost = ref('')
 const backendPort = ref('')
 const tsClientGenDir = ref('')
@@ -17,10 +28,12 @@ const rustClientGenDir = ref('')
 const isTestingUrl = ref(false)
 
 onMounted(async () => {
-  backendHost.value = (await store.get(settings.KEY_BACKEND_HOST)) || '127.0.0.1'
-  backendPort.value = (await store.get(settings.KEY_BACKEND_PORT)) || '8080'
-  tsClientGenDir.value = (await store.get(settings.KEY_TS_CLIENT_GEN_DIR)) || ''
-  rustClientGenDir.value = (await store.get(settings.KEY_RUST_CLIENT_GEN_DIR)) || ''
+  const storeInst = await createStore(settings.FILE_NAME)
+  store.value = storeInst
+  backendHost.value = (await storeInst.get(settings.KEY_BACKEND_HOST)) || '127.0.0.1'
+  backendPort.value = (await storeInst.get(settings.KEY_BACKEND_PORT)) || '8080'
+  tsClientGenDir.value = (await storeInst.get(settings.KEY_TS_CLIENT_GEN_DIR)) || ''
+  rustClientGenDir.value = (await storeInst.get(settings.KEY_RUST_CLIENT_GEN_DIR)) || ''
 })
 
 const handleTestUrl = async () => {
@@ -38,11 +51,14 @@ const handleTestUrl = async () => {
     })
 }
 const handleSaveAll = async () => {
-  await store.set(settings.KEY_BACKEND_HOST, backendHost.value)
-  await store.set(settings.KEY_BACKEND_PORT, backendPort.value)
-  await store.set(settings.KEY_TS_CLIENT_GEN_DIR, tsClientGenDir.value)
-  await store.set(settings.KEY_RUST_CLIENT_GEN_DIR, rustClientGenDir.value)
-  store
+  await untilReady()
+  const storeInst = store.value!
+  // FIXME https://github.com/tauri-apps/plugins-workspace/issues/1865
+  await storeInst.set(settings.KEY_BACKEND_HOST, backendHost.value)
+  await storeInst.set(settings.KEY_BACKEND_PORT, backendPort.value)
+  await storeInst.set(settings.KEY_TS_CLIENT_GEN_DIR, tsClientGenDir.value)
+  await storeInst.set(settings.KEY_RUST_CLIENT_GEN_DIR, rustClientGenDir.value)
+  storeInst
     .save()
     .then(() => {
       openSuccessNotification('配置已保存')

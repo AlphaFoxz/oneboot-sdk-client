@@ -63,9 +63,9 @@ const routes = [
     component: () => import('@/views/CheckServiceStatus.vue'),
   },
   {
-    path: '/genDomain',
-    name: 'GenDomain',
-    component: () => import('@/views/GenDomain.vue'),
+    path: '/dddDesigner',
+    name: 'DddDesigner',
+    component: () => import('@/views/DddDesigner.vue'),
   },
 ] as RouteRecordRaw[]
 

@@ -1,0 +1,87 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --oneboot-c-white: #ffffff;
+  --oneboot-c-white-soft: #f9f9f9;
+  --oneboot-c-white-mute: #f1f1f1;
+  --oneboot-c-black: #1a1a1a;
+  --oneboot-c-black-pure: #000000;
+  --oneboot-c-black-soft: #242424;
+  --oneboot-c-black-mute: #2f2f2f;
+  --oneboot-c-indigo: #213547;
+  --oneboot-c-indigo-soft: #476582;
+  --oneboot-c-indigo-light: #aac8e4;
+  --oneboot-c-gray: #8e8e8e;
+  --oneboot-c-gray-light-1: #aeaeae;
+  --oneboot-c-gray-light-2: #c7c7c7;
+  --oneboot-c-gray-light-3: #d1d1d1;
+  --oneboot-c-gray-light-4: #e5e5e5;
+  --oneboot-c-gray-light-5: #f2f2f2;
+  --oneboot-c-gray-dark-1: #636363;
+  --oneboot-c-gray-dark-2: #484848;
+  --oneboot-c-gray-dark-3: #3a3a3a;
+  --oneboot-c-gray-dark-4: #282828;
+  --oneboot-c-gray-dark-5: #202020;
+  --oneboot-c-divider: rgba(60, 60, 60, 0.29);
+  --oneboot-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --oneboot-c-divider-light-2: rgba(60, 60, 60, 0.12);
+  --oneboot-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --oneboot-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+  --oneboot-c-text-light-1: var(--oneboot-c-indigo);
+  --oneboot-c-text-light-2: rgba(60, 60, 60, 0.7);
+  --oneboot-c-text-light-3: rgba(60, 60, 60, 0.33);
+  --oneboot-c-text-light-4: rgba(60, 60, 60, 0.18);
+  --oneboot-c-text-light-code: var(--oneboot-c-indigo-soft);
+  --oneboot-c-text-dark-1: rgba(255, 255, 255, 0.87);
+  --oneboot-c-text-dark-2: rgba(235, 235, 235, 0.6);
+  --oneboot-c-text-dark-3: rgba(235, 235, 235, 0.38);
+  --oneboot-c-text-dark-4: rgba(235, 235, 235, 0.18);
+  --oneboot-c-text-dark-code: var(--oneboot-c-indigo-light);
+  --oneboot-c-green: #42b883;
+  --oneboot-c-green-light: #42d392;
+  --oneboot-c-green-lighter: #35eb9a;
+  --oneboot-c-green-dark: #33a06f;
+  --oneboot-c-green-darker: #155f3e;
+  --oneboot-c-blue: #3b8eed;
+  --oneboot-c-blue-light: #549ced;
+  --oneboot-c-blue-lighter: #50a2ff;
+  --oneboot-c-blue-dark: #3468a3;
+  --oneboot-c-blue-darker: #255489;
+  --oneboot-c-yellow: #ffc517;
+  --oneboot-c-yellow-light: #ffe417;
+  --oneboot-c-yellow-lighter: #ffff17;
+  --oneboot-c-yellow-dark: #e0ad15;
+  --oneboot-c-yellow-darker: #bc9112;
+  --oneboot-c-red: #ed3c50;
+  --oneboot-c-red-light: #f43771;
+  --oneboot-c-red-lighter: #fd1d7c;
+  --oneboot-c-red-dark: #cd2d3f;
+  --oneboot-c-red-darker: #ab2131;
+  --oneboot-c-purple: #de41e0;
+  --oneboot-c-purple-light: #e936eb;
+  --oneboot-c-purple-lighter: #f616f8;
+  --oneboot-c-purple-dark: #823c83;
+  --oneboot-c-purple-darker: #602960;
+
+  --oneboot-c-text: var(--oneboot-c-black);
+  --oneboot-c-bg: var(--oneboot-c-white-soft);
+}
+
+.dark-mode {
+  --oneboot-c-text: var(--oneboot-c-white);
+  --oneboot-c-bg: var(--oneboot-c-black-soft);
+}
+
+html,
+body,
+#app {
+  color: var(--oneboot-c-text);
+  background-color: var(--oneboot-c-bg);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}

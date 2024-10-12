@@ -1,7 +1,8 @@
-import './assets/styles/global.css'
+import './assets/styles/global.scss'
 
 import { createApp } from 'vue'
 import App from './App.vue'
+import './plugins/global'
 import { applyRouterPlugin } from './plugins/router'
 import { applyPrimeVuePlugin } from './plugins/primevue'
 

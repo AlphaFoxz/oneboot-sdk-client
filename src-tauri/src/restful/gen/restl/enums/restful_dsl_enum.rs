@@ -18,9 +18,9 @@ impl TryInto<RestfulDslFileTypeEnum> for i32 {
     type Error = crate::core::error::Error;
     fn try_into(self) -> Result<RestfulDslFileTypeEnum, Self::Error> {
         match self {
-        0 => Ok(RestfulDslFileTypeEnum::LocalFile),
-        1 => Ok(RestfulDslFileTypeEnum::LocalDir),
-        _ => Err("枚举值未知".into()),
+            0 => Ok(RestfulDslFileTypeEnum::LocalFile),
+            1 => Ok(RestfulDslFileTypeEnum::LocalDir),
+            _ => Err("枚举值未知".into()),
         }
     }
 }
@@ -42,8 +42,8 @@ impl TryInto<RestfulDslServerLanguageTypeEnum> for i32 {
     type Error = crate::core::error::Error;
     fn try_into(self) -> Result<RestfulDslServerLanguageTypeEnum, Self::Error> {
         match self {
-        0 => Ok(RestfulDslServerLanguageTypeEnum::JAVA),
-        _ => Err("枚举值未知".into()),
+            0 => Ok(RestfulDslServerLanguageTypeEnum::JAVA),
+            _ => Err("枚举值未知".into()),
         }
     }
 }
