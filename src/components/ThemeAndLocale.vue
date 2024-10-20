@@ -48,10 +48,6 @@ function toggle(event: MouseEvent) {
 
 <style scoped>
 .theme-lang {
-  position: absolute;
-  float: right;
-  top: 0.75rem;
-  right: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;

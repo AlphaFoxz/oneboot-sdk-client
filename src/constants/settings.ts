@@ -1,4 +1,4 @@
-export const FILE_NAME = '.settings.dat'
+export const FILE_NAME = '.settings.json'
 export const KEY_BACKEND_HOST = 'backendHost'
 export const KEY_BACKEND_PORT = 'backendPort'
 export const KEY_TS_CLIENT_GEN_DIR = 'tsClientGenDir'

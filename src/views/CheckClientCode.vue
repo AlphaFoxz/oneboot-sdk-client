@@ -2,17 +2,14 @@
 import * as api from '@/api'
 import { useToast } from 'primevue/usetoast'
 import { onMounted, ref } from 'vue'
-import { createStore } from '@tauri-apps/plugin-store'
-import { useRouter } from 'vue-router'
-import Button from 'primevue/button'
+import { Store } from '@tauri-apps/plugin-store'
 import InputSwitch from 'primevue/inputswitch'
 
 const toast = useToast()
-const router = useRouter()
 const msg = ref('')
 const hideSuccessed = ref(false)
 const getStore = async () => {
-  const store = await createStore('.ts_code_version.dat')
+  const store = await Store.load('frontend/ts_code_version.json')
   await store.save()
   return store
 }
@@ -65,12 +62,11 @@ onMounted(async () => {
 <template>
   <div>
     <div>
-      <p class="text-white">
-        <Button class="text-white" label="返回" @click="router.push({ name: 'Home' })"></Button>
+      <p>
         <label>前端代码检查</label>
         <br />
         <label>只显示异常记录</label>
-        <InputSwitch class="text-white" v-model:checked="hideSuccessed" @change="check" />
+        <InputSwitch v-model:checked="hideSuccessed" @change="check" />
       </p>
     </div>
     <div class="bg-white text-black">

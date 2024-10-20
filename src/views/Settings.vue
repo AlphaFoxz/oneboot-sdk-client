@@ -79,8 +79,8 @@ const openErrorNotification = (content: string) => {
 </script>
 
 <template>
-  <div class="h-full overflow-x-hidden">
-    <div class="flex flex-column gap-2">
+  <div class="form">
+    <div class="form-item-4">
       <label class="font-bold">http://</label>
       <InputText
         class="w-1/3"
@@ -92,7 +92,7 @@ const openErrorNotification = (content: string) => {
       <InputText class="w-1/12" title="要访问的后端端口" placeholder="8080" v-model="backendPort" />
       <Button @click="handleTestUrl" :loading="isTestingUrl">测试连接</Button>
     </div>
-    <div class="flex flex-column gap-2">
+    <div class="form-item-2">
       <label for="tsGenDir">TS客户端代码生成目录</label>
       <InputText
         id="tsGenDir"
@@ -102,7 +102,7 @@ const openErrorNotification = (content: string) => {
         v-model="tsClientGenDir"
       />
     </div>
-    <div class="flex flex-column gap-2">
+    <div class="form-item-2">
       <label for="rustGenDir">Rust客户端代码生成目录</label>
       <InputText
         id="rustGenDir"
@@ -112,10 +112,26 @@ const openErrorNotification = (content: string) => {
         v-model="rustClientGenDir"
       />
     </div>
-    <div class="flex flex-column gap-2">
-      <Button @click="routerLink('Home')">返回</Button>
-      &emsp;
+    <div class="form-item-1">
       <Button @click="handleSaveAll">保存</Button>
     </div>
   </div>
 </template>
+
+<style scoped>
+.form {
+  height: 100%;
+
+  & > * {
+    display: flex;
+    height: 2rem;
+    line-height: 2rem;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  .form-item-2 {
+  }
+  .form-item-4 {
+  }
+}
+</style>

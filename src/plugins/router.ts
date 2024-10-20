@@ -28,6 +28,11 @@ const routes = [
     component: () => import('@/views/GenApiDocs.vue'),
   },
   {
+    path: '/genMapStruct',
+    name: 'GenMapStruct',
+    component: () => import('@/views/GenMapStruct.vue'),
+  },
+  {
     path: '/rulesOfDatabase',
     name: 'RulesOfDatabase',
     component: () => import('@/views/RulesOfDatabase.vue'),

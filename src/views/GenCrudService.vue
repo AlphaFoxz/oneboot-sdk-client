@@ -9,10 +9,8 @@ import InputText from 'primevue/inputtext'
 import InputSwitch from 'primevue/inputswitch'
 import * as utils from '@/utils'
 import * as api from '@/api'
-import { useRouter } from 'vue-router'
 
 const toast = useToast()
-const router = useRouter()
 const highlightCode = ref('')
 const copyRef = ref<HTMLTextAreaElement>()
 
@@ -98,7 +96,6 @@ onMounted(render)
 <template>
   <div>
     <div>
-      <Button label="返回" @click="router.push({ name: 'Home' })"></Button>
       <label>模块:</label>
       <Dropdown
         class="w-1/6"

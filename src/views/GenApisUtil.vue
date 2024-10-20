@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import { ref, onMounted } from 'vue'
@@ -7,7 +6,6 @@ import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
 
 const toast = useToast()
-const router = useRouter()
 const highlightCode = ref('')
 const copyRef = ref<HTMLTextAreaElement>()
 const templateCodeRef = ref<HTMLElement>()
@@ -31,8 +29,7 @@ onMounted(() => {
 <template>
   <div>
     <div>
-      <Button label="返回" @click="router.push({ name: 'Home' })"></Button>
-      <label class="text-white">前端apis目录 自定义apis-util.ts代码示例</label>
+      <label>前端apis目录 自定义apis-util.ts代码示例</label>
       <Button label="复制" @click="handleCopy"></Button>
     </div>
     <div class="bg-white">

@@ -2,12 +2,9 @@
 import { onMounted, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { checkRestfulFileVersion } from '@/api'
-import { useRouter } from 'vue-router'
-import Button from 'primevue/button'
 import InputSwitch from 'primevue/inputswitch'
 
 const toast = useToast()
-const router = useRouter()
 const msg = ref('')
 const hideSuccessed = ref(false)
 const check = async () => {
@@ -36,12 +33,11 @@ onMounted(async () => {
 <template>
   <div>
     <div>
-      <p class="text-white">
-        <Button class="text-white" @click="router.push({ name: 'Home' })">返回</Button>
+      <p>
         <label>服务端代码检查</label>
         <br />
         <label>只显示异常记录</label>
-        <InputSwitch class="text-white" v-model="hideSuccessed" @change="check" />
+        <InputSwitch v-model="hideSuccessed" @change="check" />
       </p>
     </div>
     <div class="bg-white text-black">

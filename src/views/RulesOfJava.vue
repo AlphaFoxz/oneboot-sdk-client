@@ -1,15 +1,9 @@
-<script setup lang="ts">
-import { useRouter } from 'vue-router'
-import Button from 'primevue/button'
-
-const router = useRouter()
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div style="min-height: 100%">
     <div>
-      <Button label="返回" class="text-white" @click="router.push({ name: 'Home' })"></Button>
-      <label class="text-white">Java编写原则（设计期间拟定）</label>
+      <label>Java编写原则（设计期间拟定）</label>
     </div>
     <div class="bg-white text-black">
       <h1 class="text-3xl">框架推荐</h1>

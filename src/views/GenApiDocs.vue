@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import * as api from '@/api'
 
-const router = useRouter()
 const download = (data: Blob, fileName: string) => {
   const url = window.URL.createObjectURL(data)
   const tmpLink = document.createElement('a')
@@ -27,8 +25,7 @@ const handleGenWordApi = (moduleName: string) => {
 <template>
   <div style="min-height: 100%">
     <div>
-      <Button label="返回" class="text-white" @click="router.push({ name: 'Home' })"></Button>
-      <label class="text-white">生成Api文档</label>
+      <label>生成Api文档</label>
     </div>
     <div class="bg-white text-black">
       <h1 class="text-3xl">生成Word Api（docx）</h1>

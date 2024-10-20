@@ -13,6 +13,9 @@ import * as monaco from 'monaco-editor'
 import { GenTypeEnum } from './define'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import oneDarkPro from './one-dark-pro'
+import { useUserPreferenceStore } from '@/stores/user-preference-store'
+
+const userPreferenceStore = useUserPreferenceStore()
 
 window.MonacoEnvironment = {
   getWorker: function (_moduleId, _label: string) {
@@ -300,6 +303,7 @@ const handleGenDbSql = (path: string) => {
     @reload="serverApi.handleReloadRestfulDsl"
     :files="files"
     language="zh-CN"
+    :theme="userPreferenceStore.state.colorMode.value"
     @new-file="serverApi.handleNewFile"
     @new-folder="serverApi.handleNewFolder"
     @save-file="serverApi.handleSaveFile"
