@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { createStore, Store } from '@tauri-apps/plugin-store'
+import { Store } from '@tauri-apps/plugin-store'
 import { router } from '@/plugins/router'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, shallowRef } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -9,7 +9,7 @@ import { settings } from '@/constants'
 import { getBasePackage } from '@/api'
 
 const toast = useToast()
-const store = ref<Store>()
+const store = shallowRef<Store>()
 async function untilReady(): Promise<void> {
   return new Promise((resolve) => {
     if (store.value) {
@@ -28,7 +28,7 @@ const rustClientGenDir = ref('')
 const isTestingUrl = ref(false)
 
 onMounted(async () => {
-  const storeInst = await createStore(settings.FILE_NAME)
+  const storeInst = await Store.load(settings.FILE_NAME)
   store.value = storeInst
   backendHost.value = (await storeInst.get(settings.KEY_BACKEND_HOST)) || '127.0.0.1'
   backendPort.value = (await storeInst.get(settings.KEY_BACKEND_PORT)) || '8080'

@@ -4,14 +4,11 @@ pub mod parser;
 pub mod store;
 
 pub mod util {
-    use std::sync::{Arc, Mutex};
-
-    use lazy_static::lazy_static;
     use snowflake::SnowflakeIdGenerator;
-    lazy_static! {
-        pub static ref SNOWFLAKE: Arc<Mutex<SnowflakeIdGenerator>> =
-            Arc::new(Mutex::new(SnowflakeIdGenerator::new(0, 0)));
-    }
+    use std::sync::{Arc, LazyLock, Mutex};
+
+    pub static SNOWFLAKE: LazyLock<Arc<Mutex<SnowflakeIdGenerator>>> =
+        LazyLock::new(|| Arc::new(Mutex::new(SnowflakeIdGenerator::new(0, 0))));
     pub fn next_snowflake_id() -> i64 {
         let mut snowflake = *SNOWFLAKE.lock().unwrap();
         snowflake.generate()

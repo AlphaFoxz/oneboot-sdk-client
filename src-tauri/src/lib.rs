@@ -1,21 +1,18 @@
-use tauri_plugin_store::StoreExt;
-
 pub mod core;
 pub mod restful;
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+use tauri_plugin_store::StoreExt;
+
+// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .setup(|app| {
-            let store = app.handle().store_builder(".settings.dat").build();
+            let store = app.store(".settings.json").expect("初始化设置失败");
+            store.save().expect("保存设置失败");
             let mut lock = crate::core::store::SETTINGS_STORE.lock().unwrap();
-            let res = store.load();
-            if res.is_err() {
-                let _ = store.save();
-            }
             *lock = Some(store);
             Ok(())
         })
