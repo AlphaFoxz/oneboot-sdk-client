@@ -7,6 +7,6 @@ import { applyRouterPlugin } from './plugins/router'
 import { applyPrimeVuePlugin } from './plugins/primevue'
 
 const app = createApp(App)
-applyRouterPlugin(app)
 applyPrimeVuePlugin(app)
+applyRouterPlugin(app)
 app.mount('#app')

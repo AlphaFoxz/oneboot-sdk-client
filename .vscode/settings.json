@@ -25,6 +25,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[rust]": {
+    "editor.tabSize": 4,
     "editor.defaultFormatter": "rust-lang.rust-analyzer"
   },
   "[toml]": {

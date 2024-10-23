@@ -14,8 +14,6 @@ const router = useRouter()
   <LayoutGrid wrapped class="container">
     <DynamicDialog />
     <Toast />
-    <Toast position="bottom-right" group="br" />
-
     <LayoutGrid wrapped margin="0" class="header">
       <Button label="返回" text @click="router.back()" class="back-btn"></Button>
       <LayoutFlex wrapped>

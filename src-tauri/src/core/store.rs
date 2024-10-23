@@ -6,10 +6,13 @@ use tauri_plugin_store::Store;
 
 type StoreImpl = Arc<Store<Wry>>;
 
-pub static KEY_TS_CLIENT_GEN_DIR: LazyLock<String> = LazyLock::new(|| "tsClientGenDir".into());
-pub static KEY_RUST_CLIENT_GEN_DIR: LazyLock<String> = LazyLock::new(|| "rustClientGenDir".into());
 pub static KEY_BACKEND_HOST: LazyLock<String> = LazyLock::new(|| "backendHost".into());
 pub static KEY_BACKEND_PORT: LazyLock<String> = LazyLock::new(|| "backendPort".into());
+pub static KEY_TS_CLIENT_GEN_DIR: LazyLock<String> = LazyLock::new(|| "tsClientGenDir".into());
+pub static KEY_RUST_CLIENT_GEN_DIR: LazyLock<String> = LazyLock::new(|| "rustClientGenDir".into());
+
+pub static KEY_PROJECT_ROOT_DIR: LazyLock<String> = LazyLock::new(|| "projectRootDir".into());
+
 pub static SETTINGS_STORE: LazyLock<Arc<Mutex<Option<StoreImpl>>>> =
     LazyLock::new(|| Arc::new(Mutex::new(None)));
 

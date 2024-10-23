@@ -1,0 +1,1 @@
+docker buildx build -t tree_sitter_java_wasm  --output . .

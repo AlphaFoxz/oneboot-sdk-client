@@ -5,7 +5,7 @@ import { onMounted, ref } from 'vue'
  * @param fn 目标函数
  */
 export function debounce(fn: Function, delay: number = 500): Function {
-  let timer: NodeJS.Timeout
+  let timer: ReturnType<typeof setTimeout>
   return function () {
     if (timer) {
       clearTimeout(timer)
@@ -92,26 +92,39 @@ export function useDefer(maxCount = 100) {
   }
 }
 
-/**
- * Camel转SNAKE_CASE
- */
-export function camelToUpperSnake(str: string): string {
-  if (!str) return str
-  str = str.replace(str[0], str[0].toLowerCase())
-  return str.replace(/([A-Z])/g, '_$1').toUpperCase()
+export function forTimes(times: number) {
+  return {
+    reduce: <T>(callback: (accumulator: T, index: number) => T, accumulator: T) => {
+      return reduce(times, callback, accumulator)
+    },
+  }
 }
 
-/**
- * Camel转SNAKE_CASE
- */
-export function snakeToLowerCamel(str: string): string {
-  if (!str) return str
-  str = str.toLowerCase()
-  return str.replace(/_(\w)/g, (_, c) => c.toUpperCase())
+function reduce<T>(times: number, callback: (accumulator: T, index: number) => T, accumulator: T) {
+  Array.from({ length: times }).forEach((_, index) => {
+    accumulator = callback(accumulator, index)
+  })
+  return accumulator
 }
-export function snakeToUpperCamel(str: string): string {
-  if (!str) return str
-  str = str.toLowerCase()
-  str = str.replace(str[0], str[0].toUpperCase())
-  return str.replace(/_(\w)/g, (_, c) => c.toUpperCase())
-}
+
+// function reduceObj<T extends object>(
+//   times: number,
+//   callback: (accumulator: T, index: number) => T,
+//   accumulator: T = {} as T
+// ) {
+//   Array.from({ length: times }).forEach((_, index) => {
+//     accumulator = callback(accumulator, index)
+//   })
+//   return accumulator
+// }
+
+// function reduceArr<T extends Array<any>>(
+//   times: number,
+//   callback: (accumulator: T, index: number) => T,
+//   accumulator: T = [] as unknown as T
+// ) {
+//   Array.from({ length: times }).forEach((_, index) => {
+//     accumulator = callback(accumulator, index)
+//   })
+//   return accumulator
+// }

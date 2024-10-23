@@ -3,7 +3,7 @@ import * as losslessJson from 'lossless-json'
 import { Store } from '@tauri-apps/plugin-store'
 import { settings } from '@/constants'
 
-const settingsStore = new Store(settings.FILE_NAME)
+const settingsStore = Store.load(settings.FILE_NAME)
 
 /**
  * 向gen各个模块提供JSON序列化工具，方法内可改，方法本体勿删
@@ -95,8 +95,8 @@ export async function requireHttpUtil(): Promise<HttpUtil> {
   if (http) {
     return http
   }
-  const host = await settingsStore.get(settings.KEY_BACKEND_HOST)
-  const port = await settingsStore.get(settings.KEY_BACKEND_PORT)
+  const host = await (await settingsStore).get(settings.KEY_BACKEND_HOST)
+  const port = await (await settingsStore).get(settings.KEY_BACKEND_PORT)
   axiosInstance.defaults.baseURL = `http://${host}:${port}`
   http = {
     get: async (url: string, config?: any) => await axiosInstance.get(url, config),

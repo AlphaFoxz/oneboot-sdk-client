@@ -1,7 +1,8 @@
 pub mod error;
-pub mod http;
+pub mod io;
 pub mod parser;
 pub mod store;
+pub mod strsim;
 
 pub mod util {
     use snowflake::SnowflakeIdGenerator;

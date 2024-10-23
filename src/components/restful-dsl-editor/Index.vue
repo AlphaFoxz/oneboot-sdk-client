@@ -4,7 +4,7 @@ import { Modal as AModal, Tabs as ATabs, TabPane as ATabPane } from 'ant-design-
 import { ComputedRef, onMounted, ref, watch } from 'vue'
 import { Editor, type Files, useMessage, useMonaco, useHotkey } from 'monaco-tree-editor'
 import 'monaco-tree-editor/index.css'
-import * as utils from '@/utils'
+import * as utils from '@/utils/fun'
 import * as valid from './valid'
 import * as api from '@/api'
 import { useServerApi } from '../server-api'

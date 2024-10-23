@@ -88,3 +88,20 @@ export async function generateJavaServerDomain(path: string) {
 export async function generateWordApi(moduleName: string) {
   return invoke('generate_word_api', { moduleName })
 }
+
+export async function readFolderContent(
+  parentFolder: string,
+  folderPathPattern?: RegExp | string,
+  filePathPattern?: RegExp | string
+): Promise<FileInfo[]> {
+  const result: FileInfo[] = await invoke('read_folder_content', {
+    parentFolder,
+    folderPathPattern: folderPathPattern ? folderPathPattern.toString() : undefined,
+    filePathPattern: filePathPattern ? filePathPattern.toString() : undefined,
+  })
+  return result
+}
+
+export async function writeCodeFiles(files: FileInfo[]): Promise<void> {
+  return invoke('write_code_files', { files })
+}

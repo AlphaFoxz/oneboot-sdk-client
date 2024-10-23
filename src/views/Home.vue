@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
 import LayoutFlex from '@/components/layout/Flex.vue'
-import { router } from '@/plugins/router'
+import { useRouter } from 'vue-router'
 import { nanoid } from 'nanoid'
 import { WebviewWindow } from '@tauri-apps/api/webviewWindow'
 
+const router = useRouter()
 const routerLink = (name: string) => {
   router.push({ name })
 }

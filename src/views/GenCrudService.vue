@@ -7,7 +7,7 @@ import Button from 'primevue/button'
 import Dropdown from 'primevue/dropdown'
 import InputText from 'primevue/inputtext'
 import InputSwitch from 'primevue/inputswitch'
-import * as utils from '@/utils'
+import { snakeToUpperCamel, camelToUpperSnake, snakeToLowerCamel } from '@/utils/str'
 import * as api from '@/api'
 
 const toast = useToast()
@@ -78,10 +78,10 @@ watch(poInput, () => {
   if (poInput.value.includes('_')) {
     PO_NAME.value = poInput.value.toUpperCase().trim()
   } else {
-    PO_NAME.value = utils.camelToUpperSnake(poInput.value).trim()
+    PO_NAME.value = camelToUpperSnake(poInput.value).trim()
   }
-  PoName.value = utils.snakeToUpperCamel(PO_NAME.value)
-  poName.value = utils.snakeToLowerCamel(PO_NAME.value)
+  PoName.value = snakeToUpperCamel(PO_NAME.value)
+  poName.value = snakeToLowerCamel(PO_NAME.value)
   nextTick(render)
 })
 watch(moduleName, () => {

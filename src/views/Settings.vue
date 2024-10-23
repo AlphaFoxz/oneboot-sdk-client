@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Store } from '@tauri-apps/plugin-store'
-import { router } from '@/plugins/router'
 import { onMounted, ref, shallowRef } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import Button from 'primevue/button'
@@ -66,9 +65,6 @@ const handleSaveAll = async () => {
     .catch(() => {
       openErrorNotification('保存失败，请检查是否有网络错误')
     })
-}
-const routerLink = (name: string) => {
-  router.push({ name })
 }
 const openSuccessNotification = (content: string) => {
   toast.add({ severity: 'success', summary: '操作成功', detail: content, life: 2000 })
