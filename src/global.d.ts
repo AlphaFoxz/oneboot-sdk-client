@@ -1,3 +1,4 @@
+import type { Ref } from 'vue'
 export {}
 
 declare global {
@@ -7,6 +8,14 @@ declare global {
     isFolder: boolean
     path: string
     content: string | undefined
+  }
+  type MatchSimilarStringsResult = {
+    name: string
+    selected?: string
+    targets: {
+      name: string
+      score: number
+    }[]
   }
   type NonEmptyArray<T> = [T, ...T[]]
   enum $JavaSyntax {

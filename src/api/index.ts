@@ -105,3 +105,7 @@ export async function readFolderContent(
 export async function writeCodeFiles(files: FileInfo[]): Promise<void> {
   return invoke('write_code_files', { files })
 }
+
+export async function matchSimilarStrings(sources: string[], targets: string[]): Promise<MatchSimilarStringsResult[]> {
+  return invoke('match_similar_strings', { sources, targets })
+}

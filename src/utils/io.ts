@@ -1,4 +1,5 @@
 import { readFolderContent, writeCodeFiles } from '@/api'
+import { forTimes } from './fun'
 
 export async function writeCodeFile(...files: FileInfo[]) {
   await writeCodeFiles(files)
@@ -19,4 +20,14 @@ export async function recursivelyReadFolderContent(
     }
   }
   return
+}
+
+export async function readFolder(parentFolder: string): Promise<FileInfo[]> {
+  const fileInfoArr: FileInfo[] = await readFolderContent(parentFolder, undefined, undefined)
+  return forTimes(fileInfoArr.length).reduce((acc, index) => {
+    if (fileInfoArr[index].isFolder) {
+      acc.push(fileInfoArr[index])
+    }
+    return acc
+  }, [] as FileInfo[])
 }

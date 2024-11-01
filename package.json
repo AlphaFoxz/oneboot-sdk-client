@@ -13,33 +13,33 @@
     "update-tauri": "pnpm update @tauri-apps/cli @tauri-apps/api @tauri-apps/plugin-shell @tauri-apps/plugin-store"
   },
   "dependencies": {
-    "@ant-design/icons-vue": "^7.0.1",
-    "@primevue/themes": "^4.1.1",
+    "@primevue/themes": "^4.2.0",
     "@tauri-apps/api": "^2.0.3",
     "@tauri-apps/plugin-shell": "^2.0.1",
     "@tauri-apps/plugin-store": "^2.1.0",
-    "ant-design-vue": "^4.2.5",
     "axios": "^1.7.7",
     "lossless-json": "^4.0.2",
     "monaco-editor": "^0.50.0",
     "monaco-tree-editor": "^1.1.5",
-    "nanoid": "^5.0.7",
-    "primevue": "^4.1.1",
+    "nanoid": "^5.0.8",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.2.0",
     "vue": "^3.5.12",
     "vue-fn": "latest",
     "vue-router": "^4.4.5",
     "web-tree-sitter": "^0.24.3"
   },
   "devDependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "@tauri-apps/cli": "^2.0.4",
-    "@types/node": "^22.7.7",
+    "@types/node": "^22.8.6",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vitejs/plugin-vue-jsx": "^4.0.1",
     "highlight.js": "^11.10.0",
-    "sass": "^1.80.3",
+    "sass": "^1.80.5",
     "typescript": "^5.6.3",
-    "vite": "^5.4.9",
-    "vue-tsc": "^2.1.6"
+    "vite": "^5.4.10",
+    "vue-tsc": "^2.1.10"
   },
-  "packageManager": "pnpm@9.0.6"
+  "packageManager": "pnpm@9.12.2"
 }

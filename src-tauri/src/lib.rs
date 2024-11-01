@@ -37,6 +37,7 @@ pub fn run() {
             restful::sdk_api::generate_word_api,
             core::io::read_folder_content,
             core::io::write_code_files,
+            core::strsim::match_similar_strings,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

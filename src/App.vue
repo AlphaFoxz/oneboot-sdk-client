@@ -30,7 +30,7 @@ const router = useRouter()
         <ThemeAndLocale />
       </div>
     </LayoutGrid>
-    <LayoutFlex><router-view></router-view></LayoutFlex>
+    <div class="content"><router-view></router-view></div>
   </LayoutGrid>
 </template>
 
@@ -50,6 +50,15 @@ const router = useRouter()
     }
     .home-btn {
       width: 200px;
+    }
+  }
+
+  .content {
+    width: 100%;
+    max-height: calc(100vh - 2.5rem);
+
+    & > * {
+      max-height: calc(100vh - 2.5rem);
     }
   }
 }

@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { Modal as AModal, Tabs as ATabs, TabPane as ATabPane } from 'ant-design-vue'
+import Dialog from 'primevue/dialog'
+import Tabs from 'primevue/tabs'
+import TabList from 'primevue/tablist'
+import Tab from 'primevue/tab'
+import TabPanels from 'primevue/tabpanels'
+import TabPanel from 'primevue/tabpanel'
 import { ComputedRef, onMounted, ref, watch } from 'vue'
 import { Editor, type Files, useMessage, useMonaco, useHotkey } from 'monaco-tree-editor'
 import 'monaco-tree-editor/index.css'
@@ -291,13 +296,20 @@ const handleGenDbSql = (path: string) => {
 </script>
 
 <template>
-  <a-modal v-model:open="sqlVisible" width="70%">
-    <a-tabs v-if="sqlTitle.length" v-model:activeKey="sqlIndex">
-      <a-tab-pane v-for="(item, index) in sqlTitle" :key="index" :tab="item">
+  <Dialog v-model:visible="sqlVisible" style="width: 70%">
+    <template #header>
+      <Tabs value="0">
+        <TabList v-if="sqlTitle.length" v-for="(item, index) in sqlTitle">
+          <Tab :value="index.toString()" :key="index">{{ item }}</Tab>
+        </TabList>
+      </Tabs>
+    </template>
+    <TabPanels v-if="sqlTitle.length" v-for="(_, index) in sqlTitle">
+      <TabPanel :value="index.toString()" :key="index">
         <pre>{{ sqlContent[index] }}</pre>
-      </a-tab-pane>
-    </a-tabs>
-  </a-modal>
+      </TabPanel>
+    </TabPanels>
+  </Dialog>
   <Editor
     ref="editorRef"
     @reload="serverApi.handleReloadRestfulDsl"

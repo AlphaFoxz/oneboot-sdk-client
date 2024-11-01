@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura'
-// import Lara from '@primevue/themes/lara'
+import Tooltip from 'primevue/tooltip'
 import ToastService from 'primevue/toastservice'
 
 export function applyPrimeVuePlugin(app: App) {
@@ -15,5 +15,6 @@ export function applyPrimeVuePlugin(app: App) {
       },
     },
   })
+  app.directive('tooltip', Tooltip)
   app.use(ToastService)
 }
