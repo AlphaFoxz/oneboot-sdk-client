@@ -13,7 +13,7 @@
     "update-tauri": "pnpm update @tauri-apps/cli @tauri-apps/api @tauri-apps/plugin-shell @tauri-apps/plugin-store"
   },
   "dependencies": {
-    "@primevue/themes": "^4.2.0",
+    "@primevue/themes": "^4.2.1",
     "@tauri-apps/api": "^2.0.3",
     "@tauri-apps/plugin-shell": "^2.0.1",
     "@tauri-apps/plugin-store": "^2.1.0",
@@ -23,7 +23,7 @@
     "monaco-tree-editor": "^1.1.5",
     "nanoid": "^5.0.8",
     "primeicons": "^7.0.0",
-    "primevue": "^4.2.0",
+    "primevue": "^4.2.1",
     "vue": "^3.5.12",
     "vue-fn": "latest",
     "vue-router": "^4.4.5",
@@ -36,7 +36,7 @@
     "@vitejs/plugin-vue": "^5.1.4",
     "@vitejs/plugin-vue-jsx": "^4.0.1",
     "highlight.js": "^11.10.0",
-    "sass": "^1.80.5",
+    "sass": "^1.80.6",
     "typescript": "^5.6.3",
     "vite": "^5.4.10",
     "vue-tsc": "^2.1.10"
