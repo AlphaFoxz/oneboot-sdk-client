@@ -20,11 +20,7 @@ pub enum Error {
     #[error(transparent)]
     ParseIntError(#[from] std::num::ParseIntError),
     #[error(transparent)]
-    PestParseThriftError(#[from] pest::error::Error<super::parser::thrift::Rule>),
-    #[error(transparent)]
     PestParseRestError(#[from] pest::error::Error<super::parser::restful::Rule>),
-    #[error(transparent)]
-    PestParseDomainError(#[from] pest::error::Error<super::parser::domain::Rule>),
     #[error(transparent)]
     SerdeJsonError(#[from] serde_json::Error),
     #[error(transparent)]

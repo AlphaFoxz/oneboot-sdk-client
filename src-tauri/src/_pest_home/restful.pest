@@ -26,7 +26,9 @@ contain_list          = !{ "list" ~ "<" ~ contain_list_type ~ ">" }
 contain_set_type      = @{ type }
 contain_set           = !{ "set" ~ "<" ~ contain_set_type ~ ">" }
 ref_enum              = !{ "enum" ~ "<" ~ utype ~ ">" }
-intype                = ${
+
+// https://protobuf.dev/programming-guides/proto3/#scalar
+intype = ${
     "boolean"
   | "byte"
   | "i16"
