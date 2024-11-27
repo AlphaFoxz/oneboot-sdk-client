@@ -13,6 +13,7 @@ export default defineConfig(({ mode, command }) => {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '#domain': fileURLToPath(new URL('./src/domain', import.meta.url)),
       },
       extensions: ['.js', '.json', '.ts', '.tsx'],
     },

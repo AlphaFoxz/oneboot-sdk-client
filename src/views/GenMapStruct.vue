@@ -11,12 +11,12 @@ import { forTimes } from '@/utils/fun'
 import { readFolder } from '@/utils/io'
 import path from '@/utils/path'
 import { settings } from '@/constants'
-import { createVoMapperDomain } from '@/domains/vo-mapper'
+import { useVoMapperAgg } from '@/domain/vo-mapper'
 import { Store } from '@tauri-apps/plugin-store'
 import { onMounted, onUnmounted, reactive, ref, shallowRef, watch, watchEffect } from 'vue'
-import { FieldMapping, VoMapping } from '@/domains/vo-mapper/define'
+import { FieldMapping, VoMapping } from '@/domain/vo-mapper/define'
 
-const voMapperDomain = shallowRef<ReturnType<typeof createVoMapperDomain>>()
+const voMapperAgg = shallowRef<ReturnType<typeof useVoMapperAgg>>()
 const store = Store.load(settings.FILE_NAME)
 const projectRootFolders = shallowRef<string[]>([])
 onMounted(async () => {
@@ -30,8 +30,8 @@ onMounted(async () => {
     }
     return acc
   }, [] as string[])
-  voMapperDomain.value = createVoMapperDomain(projectRootPath, 'com.github.alphafoxz.oneboot')
-  similarityThreshold.value = voMapperDomain.value.states.similarityThreshold.value * 100
+  voMapperAgg.value = useVoMapperAgg(projectRootPath, 'com.github.alphafoxz.oneboot')
+  similarityThreshold.value = voMapperAgg.value.states.similarityThreshold.value * 100
 })
 
 const domainModuleName = ref<string>()
@@ -39,28 +39,28 @@ const outputModuleName = ref<string>()
 const similarityThreshold = ref(0)
 onUnmounted(
   watch([domainModuleName, outputModuleName], (v) => {
-    voMapperDomain.value?.actions.setDomainModuleName(v[0]!)
-    voMapperDomain.value?.actions.setOutputModuleName(v[1]!)
+    voMapperAgg.value?.actions.setDomainModuleName(v[0]!)
+    voMapperAgg.value?.actions.setOutputModuleName(v[1]!)
   })
 )
 onUnmounted(
   watch(similarityThreshold, (v) => {
-    voMapperDomain.value?.actions.setSimilarityThreshold(v / 100)
+    voMapperAgg.value?.actions.setSimilarityThreshold(v / 100)
   })
 )
 
 async function handleParse() {
   if (domainModuleName.value && outputModuleName.value) {
-    await voMapperDomain.value?.actions.parse()
+    await voMapperAgg.value?.actions.parse()
   }
 }
 async function handleAutoMapping() {
   if (domainModuleName.value && outputModuleName.value) {
-    await voMapperDomain.value?.actions.autoMapping()
+    await voMapperAgg.value?.actions.autoMapping()
   }
 }
 function handleGenerate() {
-  voMapperDomain.value?.actions.generate()
+  voMapperAgg.value?.actions.generate()
 }
 
 // ============================= 配置表映射 =============================
@@ -68,12 +68,12 @@ const currentVoName = ref()
 const voMappings = reactive<VoMapping[]>([])
 onUnmounted(
   watchEffect(() => {
-    if (!voMapperDomain.value) {
+    if (!voMapperAgg.value) {
       return
     }
     voMappings.splice(0)
-    for (const voName in voMapperDomain.value.states.voMappings) {
-      const t = voMapperDomain.value.states.voMappings[voName]
+    for (const voName in voMapperAgg.value.states.voMappings) {
+      const t = voMapperAgg.value.states.voMappings[voName]
       voMappings.push({
         package: t.package,
         aggregation: t.aggregation,
@@ -91,7 +91,7 @@ onUnmounted(
 )
 
 function editVoMapping(voName: string, optionIndex: number | undefined) {
-  voMapperDomain.value?.actions.editVoMapping(voName, optionIndex)
+  voMapperAgg.value?.actions.editVoMapping(voName, optionIndex)
 }
 
 function handleChangeMappingVo(voName: string) {
@@ -116,11 +116,11 @@ const dialogVisible = ref(false)
 const fieldMappings = reactive<FieldMapping[]>([])
 onUnmounted(
   watchEffect(() => {
-    if (!currentVoName.value || !voMapperDomain.value) {
+    if (!currentVoName.value || !voMapperAgg.value) {
       return
     }
     fieldMappings.splice(0)
-    const voMapping = voMapperDomain.value?.states.voMappings[currentVoName.value]
+    const voMapping = voMapperAgg.value?.states.voMappings[currentVoName.value]
     if (!voMapping) {
       return
     }
@@ -145,7 +145,7 @@ function handleShowFieldMapping(voName: string) {
   dialogVisible.value = true
 }
 function editFieldMapping(voFieldName: string, optionIndex: number | undefined) {
-  voMapperDomain.value?.actions.editFieldMapping(currentVoName.value, voFieldName, optionIndex)
+  voMapperAgg.value?.actions.editFieldMapping(currentVoName.value, voFieldName, optionIndex)
 }
 function handleChangeMappingField(voFieldName: string) {
   const t = fieldMappings.find((item) => item.fieldName === voFieldName)
